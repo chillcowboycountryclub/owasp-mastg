@@ -1,0 +1,3133 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../../General/0x04i-Testing-User-Privacy-Protection/">
+      
+      
+        <link rel="next" href="../0x05b-Basic-Security_Testing/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>Android Platform Overview - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#android-platform-overview" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Android Platform Overview
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Android Platform Overview
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Android Platform Overview
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#android-architecture" class="md-nav__link">
+    Android Architecture
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android-security-defense-in-depth-approach" class="md-nav__link">
+    Android Security: Defense-in-Depth Approach
+  </a>
+  
+    <nav class="md-nav" aria-label="Android Security: Defense-in-Depth Approach">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#system-wide-security" class="md-nav__link">
+    System-wide security
+  </a>
+  
+    <nav class="md-nav" aria-label="System-wide security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#device-encryption" class="md-nav__link">
+    Device encryption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trusted-execution-environment-tee" class="md-nav__link">
+    Trusted Execution Environment (TEE)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verified-boot" class="md-nav__link">
+    Verified Boot
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#software-isolation" class="md-nav__link">
+    Software Isolation
+  </a>
+  
+    <nav class="md-nav" aria-label="Software Isolation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#android-users-and-groups" class="md-nav__link">
+    Android Users and Groups
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#selinux" class="md-nav__link">
+    SELinux
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#permissions" class="md-nav__link">
+    Permissions
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-security" class="md-nav__link">
+    Network security
+  </a>
+  
+    <nav class="md-nav" aria-label="Network security">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#tls-by-default" class="md-nav__link">
+    TLS by Default
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dns-over-tls" class="md-nav__link">
+    DNS over TLS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-exploitation" class="md-nav__link">
+    Anti-exploitation
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-exploitation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#aslr-kaslr-pie-and-dep" class="md-nav__link">
+    ASLR, KASLR, PIE and DEP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#seccomp-filter" class="md-nav__link">
+    SECCOMP Filter
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android-application-structure" class="md-nav__link">
+    Android Application Structure
+  </a>
+  
+    <nav class="md-nav" aria-label="Android Application Structure">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#communication-with-the-operating-system" class="md-nav__link">
+    Communication with the Operating System
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-app-sandbox" class="md-nav__link">
+    The App Sandbox
+  </a>
+  
+    <nav class="md-nav" aria-label="The App Sandbox">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#linux-user-management" class="md-nav__link">
+    Linux User Management
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#zygote" class="md-nav__link">
+    Zygote
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-lifecycle" class="md-nav__link">
+    App Lifecycle
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-bundles" class="md-nav__link">
+    App Bundles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#android-manifest" class="md-nav__link">
+    Android Manifest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-components" class="md-nav__link">
+    App Components
+  </a>
+  
+    <nav class="md-nav" aria-label="App Components">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#activities" class="md-nav__link">
+    Activities
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fragments" class="md-nav__link">
+    Fragments
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#content-providers" class="md-nav__link">
+    Content Providers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#services" class="md-nav__link">
+    Services
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#inter-process-communication" class="md-nav__link">
+    Inter-Process Communication
+  </a>
+  
+    <nav class="md-nav" aria-label="Inter-Process Communication">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#intents" class="md-nav__link">
+    Intents
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#broadcast-receivers" class="md-nav__link">
+    Broadcast Receivers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#implicit-broadcast-receiver-limitation" class="md-nav__link">
+    Implicit Broadcast Receiver Limitation
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android-application-publishing" class="md-nav__link">
+    Android Application Publishing
+  </a>
+  
+    <nav class="md-nav" aria-label="Android Application Publishing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#signing-process" class="md-nav__link">
+    Signing Process
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apk-signing-schemes" class="md-nav__link">
+    APK Signing Schemes
+  </a>
+  
+    <nav class="md-nav" aria-label="APK Signing Schemes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#jar-signing-v1-scheme" class="md-nav__link">
+    JAR Signing (v1 Scheme)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apk-signature-scheme-v2-scheme" class="md-nav__link">
+    APK Signature Scheme (v2 Scheme)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apk-signature-scheme-v3-scheme" class="md-nav__link">
+    APK Signature Scheme (v3 Scheme)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apk-signature-scheme-v4-scheme" class="md-nav__link">
+    APK Signature Scheme (v4 Scheme)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#creating-your-certificate" class="md-nav__link">
+    Creating Your Certificate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#signing-an-application" class="md-nav__link">
+    Signing an Application
+  </a>
+  
+    <nav class="md-nav" aria-label="Signing an Application">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#zipalign" class="md-nav__link">
+    Zipalign
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#publishing-process" class="md-nav__link">
+    Publishing Process
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#android-application-attack-surface" class="md-nav__link">
+    Android Application Attack Surface
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="android-platform-overview">Android Platform Overview<a class="headerlink" href="#android-platform-overview" title="Permanent link">&para;</a></h1>
+<p>This chapter introduces the Android platform from an architecture point of view. The following five key areas are discussed:</p>
+<ol>
+<li>Android architecture</li>
+<li>Android security: defense-in-depth approach</li>
+<li>Android application structure</li>
+<li>Android application publishing</li>
+<li>Android application attack surface</li>
+</ol>
+<p>Visit the official <a href="https://developer.android.com/index.html" title="Android Developer Guide">Android developer documentation website</a> for more details about the Android platform.</p>
+<h2 id="android-architecture">Android Architecture<a class="headerlink" href="#android-architecture" title="Permanent link">&para;</a></h2>
+<p><a href="https://en.wikipedia.org/wiki/Android_(operating_system)">Android</a> is a Linux-based open source platform developed by the <a href="https://www.openhandsetalliance.com/">Open Handset Alliance</a> (a consortium lead by Google), which serves as a mobile operating system (OS). Today the platform is the foundation for a wide variety of modern technology, such as mobile phones, tablets, wearable tech, TVs, and other smart devices. Typical Android builds ship with a range of pre-installed ("stock") apps and support installation of third-party apps through the Google Play store and other marketplaces.</p>
+<p>Android's software stack is composed of several different layers. Each layer defines interfaces and offers specific services.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/android_software_stack.png" width="400px" /></p>
+<p><strong>Kernel:</strong> At the lowest level, Android is based on a <a href="https://source.android.com/devices/architecture/kernel">variation of the Linux Kernel</a> containing some significant additions, including <a href="https://source.android.com/devices/tech/perf/lmkd">Low Memory Killer</a>, wake locks, the <a href="https://source.android.com/devices/architecture/hidl/binder-ipc">Binder IPC</a> driver, etc. For the purpose of the MASTG, we'll focus on the user-mode part of the OS, where Android significantly differs from a typical Linux distribution. The two most important components for us are the managed runtime used by applications (ART/Dalvik) and <a href="https://en.wikipedia.org/wiki/Bionic_(software)">Bionic</a>, Android’s version of glibc, the GNU C library.</p>
+<p><strong>HAL:</strong> On top of the kernel, the Hardware Abstraction Layer (HAL) defines a standard interface for interacting with built-in hardware components. Several HAL implementations are packaged into shared library modules that the Android system calls when required. This is the basis for allowing applications to interact with the device's hardware. For example, it allows a stock phone application to use a device's microphone and speaker.</p>
+<p><strong>Runtime Environment:</strong> Android apps are written in Java and Kotlin and then compiled to <a href="https://source.android.com/devices/tech/dalvik/dalvik-bytecode">Dalvik bytecode</a> which can be then executed using a runtime that interprets the bytecode instructions and executes them on the target device. For Android, this is the <a href="https://source.android.com/devices/tech/dalvik/configure#how_art_works">Android Runtime (ART)</a>. This is similar to the <a href="https://en.wikipedia.org/wiki/Java_virtual_machine">JVM (Java Virtual Machine)</a> for Java applications, or the Mono Runtime for .NET applications.</p>
+<p>Dalvik bytecode is an optimized version of Java bytecode. It is created by first compiling the Java or Kotlin code to Java bytecode, using the javac and kotlinc compilers respectively, producing .class files. Finally, the Java bytecode is converted to Dalvik bytecode using the d8 tool. Dalvik bytecode is packed within APK and AAB files in the form of .dex files and is used by a managed runtime on Android to execute it on the device.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/java_vs_dalvik.png" width="400px" /></p>
+<p>Before Android 5.0 (API level 21), Android executed bytecode on the Dalvik Virtual Machine (DVM), where it was translated into machine code at execution time, a process known as <em>just-in-time</em> (JIT) compilation. This enables the runtime to benefit from the speed of compiled code while maintaining the flexibility of code interpretation.</p>
+<p>Since Android 5.0 (API level 21), Android executes bytecode on the Android Runtime (ART) which is the successor of the DVM. ART provides improved performance as well as context information in app native crash reports, by including both Java and native stack information. It uses the same Dalvik bytecode input to maintain backward compatibility. However, ART executes the Dalvik bytecode differently, using a hybrid combination of <em>ahead-of-time</em> (AOT), <em>just-in-time</em> (JIT) and profile-guided compilation.</p>
+<ul>
+<li><strong>AOT</strong> pre-compiles Dalvik bytecode into native code, and the generated code will be saved on disk with the .oat extension (ELF binary). The dex2oat tool can be used to perform the compilation and can be found at /system/bin/dex2oat on Android devices. AOT compilation is executed during the installation of the app. This makes the application start faster, as no compilation is needed anymore. However, this also means that the install time increases as compared to JIT compilation. Additionally, since applications are always optimized against the current version of the OS, this means that software updates will recompile all previously compiled applications, resulting in a significant increase in the system update time. Finally, AOT compilation will compile the entire application, even if certain parts are never used by the user.</li>
+<li><strong>JIT</strong> happens at runtime.</li>
+<li><strong>Profile-guided compilation</strong> is a hybrid approach that was introduced in Android 7 (API level 24) to combat the downsides of AOT. At first, the application will use JIT compilation, and Android keeps track of all the parts of the application that are frequently used. This information is stored in an application profile and when the device is idle, a compilation (dex2oat) daemon runs which AOT compiles the identified frequent code paths from the profile.</li>
+</ul>
+<p><img src="../../../assets/Images/Chapters/0x05a/java2oat.png" width="100%" /></p>
+<p>Source: <a href="https://lief-project.github.io/doc/latest/tutorials/10_android_formats.html">https://lief-project.github.io/doc/latest/tutorials/10_android_formats.html</a></p>
+<p><strong>Sandboxing:</strong> Android apps don't have direct access to hardware resources, and each app runs in its own virtual machine or sandbox. This enables the OS to have precise control over resources and memory access on the device. For instance, a crashing app doesn't affect other apps running on the same device. Android controls the maximum number of system resources allocated to apps, preventing any one app from monopolizing too many resources. At the same time, this sandbox design can be considered as one of the many principles in Android's global defense-in-depth strategy. A malicious third-party application, with low privileges, shouldn't be able to escape its own runtime and read the memory of a victim application on the same device. In the following section we take a closer look at the different defense layers in the Android operating system. Learn more in the section <a href="#software-isolation">"Software Isolation"</a>.</p>
+<p>You can find more detailed information in the Google Source article <a href="https://source.android.com/devices/tech/dalvik/configure#how_art_works">"Android Runtime (ART)"</a> , the <a href="http://newandroidbook.com/">"Android Internals" by Jonathan Levin</a> and the <a href="https://secrary.com/android-reversing/android101/">blog post "Android 101" by @_qaz_qaz</a>.</p>
+<h2 id="android-security-defense-in-depth-approach">Android Security: Defense-in-Depth Approach<a class="headerlink" href="#android-security-defense-in-depth-approach" title="Permanent link">&para;</a></h2>
+<p>The Android architecture implements different security layers that, together, enable a defense-in-depth approach. This means that the confidentiality, integrity or availability of sensitive user-data or applications doesn't hinge on one single security measure. This section brings an overview of the different layers of defense that the Android system provides. The security strategy can be roughly categorized into four distinct domains, each focusing on protecting against certain attack models.</p>
+<ul>
+<li>System-wide security</li>
+<li>Software isolation</li>
+<li>Network security</li>
+<li>Anti-exploitation</li>
+</ul>
+<h3 id="system-wide-security">System-wide security<a class="headerlink" href="#system-wide-security" title="Permanent link">&para;</a></h3>
+<h4 id="device-encryption">Device encryption<a class="headerlink" href="#device-encryption" title="Permanent link">&para;</a></h4>
+<p>Android supports device encryption from Android 2.3.4 (API level 10) and it has undergone some big changes since then. Google imposed that all devices running Android 6.0 (API level 23) or higher had to support storage encryption, although some low-end devices were exempt because it would significantly impact their performance.</p>
+<ul>
+<li>
+<p><a href="https://source.android.com/security/encryption/full-disk" title="Full-Disk Encryption">Full-Disk Encryption (FDE)</a>: Android 5.0 (API level 21) and above support full-disk encryption. This encryption uses a single key protected by the user's device password to encrypt and decrypt the user data partition. This kind of encryption is now considered deprecated and file-based encryption should be used whenever possible. Full-disk encryption has drawbacks, such as not being able to receive calls or not having operative alarms after a reboot if the user does not enter the password to unlock.</p>
+</li>
+<li>
+<p><a href="https://source.android.com/security/encryption/file-based" title="File-Based Encryption">File-Based Encryption (FBE)</a>: Android 7.0 (API level 24) supports file-based encryption. File-based encryption allows different files to be encrypted with different keys so they can be deciphered independently. Devices that support this type of encryption support Direct Boot as well. Direct Boot enables the device to have access to features such as alarms or accessibility services even if the user didn't unlock the device.</p>
+</li>
+</ul>
+<blockquote>
+<p>Note: you might hear of <a href="https://github.com/google/adiantum" title="Adiantum">Adiantum</a>, which is an encryption method designed for devices running Android 9 (API level 28) and higher whose CPUs lack AES instructions. <strong>Adiantum is only relevant for ROM developers or device vendors</strong>, Android does not provide an API for developers to use Adiantum from applications. As recommended by Google, Adiantum should not be used when shipping ARM-based devices with ARMv8 Cryptography Extensions or x86-based devices with AES-NI. AES is faster on those platforms.</p>
+<p>Further information is available in the <a href="https://source.android.com/security/encryption/adiantum" title="Adiantum">Android documentation</a>.</p>
+</blockquote>
+<h4 id="trusted-execution-environment-tee">Trusted Execution Environment (TEE)<a class="headerlink" href="#trusted-execution-environment-tee" title="Permanent link">&para;</a></h4>
+<p>In order for the Android system to perform encryption it needs a way to securely generate, import and store cryptographic keys. We are essentially shifting the problem of keeping sensitive data secure towards keeping a cryptographic key secure. If the attacker can dump or guess the cryptographic key, the sensitive encrypted data can be retrieved.</p>
+<p>Android offers a trusted execution environment in dedicated hardware to solve the problem of securely generating and protecting cryptographic keys. This means that a dedicated hardware component in the Android system is responsible for handling cryptographic key material. Three main modules are responsible for this:</p>
+<ul>
+<li>
+<p><a href="https://source.android.com/security/keystore">Hardware-backed KeyStore</a>: This module offers cryptographic services to the Android OS and third-party apps. It enables apps to perform cryptographic sensitive operations in an TEE without exposing the cryptographic key material.</p>
+</li>
+<li>
+<p><a href="https://developer.android.com/training/articles/keystore#HardwareSecurityModule">StrongBox</a>: In Android 9 (Pie), StrongBox was introduced, another approach to implement a hardware-backed KeyStore. While previous to Android 9 Pie, a hardware-backed KeyStore would be any TEE implementation that lies outside of the Android OS kernel. StrongBox is an actual complete separate hardware chip that is added to the device on which the KeyStore is implemented and is clearly defined in the Android documentation. You can check programmatically whether a key resides in StrongBox and if it does, you can be sure that it is protected by a hardware security module that has its own CPU, secure storage, and True Random Number Generator (TRNG). All the sensitive cryptographic operations happen on this chip, in the secure boundaries of StrongBox.</p>
+</li>
+<li>
+<p><a href="https://source.android.com/security/authentication/gatekeeper">GateKeeper</a>: The GateKeeper module enables device pattern and password authentication. The security sensitive operations during the authentication process happen inside the TEE that is available on the device. GateKeeper consists of three main components, (1) <code>gatekeeperd</code> which is the service that exposes GateKeeper, (2) GateKeeper HAL, which is the hardware interface and (3) the TEE implementation which is the actual software that implements the GateKeeper functionality in the TEE.</p>
+</li>
+</ul>
+<h4 id="verified-boot">Verified Boot<a class="headerlink" href="#verified-boot" title="Permanent link">&para;</a></h4>
+<p>We need to have a way to ensure that code that is being executed on Android devices comes from a trusted source and that its integrity is not compromised. In order to achieve this, Android introduced the concept of verified boot. The goal of verified boot is to establish a trust relationship between the hardware and the actual code that executes on this hardware. During the verified boot sequence, a full chain of trust is established starting from the hardware-protected Root-of-Trust (RoT) up until the final system that is running, passing through and verifying all the required boot phases. When the Android system is finally booted you can rest assured that the system is not tampered with. You have cryptographic proof that the code which is running is the one that is intended by the OEM and not one that has been maliciously or accidentally altered.</p>
+<p>Further information is available in the <a href="https://source.android.com/security/verifiedboot">Android documentation</a>.</p>
+<h3 id="software-isolation">Software Isolation<a class="headerlink" href="#software-isolation" title="Permanent link">&para;</a></h3>
+<h4 id="android-users-and-groups">Android Users and Groups<a class="headerlink" href="#android-users-and-groups" title="Permanent link">&para;</a></h4>
+<p>Even though the Android operating system is based on Linux, it doesn't implement user accounts in the same way other Unix-like systems do. In Android, the multi-user support of the Linux kernel is used to sandbox apps: with a few exceptions, each app runs as though under a separate Linux user, effectively isolated from other apps and the rest of the operating system.</p>
+<p>The file <a href="http://androidxref.com/9.0.0_r3/xref/system/core/include/private/android_filesystem_config.h" title="android_filesystem_config.h">system/core/include/private/android_filesystem_config.h</a> includes a list of the predefined users and groups system processes are assigned to. UIDs (userIDs) for other applications are added as the latter are installed. For more details, check out Bin Chen's <a href="https://pierrchen.blogspot.mk/2016/09/an-walk-through-of-android-uidgid-based.html" title="Bin Chen - AProgrammer Blog - Android Security: An Overview Of Application Sandbox">blog post</a> on Android sandboxing.</p>
+<p>For example, Android 9.0 (API level 28) defines the following system users:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="cp">#define AID_ROOT             0  </span><span class="cm">/* traditional unix root user */</span>
+<span class="w">    </span><span class="cp">#...</span>
+<span class="w">    </span><span class="cp">#define AID_SYSTEM        1000  </span><span class="cm">/* system server */</span>
+<span class="w">    </span><span class="cp">#...</span>
+<span class="w">    </span><span class="cp">#define AID_SHELL         2000  </span><span class="cm">/* adb and debug shell user */</span>
+<span class="w">    </span><span class="cp">#...</span>
+<span class="w">    </span><span class="cp">#define AID_APP_START          10000  </span><span class="cm">/* first app user */</span>
+<span class="w">    </span><span class="p">...</span>
+</code></pre></div>
+<h4 id="selinux">SELinux<a class="headerlink" href="#selinux" title="Permanent link">&para;</a></h4>
+<p>Security-Enhanced Linux (SELinux) uses a Mandatory Access Control (MAC) system to further lock down which processes should have access to which resources. Each resource is given a label in the form of <code>user:role:type:mls_level</code> which defines which users are able to execute which types of actions on it. For example, one process may only be able to read a file, while another process may be able to edit or delete the file. This way, by working on a least-privilege principle, vulnerable processes are more difficult to exploit via privilege escalation or lateral movement.</p>
+<p>Further information is available on the <a href="https://source.android.com/security/selinux" title="Security-Enhanced Linux in Android">Android documentation</a>.</p>
+<h4 id="permissions">Permissions<a class="headerlink" href="#permissions" title="Permanent link">&para;</a></h4>
+<p>Android implements an extensive permissions system that is used as an access control mechanism. It ensures controlled access to sensitive user data and device resources. Android categorizes permissions into different <a href="https://developer.android.com/guide/topics/permissions/overview#types">types</a> offering various protection levels.</p>
+<blockquote>
+<p>Prior to Android 6.0 (API level 23), all permissions an app requested were granted at installation (Install-time permissions). From API level 23 onwards, the user must approve some permissions requests during runtime (Runtime permissions).</p>
+</blockquote>
+<p>Further information is available in the <a href="https://developer.android.com/guide/topics/permissions/overview">Android documentation</a> including several <a href="https://developer.android.com/training/permissions/evaluating">considerations</a> and <a href="https://developer.android.com/training/permissions/usage-notes">best practices</a>.</p>
+<p>To learn how to test app permissions refer to the <a href="../0x05h-Testing-Platform-Interaction/#testing-app-permissions-mstg-platform-1">Testing App Permissions</a> section in the "Android Platform APIs" chapter.</p>
+<h3 id="network-security">Network security<a class="headerlink" href="#network-security" title="Permanent link">&para;</a></h3>
+<h4 id="tls-by-default">TLS by Default<a class="headerlink" href="#tls-by-default" title="Permanent link">&para;</a></h4>
+<p>By default, since Android 9 (API level 28), all network activity is treated as being executed in a hostile environment. This means that the Android system will only allow apps to communicate over a network channel that is established using the Transport Layer Security (TLS) protocol. This protocol effectively encrypts all network traffic and creates a secure channel to a server. It may be the case that you would want to use clear traffic connections for legacy reasons. This can be achieved by adapting the <code>res/xml/network_security_config.xml</code> file in the application.</p>
+<p>Further information is available in the <a href="https://developer.android.com/training/articles/security-config.html">Android documentation</a>.</p>
+<h4 id="dns-over-tls">DNS over TLS<a class="headerlink" href="#dns-over-tls" title="Permanent link">&para;</a></h4>
+<p>System-wide DNS over TLS support has been introduced since Android 9 (API level 28). It allows you to perform queries to DNS servers using the TLS protocol.  A secure channel is established with the DNS server through which the DNS query is sent. This assures that no sensitive data is exposed during a DNS lookup.</p>
+<p>Further information is available on the <a href="https://android-developers.googleblog.com/2018/04/dns-over-tls-support-in-android-p.html">Android Developers blog</a>.</p>
+<h3 id="anti-exploitation">Anti-exploitation<a class="headerlink" href="#anti-exploitation" title="Permanent link">&para;</a></h3>
+<h4 id="aslr-kaslr-pie-and-dep">ASLR, KASLR, PIE and DEP<a class="headerlink" href="#aslr-kaslr-pie-and-dep" title="Permanent link">&para;</a></h4>
+<p>Address Space Layout Randomization (ASLR), which has been part of Android since Android 4.1 (API level 15), is a standard protection against buffer-overflow attacks, which makes sure that both the application and the OS are loaded to random memory addresses making it difficult to get the correct address for a specific memory region or library. In Android 8.0 (API level 26), this protection was also implemented for the kernel (KASLR). ASLR protection is only possible if the application can be loaded at a random place in memory, which is indicated by the Position Independent Executable (PIE) flag of the application. Since Android 5.0 (API level 21), support for non-PIE enabled native libraries was dropped. Finally, Data Execution Prevention (DEP) prevents code execution on the stack and heap, which is also used to combat buffer-overflow exploits.</p>
+<p>Further information is available on the <a href="https://android-developers.googleblog.com/2016/07/protecting-android-with-more-linux.html" title="Protecting Android with more Linux kernel defenses">Android Developers blog</a>.</p>
+<h4 id="seccomp-filter">SECCOMP Filter<a class="headerlink" href="#seccomp-filter" title="Permanent link">&para;</a></h4>
+<p>Android applications can contain native code written in C or C++. These compiled binaries can communicate both with the Android Runtime through Java Native Interface (JNI) bindings, and with the OS through system calls. Some system calls are either not implemented, or are not supposed to be called by normal applications. As these system calls communicate directly with the kernel, they are a prime target for exploit developers. With Android 8 (API level 26), Android has introduced the support for Secure Computing (SECCOMP) filters for all Zygote based processes (i.e. user applications). These filters restrict the available syscalls to those exposed through bionic.</p>
+<p>Further information is available on the <a href="https://android-developers.googleblog.com/2017/07/seccomp-filter-in-android-o.html" title="Seccomp filter in Android O">Android Developers blog</a>.</p>
+<h2 id="android-application-structure">Android Application Structure<a class="headerlink" href="#android-application-structure" title="Permanent link">&para;</a></h2>
+<h3 id="communication-with-the-operating-system">Communication with the Operating System<a class="headerlink" href="#communication-with-the-operating-system" title="Permanent link">&para;</a></h3>
+<p>Android apps interact with system services via the Android Framework, an abstraction layer that offers high-level Java APIs. The majority of these services are invoked via normal Java method calls and are translated to IPC calls to system services that are running in the background. Examples of system services include:</p>
+<ul>
+<li>Connectivity (Wi-Fi, Bluetooth, NFC, etc.)</li>
+<li>Files</li>
+<li>Cameras</li>
+<li>Geolocation (GPS)</li>
+<li>Microphone</li>
+</ul>
+<p>The framework also offers common security functions, such as cryptography.</p>
+<p>The API specifications change with every new Android release. Critical bug fixes and security patches are usually applied to earlier versions as well.</p>
+<p>Noteworthy API versions:</p>
+<ul>
+<li>Android 4.2 (API level 16) in November 2012 (introduction of SELinux)</li>
+<li>Android 4.3 (API level 18) in July 2013 (SELinux became enabled by default)</li>
+<li>Android 4.4 (API level 19) in October 2013 (several new APIs and ART introduced)</li>
+<li>Android 5.0 (API level 21) in November 2014 (ART used by default and many other features added)</li>
+<li>Android 6.0 (API level 23) in October 2015 (many new features and improvements, including granting; detailed permissions setup at runtime rather than all or nothing during installation)</li>
+<li>Android 7.0 (API level 24-25) in August 2016 (new JIT compiler on ART)</li>
+<li>Android 8.0 (API level 26-27) in August 2017 (a lot of security improvements)</li>
+<li>Android 9 (API level 28) in August 2018 (restriction of background usage of mic or camera, introduction of lockdown mode, default HTTPS for all apps)</li>
+<li><strong>Android 10 (API level 29)</strong> in September 2019 (access location "only while using the app", device tracking prevention, improve secure external storage,)</li>
+<li>Privacy (<a href="https://developer.android.com/about/versions/10/highlights#privacy_for_users">overview</a>, <a href="https://developer.android.com/about/versions/10/privacy">details 1</a>, <a href="https://developer.android.com/about/versions/10/privacy/changes">details 2</a>)</li>
+<li>Security (<a href="https://developer.android.com/about/versions/10/highlights#security">overview</a>, <a href="https://developer.android.com/about/versions/10/behavior-changes-all#security">details</a>)</li>
+<li><strong>Android 11 (API level 30)</strong> in September 2020 (scoped storage enforcement, Permissions auto-reset, <a href="https://developer.android.com/training/package-visibility">reduced package visibility</a>, APK Signature Scheme v4)</li>
+<li>Privacy (<a href="https://developer.android.com/about/versions/11/privacy">overview</a>)</li>
+<li><a href="https://developer.android.com/about/versions/11/behavior-changes-all">Privacy Behavior changes (all apps)</a></li>
+<li><a href="https://developer.android.com/about/versions/11/behavior-changes-all#security">Security Behavior changes (all apps)</a></li>
+<li><a href="https://developer.android.com/about/versions/11/behavior-changes-11#privacy">Privacy Behavior changes (apps targeting version)</a></li>
+<li><a href="https://developer.android.com/about/versions/11/behavior-changes-11#security">Security Behavior changes (apps targeting version)</a></li>
+<li><strong>Android 12 (API level 31-32)</strong> in August 2021 (Material You, Web intent resolution, Privacy Dashboard)</li>
+<li><a href="https://developer.android.com/about/versions/12/features#security-privacy">Security and privacy</a></li>
+<li><a href="https://developer.android.com/about/versions/12/behavior-changes-all#security-privacy">Behavior changes (all apps)</a></li>
+<li><a href="https://developer.android.com/about/versions/12/behavior-changes-12#security-privacy">Behavior changes (apps targeting version)</a></li>
+<li>[BETA] <strong>Android 13 (API level 33)</strong> in 2022 (Safer exporting of context-registered receivers, new photo picker)</li>
+<li><a href="https://developer.android.com/about/versions/13/features#privacy-security">Security and privacy</a></li>
+<li><a href="https://developer.android.com/about/versions/13/behavior-changes-all#privacy">Privacy Behavior changes (all apps)</a></li>
+<li><a href="https://developer.android.com/about/versions/13/behavior-changes-all#security">Security Behavior changes (all apps)</a></li>
+<li><a href="https://developer.android.com/about/versions/13/behavior-changes-13#privacy">Privacy Behavior changes (apps targeting version)</a></li>
+<li><a href="https://developer.android.com/about/versions/13/behavior-changes-13#security">Security Behavior changes (apps targeting version)</a></li>
+</ul>
+<h3 id="the-app-sandbox">The App Sandbox<a class="headerlink" href="#the-app-sandbox" title="Permanent link">&para;</a></h3>
+<p>Apps are executed in the Android Application Sandbox, which separates the app data and code execution from other apps on the device. As mentioned before, this separation adds a first layer of defense.</p>
+<p>Installation of a new app creates a new directory named after the app package, which results in the following path: <code>/data/data/[package-name]</code>. This directory holds the app's data. Linux directory permissions are set such that the directory can be read from and written to only with the app's unique UID.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/Selection_003.png" width="400px" /></p>
+<p>We can confirm this by looking at the file system permissions in the <code>/data/data</code> folder. For example, we can see that Google Chrome and Calendar are assigned one directory each and run under different user accounts:</p>
+<div class="highlight"><pre><span></span><code>drwx------<span class="w">  </span><span class="m">4</span><span class="w"> </span>u0_a97<span class="w">              </span>u0_a97<span class="w">              </span><span class="m">4096</span><span class="w"> </span><span class="m">2017</span>-01-18<span class="w"> </span><span class="m">14</span>:27<span class="w"> </span>com.android.calendar
+drwx------<span class="w">  </span><span class="m">6</span><span class="w"> </span>u0_a120<span class="w">             </span>u0_a120<span class="w">             </span><span class="m">4096</span><span class="w"> </span><span class="m">2017</span>-01-19<span class="w"> </span><span class="m">12</span>:54<span class="w"> </span>com.android.chrome
+</code></pre></div>
+<p>Developers who want their apps to share a common sandbox can sidestep sandboxing. When two apps are signed with the same certificate and explicitly share the same user ID (having the <em>sharedUserId</em> in their <em>AndroidManifest.xml</em> files), each can access the other's data directory. See the following example to achieve this in the NFC app:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;manifest</span><span class="w"> </span><span class="na">xmlns:android=</span><span class="s">&quot;http://schemas.android.com/apk/res/android&quot;</span>
+<span class="w">  </span><span class="na">package=</span><span class="s">&quot;com.android.nfc&quot;</span>
+<span class="w">  </span><span class="na">android:sharedUserId=</span><span class="s">&quot;android.uid.nfc&quot;</span><span class="nt">&gt;</span>
+</code></pre></div>
+<h4 id="linux-user-management">Linux User Management<a class="headerlink" href="#linux-user-management" title="Permanent link">&para;</a></h4>
+<p>Android leverages Linux user management to isolate apps. This approach is different from user management usage in traditional Linux environments, where multiple apps are often run by the same user. Android creates a unique UID for each Android app and runs the app in a separate process. Consequently, each app can access its own resources only. This protection is enforced by the Linux kernel.</p>
+<p>Generally, apps are assigned UIDs in the range of 10000 and 99999. Android apps receive a user name based on their UID. For example, the app with UID 10188 receives the user name <code>u0_a188</code>. If the permissions an app requested are granted, the corresponding group ID is added to the app's process. For example, the user ID of the app below is 10188. It belongs to the group ID 3003 (inet). That group is related to android.permission.INTERNET permission. The output of the <code>id</code> command is shown below.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>id
+<span class="nv">uid</span><span class="o">=</span><span class="m">10188</span><span class="o">(</span>u0_a188<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">10188</span><span class="o">(</span>u0_a188<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">10188</span><span class="o">(</span>u0_a188<span class="o">)</span>,3003<span class="o">(</span>inet<span class="o">)</span>,
+<span class="m">9997</span><span class="o">(</span>everybody<span class="o">)</span>,50188<span class="o">(</span>all_a188<span class="o">)</span><span class="w"> </span><span class="nv">context</span><span class="o">=</span>u:r:untrusted_app:s0:c512,c768
+</code></pre></div>
+<p>The relationship between group IDs and permissions is defined in the following file:</p>
+<p><a href="http://androidxref.com/9.0.0_r3/xref/frameworks/base/data/etc/platform.xml" title="platform.xml">frameworks/base/data/etc/platform.xml</a></p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;permission</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;android.permission.INTERNET&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;group</span><span class="w"> </span><span class="na">gid=</span><span class="s">&quot;inet&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/permission&gt;</span>
+
+<span class="nt">&lt;permission</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;android.permission.READ_LOGS&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;group</span><span class="w"> </span><span class="na">gid=</span><span class="s">&quot;log&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/permission&gt;</span>
+
+<span class="nt">&lt;permission</span><span class="w"> </span><span class="na">name=</span><span class="s">&quot;android.permission.WRITE_MEDIA_STORAGE&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;group</span><span class="w"> </span><span class="na">gid=</span><span class="s">&quot;media_rw&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;group</span><span class="w"> </span><span class="na">gid=</span><span class="s">&quot;sdcard_rw&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/permission&gt;</span>
+</code></pre></div>
+<h4 id="zygote">Zygote<a class="headerlink" href="#zygote" title="Permanent link">&para;</a></h4>
+<p>The process <code>Zygote</code> starts up during <a href="https://github.com/dogriffiths/HeadFirstAndroid/wiki/How-Android-Apps-are-Built-and-Run" title="How Android Apps are run">Android initialization</a>. Zygote is a system service for launching apps. The Zygote process is a "base" process that contains all the core libraries the app needs. Upon launch, Zygote opens the socket <code>/dev/socket/zygote</code> and listens for connections from local clients. When it receives a connection, it forks a new process, which then loads and executes the app-specific code.</p>
+<h4 id="app-lifecycle">App Lifecycle<a class="headerlink" href="#app-lifecycle" title="Permanent link">&para;</a></h4>
+<p>In Android, the lifetime of an app process is controlled by the operating system. A new Linux process is created when an app component is started and the same app doesn’t yet have any other components running. Android may kill this process when the latter is no longer necessary or when reclaiming memory is necessary to run more important apps. The decision to kill a process is primarily related to the state of the user's interaction with the process. In general, processes can be in one of four states.</p>
+<ul>
+<li>A foreground process (e.g., an activity running at the top of the screen or a running BroadcastReceiver)</li>
+<li>
+<p>A visible process is a process that the user is aware of, so killing it would have a noticeable negative impact on user experience. One example is running an activity that's visible to the user on-screen but not in the foreground.</p>
+</li>
+<li>
+<p>A service process is a process hosting a service that has been started with the <code>startService</code> method. Though these processes aren't directly visible to the user, they are generally things that the user cares about (such as background network data upload or download), so the system will always keep such processes running unless there's insufficient memory to retain all foreground and visible processes.</p>
+</li>
+<li>A cached process is a process that's not currently needed, so the system is free to kill it when memory is needed.
+Apps must implement callback methods that react to a number of events; for example, the <code>onCreate</code> handler is called when the app process is first created. Other callback methods include <code>onLowMemory</code>, <code>onTrimMemory</code> and <code>onConfigurationChanged</code>.</li>
+</ul>
+<h3 id="app-bundles">App Bundles<a class="headerlink" href="#app-bundles" title="Permanent link">&para;</a></h3>
+<p>Android applications can be shipped in two forms: the Android Package Kit (APK) file or an <a href="https://developer.android.com/guide/app-bundle" title="Android App Bundle">Android App Bundle</a> (.aab). Android App Bundles provide all the resources necessary for an app, but defer the generation of the APK and its signing to Google Play. App Bundles are signed binaries which contain the code of the app in several modules. The base module contains the core of the application. The base module can be extended with various modules which contain new enrichments/functionalities for the app as further explained on the <a href="https://developer.android.com/guide/app-bundle" title="Documentation on App Bundle">developer documentation for app bundle</a>.
+If you have an Android App Bundle, you can best use the <a href="https://developer.android.com/studio/command-line/bundletool" title="bundletool">bundletool</a> command line tool from Google to build unsigned APKs in order to use the existing tooling on the APK. You can create an APK from an AAB file by running the following command:</p>
+<div class="highlight"><pre><span></span><code>bundletool<span class="w"> </span>build-apks<span class="w"> </span>--bundle<span class="o">=</span>/MyApp/my_app.aab<span class="w"> </span>--output<span class="o">=</span>/MyApp/my_app.apks
+</code></pre></div>
+<p>If you want to create signed APKs ready for deployment to a test device, use:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>bundletool<span class="w"> </span>build-apks<span class="w"> </span>--bundle<span class="o">=</span>/MyApp/my_app.aab<span class="w"> </span>--output<span class="o">=</span>/MyApp/my_app.apks
+--ks<span class="o">=</span>/MyApp/keystore.jks
+--ks-pass<span class="o">=</span>file:/MyApp/keystore.pwd
+--ks-key-alias<span class="o">=</span>MyKeyAlias
+--key-pass<span class="o">=</span>file:/MyApp/key.pwd
+</code></pre></div>
+<p>We recommend that you test both the APK with and without the additional modules, so that it becomes clear whether the additional modules introduce and/or fix security issues for the base module.</p>
+<h3 id="android-manifest">Android Manifest<a class="headerlink" href="#android-manifest" title="Permanent link">&para;</a></h3>
+<p>Every app has an Android Manifest file, which embeds content in binary XML format. The standard name of this file is AndroidManifest.xml. It is located in the root directory of the app’s Android Package Kit (APK) file.</p>
+<p>The manifest file describes the app structure, its components (activities, services, content providers, and intent receivers), and requested permissions. It also contains general app metadata, such as the app's icon, version number, and theme. The file may list other information, such as compatible APIs (minimal, targeted, and maximal SDK version) and the <a href="https://developer.android.com/guide/topics/data/install-location.html" title="Define app install location">kind of storage it can be installed on (external or internal)</a>.</p>
+<p>Here is an example of a manifest file, including the package name (the convention is a reversed URL, but any string is acceptable). It also lists the app version, relevant SDKs, required permissions, exposed content providers, broadcast receivers used with intent filters and a description of the app and its activities:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;manifest</span>
+<span class="w">    </span><span class="na">package=</span><span class="s">&quot;com.owasp.myapplication&quot;</span>
+<span class="w">    </span><span class="na">android:versionCode=</span><span class="s">&quot;0.1&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;uses-sdk</span><span class="w"> </span><span class="na">android:minSdkVersion=</span><span class="s">&quot;12&quot;</span>
+<span class="w">        </span><span class="na">android:targetSdkVersion=</span><span class="s">&quot;22&quot;</span>
+<span class="w">        </span><span class="na">android:maxSdkVersion=</span><span class="s">&quot;25&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;uses-permission</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.permission.INTERNET&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;provider</span>
+<span class="w">        </span><span class="na">android:name=</span><span class="s">&quot;com.owasp.myapplication.MyProvider&quot;</span>
+<span class="w">        </span><span class="na">android:exported=</span><span class="s">&quot;false&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;receiver</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;.MyReceiver&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;intent-filter&gt;</span>
+<span class="w">            </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.owasp.myapplication.myaction&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/intent-filter&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/receiver&gt;</span>
+
+<span class="w">    </span><span class="nt">&lt;application</span>
+<span class="w">        </span><span class="na">android:icon=</span><span class="s">&quot;@drawable/ic_launcher&quot;</span>
+<span class="w">        </span><span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span>
+<span class="w">        </span><span class="na">android:theme=</span><span class="s">&quot;@style/Theme.Material.Light&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;activity</span>
+<span class="w">            </span><span class="na">android:name=</span><span class="s">&quot;com.owasp.myapplication.MainActivity&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="nt">&lt;intent-filter&gt;</span>
+<span class="w">                </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;android.intent.action.MAIN&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;/intent-filter&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/activity&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/application&gt;</span>
+<span class="nt">&lt;/manifest&gt;</span>
+</code></pre></div>
+<p>The full list of available manifest options is in the official <a href="https://developer.android.com/guide/topics/manifest/manifest-intro.html" title="Android Developer Guide for Manifest">Android Manifest file documentation</a>.</p>
+<h3 id="app-components">App Components<a class="headerlink" href="#app-components" title="Permanent link">&para;</a></h3>
+<p>Android apps are made of several high-level components. The main components are:</p>
+<ul>
+<li>Activities</li>
+<li>Fragments</li>
+<li>Intents</li>
+<li>Broadcast receivers</li>
+<li>Content providers and services</li>
+</ul>
+<p>All these elements are provided by the Android operating system, in the form of predefined classes available through APIs.</p>
+<h4 id="activities">Activities<a class="headerlink" href="#activities" title="Permanent link">&para;</a></h4>
+<p>Activities make up the visible part of any app. There is one activity per screen, so an app with three different screens implements three different activities. Activities are declared by extending the Activity class. They contain all user interface elements: fragments, views, and layouts.</p>
+<p>Each activity needs to be declared in the Android Manifest with the following syntax:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;activity</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;ActivityName&quot;</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/activity&gt;</span>
+</code></pre></div>
+<p>Activities not declared in the manifest can't be displayed, and attempting to launch them will raise an exception.</p>
+<p>Like apps, activities have their own life cycle and need to monitor system changes to handle them. Activities can be in the following states: active, paused, stopped, and inactive. These states are managed by the Android operating system. Accordingly, activities can implement the following event managers:</p>
+<ul>
+<li>onCreate</li>
+<li>onSaveInstanceState</li>
+<li>onStart</li>
+<li>onResume</li>
+<li>onRestoreInstanceState</li>
+<li>onPause</li>
+<li>onStop</li>
+<li>onRestart</li>
+<li>onDestroy</li>
+</ul>
+<p>An app may not explicitly implement all event managers, in which case default actions are taken. Typically, at least the <code>onCreate</code> manager is overridden by the app developers. This is how most user interface components are declared and initialized. <code>onDestroy</code> may be overridden when resources (like network connections or connections to databases) must be explicitly released or specific actions must occur when the app shuts down.</p>
+<h4 id="fragments">Fragments<a class="headerlink" href="#fragments" title="Permanent link">&para;</a></h4>
+<p>A fragment represents a behavior or a portion of the user interface within the activity. Fragments were introduced Android with the version Honeycomb 3.0 (API level 11).</p>
+<p>Fragments are meant to encapsulate parts of the interface to facilitate re-usability and adaptation to different screen sizes. Fragments are autonomous entities in that they include all their required components (they have their own layout, buttons, etc.). However, they must be integrated with activities to be useful: fragments can't exist on their own. They have their own life cycle, which is tied to the life cycle of the Activities that implement them.</p>
+<p>Because fragments have their own life cycle, the Fragment class contains event managers that can be redefined and extended. These event managers included onAttach, onCreate, onStart, onDestroy and onDetach. Several others exist; the reader should refer to the <a href="https://developer.android.com/guide/components/fragments" title="Fragment Class">Android Fragment specification</a> for more details.</p>
+<p>Fragments can be easily implemented by extending the Fragment class provided by Android:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MyFragment</span><span class="w"> </span><span class="kd">extends</span><span class="w"> </span><span class="n">Fragment</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">class</span><span class="w"> </span><span class="nc">MyFragment</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Fragment</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">...</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Fragments don't need to be declared in manifest files because they depend on activities.</p>
+<p>To manage its fragments, an activity can use a Fragment Manager (FragmentManager class). This class makes it easy to find, add, remove, and replace associated fragments.</p>
+<p>Fragment Managers can be created via the following:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="n">FragmentManager</span><span class="w"> </span><span class="n">fm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">getFragmentManager</span><span class="p">();</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nv">fm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fragmentManager</span>
+</code></pre></div>
+<p>Fragments don't necessarily have a user interface; they can be a convenient and efficient way to manage background operations pertaining to the app's user interface. A fragment may be declared persistent so that if the system preserves its state even if its Activity is destroyed.</p>
+<h4 id="content-providers">Content Providers<a class="headerlink" href="#content-providers" title="Permanent link">&para;</a></h4>
+<p>Android uses SQLite to store data permanently: as with Linux, data is stored in files. SQLite is a light, efficient, open source relational data storage technology that does not require much processing power, which makes it ideal for mobile use. An entire API with specific classes (Cursor, ContentValues, SQLiteOpenHelper, ContentProvider, ContentResolver, etc.) is available.
+SQLite is not run as a separate process; it is part of the app.
+By default, a database belonging to a given app is accessible to this app only. However, content providers offer a great mechanism for abstracting data sources (including databases and flat files); they also provide a standard and efficient mechanism to share data between apps, including native apps. To be accessible to other apps, a content provider needs to be explicitly declared in the manifest file of the app that will share it. As long as content providers aren't declared, they won't be exported and can only be called by the app that creates them.</p>
+<p>Content providers are implemented through a URI addressing scheme: they all use the content:// model. Regardless of the type of sources (SQLite database, flat file, etc.), the addressing scheme is always the same, thereby abstracting the sources and offering the developer a unique scheme. Content providers offer all regular database operations: create, read, update, delete. That means that any app with proper rights in its manifest file can manipulate the data from other apps.</p>
+<h4 id="services">Services<a class="headerlink" href="#services" title="Permanent link">&para;</a></h4>
+<p>Services are Android OS components (based on the Service class) that perform tasks in the background (data processing, starting intents, and notifications, etc.) without presenting a user interface. Services are meant to run processes long-term. Their system priorities are lower than those of active apps and higher than those of inactive apps. Therefore, they are less likely to be killed when the system needs resources, and they can be configured to automatically restart when enough resources become available. This makes services a great candidate for running  background tasks. Please note that Services, like Activities, are executed in the main app thread. A service does not create its own thread and does not run in a separate process unless you specify otherwise.</p>
+<h3 id="inter-process-communication">Inter-Process Communication<a class="headerlink" href="#inter-process-communication" title="Permanent link">&para;</a></h3>
+<p>As we've already learned, every Android process has its own sandboxed address space. Inter-process communication facilities allow apps to exchange signals and data securely. Instead of relying on the default Linux IPC facilities, Android's IPC is based on Binder, a custom implementation of OpenBinder. Most Android system services and all high-level IPC services depend on Binder.</p>
+<p>The term <em>Binder</em> stands for a lot of different things, including:</p>
+<ul>
+<li>Binder Driver: the kernel-level driver</li>
+<li>Binder Protocol: low-level ioctl-based protocol used to communicate with the binder driver</li>
+<li>IBinder Interface: a well-defined behavior that Binder objects implement</li>
+<li>Binder object: generic implementation of the IBinder interface</li>
+<li>Binder service: implementation of the Binder object; for example, location service, and sensor service</li>
+<li>Binder client: an object using the Binder service</li>
+</ul>
+<p>The Binder framework includes a client-server communication model. To use IPC, apps call IPC methods in proxy objects. The proxy objects transparently <em>marshall</em> the call parameters into a <em>parcel</em> and send a transaction to the Binder server, which is implemented as a character driver (/dev/binder). The server holds a thread pool for handling incoming requests and delivers messages to the destination object. From the perspective of the client app, all of this seems like a regular method call, all the heavy lifting is done by the Binder framework.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/binder.jpg" width="400px" /></p>
+<ul>
+<li><em>Binder Overview - Image source: <a href="https://1library.net/document/z33dd47z-android-android-interprocess-communication-thorsten-schreiber-somorovsky-bussmeyer.html" title="Android Binder">Android Binder by Thorsten Schreiber</a></em></li>
+</ul>
+<p>Services that allow other applications to bind to them are called <em>bound services</em>. These services must provide an IBinder interface to clients. Developers use the Android Interface Descriptor Language (AIDL) to write interfaces for remote services.</p>
+<p>ServiceManager is a system daemon that manages the registration and lookup of system services. It maintains a list of name/Binder pairs for all registered services. Services are added with <code>addService</code> and retrieved by name with the static <code>getService</code> method in <code>android.os.ServiceManager</code>:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">IBinder</span><span class="w"> </span><span class="nf">getService</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">IBinder</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sCache</span><span class="p">.</span><span class="na">get</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">service</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">service</span><span class="p">;</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">getIServiceManager</span><span class="p">().</span><span class="na">getService</span><span class="p">(</span><span class="n">name</span><span class="p">);</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">RemoteException</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error in getService&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">companion</span><span class="w"> </span><span class="kd">object</span><span class="w"> </span><span class="err">{</span>
+<span class="w">        </span><span class="kd">private</span><span class="w"> </span><span class="kd">val</span><span class="w"> </span><span class="nv">sCache</span><span class="p">:</span><span class="w"> </span><span class="n">Map</span><span class="o">&lt;</span><span class="kt">String</span><span class="p">,</span><span class="w"> </span><span class="n">IBinder</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ArrayMap</span><span class="p">()</span>
+<span class="w">        </span><span class="kd">fun</span><span class="w"> </span><span class="nf">getService</span><span class="p">(</span><span class="n">name</span><span class="p">:</span><span class="w"> </span><span class="kt">String</span><span class="p">):</span><span class="w"> </span><span class="n">IBinder? </span><span class="p">{</span>
+<span class="w">            </span><span class="k">try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="kd">val</span><span class="w"> </span><span class="nv">service</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sCache</span><span class="o">[</span><span class="n">name</span><span class="o">]</span>
+<span class="w">                </span><span class="k">return</span><span class="w"> </span><span class="n">service</span><span class="w"> </span><span class="o">?:</span><span class="w"> </span><span class="n">getIServiceManager</span><span class="p">().</span><span class="na">getService</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">e</span><span class="p">:</span><span class="w"> </span><span class="n">RemoteException</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="n">Log</span><span class="p">.</span><span class="na">e</span><span class="p">(</span><span class="n">FragmentActivity</span><span class="p">.</span><span class="na">TAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;error in getService&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">)</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">null</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+</code></pre></div>
+<p>You can query the list of system services with the <code>service list</code> command.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>service<span class="w"> </span>list
+Found<span class="w"> </span><span class="m">99</span><span class="w"> </span>services:
+<span class="m">0</span><span class="w"> </span>carrier_config:<span class="w"> </span><span class="o">[</span>com.android.internal.telephony.ICarrierConfigLoader<span class="o">]</span>
+<span class="m">1</span><span class="w"> </span>phone:<span class="w"> </span><span class="o">[</span>com.android.internal.telephony.ITelephony<span class="o">]</span>
+<span class="m">2</span><span class="w"> </span>isms:<span class="w"> </span><span class="o">[</span>com.android.internal.telephony.ISms<span class="o">]</span>
+<span class="m">3</span><span class="w"> </span>iphonesubinfo:<span class="w"> </span><span class="o">[</span>com.android.internal.telephony.IPhoneSubInfo<span class="o">]</span>
+</code></pre></div>
+<h4 id="intents">Intents<a class="headerlink" href="#intents" title="Permanent link">&para;</a></h4>
+<p><em>Intent messaging</em> is an asynchronous communication framework built on top of Binder. This framework allows both point-to-point and publish-subscribe messaging. An <em>Intent</em> is a messaging object that can be used to request an action from another app component. Although intents facilitate inter-component communication in several ways, there are three fundamental use cases:</p>
+<ul>
+<li>Starting an activity</li>
+<li>An activity represents a single screen in an app. You can start a new instance of an activity by passing an intent to <code>startActivity</code>. The intent describes the activity and carries necessary data.</li>
+<li>Starting a service</li>
+<li>A Service is a component that performs operations in the background, without a user interface. With Android 5.0 (API level 21) and later, you can start a service with JobScheduler.</li>
+<li>Delivering a broadcast</li>
+<li>A broadcast is a message that any app can receive. The system delivers broadcasts for system events, including system boot and charging initialization. You can deliver a broadcast to other apps by passing an intent to <code>sendBroadcast</code> or <code>sendOrderedBroadcast</code>.</li>
+</ul>
+<p>There are two types of intents. Explicit intents name the component that will be started (the fully qualified class name). For instance:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">myActivity</span><span class="p">.</span><span class="na">myClass</span><span class="p">);</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nv">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="k">this</span><span class="p">,</span><span class="w"> </span><span class="n">myActivity</span><span class="p">.</span><span class="na">myClass</span><span class="p">)</span>
+</code></pre></div>
+<p>Implicit intents are sent to the OS to perform a given action on a given set of data (The URL of the OWASP website in our example below). It is up to the system to decide which app or class will perform the corresponding service. For instance:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="n">Intent</span><span class="p">.</span><span class="na">MY_ACTION</span><span class="p">,</span><span class="w"> </span><span class="n">Uri</span><span class="p">.</span><span class="na">parse</span><span class="p">(</span><span class="s">&quot;https://www.owasp.org&quot;</span><span class="p">));</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span><span class="w"> </span><span class="nv">intent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Intent</span><span class="p">(</span><span class="n">Intent</span><span class="p">.</span><span class="na">MY_ACTION</span><span class="p">,</span><span class="w"> </span><span class="n">Uri</span><span class="p">.</span><span class="na">parse</span><span class="p">(</span><span class="s">&quot;https://www.owasp.org&quot;</span><span class="p">))</span>
+</code></pre></div>
+<p>An <em>intent filter</em> is an expression in Android Manifest files that specifies the type of intents the component would like to receive. For instance, by declaring an intent filter for an activity, you make it possible for other apps to directly start your activity with a certain kind of intent. Likewise, your activity can only be started with an explicit intent if you don't declare any intent filters for it.</p>
+<p>Android uses intents to broadcast messages to apps (such as an incoming call or SMS) important power supply information (low battery, for example), and network changes (loss of connection, for instance). Extra data may be added to intents (through <code>putExtra</code>/<code>getExtras</code>).</p>
+<p>Here is a short list of intents sent by the operating system. All constants are defined in the Intent class, and the whole list is in the official Android documentation:</p>
+<ul>
+<li>ACTION_CAMERA_BUTTON</li>
+<li>ACTION_MEDIA_EJECT</li>
+<li>ACTION_NEW_OUTGOING_CALL</li>
+<li>ACTION_TIMEZONE_CHANGED</li>
+</ul>
+<p>To improve security and privacy, a Local Broadcast Manager is used to send and receive intents within an app without having them sent to the rest of the operating system. This is very useful for ensuring that sensitive and private data don't leave the app perimeter (geolocation data for instance).</p>
+<h4 id="broadcast-receivers">Broadcast Receivers<a class="headerlink" href="#broadcast-receivers" title="Permanent link">&para;</a></h4>
+<p>Broadcast Receivers are components that allow apps to receive notifications from other apps and from the system itself. With them, apps can react to events (internal, initiated by other apps, or initiated by the operating system). They are generally used to update user interfaces, start services, update content, and create user notifications.</p>
+<p>There are two ways to make a Broadcast Receiver known to the system. One way is to declare it in the Android Manifest file. The manifest should specify an association between the Broadcast Receiver and an intent filter to indicate the actions the receiver is meant to listen for.</p>
+<p>An example Broadcast Receiver declaration with an intent filter in a manifest:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;receiver</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;.MyReceiver&quot;</span><span class="w"> </span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;intent-filter&gt;</span>
+<span class="w">        </span><span class="nt">&lt;action</span><span class="w"> </span><span class="na">android:name=</span><span class="s">&quot;com.owasp.myapplication.MY_ACTION&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/intent-filter&gt;</span>
+<span class="nt">&lt;/receiver&gt;</span>
+</code></pre></div>
+<p>Please note that in this example, the Broadcast Receiver does not include the <a href="https://developer.android.com/guide/topics/manifest/receiver-element" title="receiver element"><code>android:exported</code></a> attribute. As at least one filter was defined, the default value will be set to "true". In absence of any filters, it will be set to "false".</p>
+<p>The other way is to create the receiver dynamically in code. The receiver can then register with the method <a href="https://developer.android.com/reference/android/content/Context.html#registerReceiver%28android.content.BroadcastReceiver,%2520android.content.IntentFilter%29" title="Context.registerReceiver"><code>Context.registerReceiver</code></a>.</p>
+<p>An example of registering a Broadcast Receiver dynamically:</p>
+<p>Example in Java:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Define a broadcast receiver</span>
+<span class="n">BroadcastReceiver</span><span class="w"> </span><span class="n">myReceiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">BroadcastReceiver</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onReceive</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">context</span><span class="p">,</span><span class="w"> </span><span class="n">Intent</span><span class="w"> </span><span class="n">intent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">.</span><span class="na">d</span><span class="p">(</span><span class="n">TAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Intent received by myReceiver&quot;</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+<span class="c1">// Define an intent filter with actions that the broadcast receiver listens for</span>
+<span class="n">IntentFilter</span><span class="w"> </span><span class="n">intentFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">IntentFilter</span><span class="p">();</span>
+<span class="n">intentFilter</span><span class="p">.</span><span class="na">addAction</span><span class="p">(</span><span class="s">&quot;com.owasp.myapplication.MY_ACTION&quot;</span><span class="p">);</span>
+<span class="c1">// To register the broadcast receiver</span>
+<span class="n">registerReceiver</span><span class="p">(</span><span class="n">myReceiver</span><span class="p">,</span><span class="w"> </span><span class="n">intentFilter</span><span class="p">);</span>
+<span class="c1">// To un-register the broadcast receiver</span>
+<span class="n">unregisterReceiver</span><span class="p">(</span><span class="n">myReceiver</span><span class="p">);</span>
+</code></pre></div>
+<p>Example in Kotlin:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Define a broadcast receiver</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">myReceiver</span><span class="p">:</span><span class="w"> </span><span class="n">BroadcastReceiver</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">object</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="nc">BroadcastReceiver</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">override</span><span class="w"> </span><span class="kd">fun</span><span class="w"> </span><span class="nf">onReceive</span><span class="p">(</span><span class="n">context</span><span class="p">:</span><span class="w"> </span><span class="n">Context</span><span class="p">,</span><span class="w"> </span><span class="n">intent</span><span class="p">:</span><span class="w"> </span><span class="n">Intent</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">Log</span><span class="p">.</span><span class="na">d</span><span class="p">(</span><span class="n">FragmentActivity</span><span class="p">.</span><span class="na">TAG</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;Intent received by myReceiver&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+<span class="c1">// Define an intent filter with actions that the broadcast receiver listens for</span>
+<span class="kd">val</span><span class="w"> </span><span class="nv">intentFilter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">IntentFilter</span><span class="p">()</span>
+<span class="n">intentFilter</span><span class="p">.</span><span class="na">addAction</span><span class="p">(</span><span class="s">&quot;com.owasp.myapplication.MY_ACTION&quot;</span><span class="p">)</span>
+<span class="c1">// To register the broadcast receiver</span>
+<span class="n">registerReceiver</span><span class="p">(</span><span class="n">myReceiver</span><span class="p">,</span><span class="w"> </span><span class="n">intentFilter</span><span class="p">)</span>
+<span class="c1">// To un-register the broadcast receiver</span>
+<span class="n">unregisterReceiver</span><span class="p">(</span><span class="n">myReceiver</span><span class="p">)</span>
+</code></pre></div>
+<p>Note that the system starts an app with the registered receiver automatically when a relevant intent is raised.</p>
+<p>According to <a href="https://developer.android.com/guide/components/broadcasts" title="Broadcasts Overview">Broadcasts Overview</a>, a broadcast is considered "implicit" if it does not target an app specifically. After receiving an implicit broadcast, Android will list all apps that have registered a given action in their filters. If more than one app has registered for the same action, Android will prompt the user to select from the list of available apps.</p>
+<p>An interesting feature of Broadcast Receivers is that they can be prioritized; this way, an intent will be delivered to all authorized receivers according to their priority. A priority can be assigned to an intent filter in the manifest via the <code>android:priority</code> attribute as well as programmatically via the <a href="https://developer.android.com/reference/android/content/IntentFilter#setPriority%28int%29" title="IntentFilter.setPriority"><code>IntentFilter.setPriority</code></a> method. However, note that receivers with the same priority will be <a href="https://developer.android.com/guide/components/broadcasts.html#sending-broadcasts" title="Sending Broadcasts">run in an arbitrary order</a>.</p>
+<p>If your app is not supposed to send broadcasts across apps, use a Local Broadcast Manager (<a href="https://developer.android.com/reference/androidx/localbroadcastmanager/content/LocalBroadcastManager.html" title="LocalBroadcastManager"><code>LocalBroadcastManager</code></a>). They can be used to make sure intents are received from the internal app only, and any intent from any other app will be discarded. This is very useful for improving security and the efficiency of the app, as no interprocess communication is involved. However, please note that the <code>LocalBroadcastManager</code> class is <a href="https://developer.android.com/reference/androidx/localbroadcastmanager/content/LocalBroadcastManager.html" title="LocalBroadcastManager">deprecated</a> and Google recommends using alternatives such as <a href="https://developer.android.com/reference/androidx/lifecycle/LiveData.html" title="LiveData"><code>LiveData</code></a>.</p>
+<p>For more security considerations regarding Broadcast Receiver, see <a href="https://developer.android.com/guide/components/broadcasts.html#security-and-best-practices" title="Security Considerations and Best Practices">Security Considerations and Best Practices</a>.</p>
+<h4 id="implicit-broadcast-receiver-limitation">Implicit Broadcast Receiver Limitation<a class="headerlink" href="#implicit-broadcast-receiver-limitation" title="Permanent link">&para;</a></h4>
+<p>According to <a href="https://developer.android.com/topic/performance/background-optimization" title="Background Optimizations">Background Optimizations</a>, apps targeting Android 7.0 (API level 24) or higher no longer receive <code>CONNECTIVITY_ACTION</code> broadcast unless they register their Broadcast Receivers with <code>Context.registerReceiver()</code>. The system does not send <code>ACTION_NEW_PICTURE</code> and <code>ACTION_NEW_VIDEO</code> broadcasts as well.</p>
+<p>According to <a href="https://developer.android.com/about/versions/oreo/background.html#broadcasts" title="Background Execution Limits">Background Execution Limits</a>, apps that target Android 8.0 (API level 26) or higher can no longer register Broadcast Receivers for implicit broadcasts in their manifest, except for those listed in <a href="https://developer.android.com/guide/components/broadcast-exceptions" title="Implicit Broadcast Exceptions">Implicit Broadcast Exceptions</a>. The Broadcast Receivers created at runtime by calling <code>Context.registerReceiver</code> are not affected by this limitation.</p>
+<p>According to <a href="https://developer.android.com/guide/components/broadcasts#changes-system-broadcasts" title="Changes to System Broadcasts">Changes to System Broadcasts</a>, beginning with Android 9 (API level 28), the <code>NETWORK_STATE_CHANGED_ACTION</code> broadcast doesn't receive information about the user's location or personally identifiable data.</p>
+<h2 id="android-application-publishing">Android Application Publishing<a class="headerlink" href="#android-application-publishing" title="Permanent link">&para;</a></h2>
+<p>Once an app has been successfully developed, the next step is to publish and share it with others. However, apps can't simply be added to a store and shared, they must be first signed. The cryptographic signature serves as a verifiable mark placed by the developer of the app. It identifies the app’s author and ensures that the app has not been modified since its initial distribution.</p>
+<h3 id="signing-process">Signing Process<a class="headerlink" href="#signing-process" title="Permanent link">&para;</a></h3>
+<p>During development, apps are signed with an automatically generated certificate. This certificate is inherently insecure and is for debugging only. Most stores don't accept this kind of certificate for publishing; therefore, a certificate with more secure features must be created.
+When an application is installed on the Android device, the Package Manager ensures that it has been signed with the certificate included in the corresponding APK. If the certificate's public key matches the key used to sign any other APK on the device, the new APK may share a UID with the pre-existing APK. This facilitates interactions between applications from a single vendor. Alternatively, specifying security permissions for the Signature protection level is possible; this will restrict access to applications that have been signed with the same key.</p>
+<h3 id="apk-signing-schemes">APK Signing Schemes<a class="headerlink" href="#apk-signing-schemes" title="Permanent link">&para;</a></h3>
+<p>Android supports three application signing schemes. Starting with Android 9 (API level 28), APKs can be verified with APK Signature Scheme v3 (v3 scheme), APK Signature Scheme v2 (v2 scheme) or JAR signing (v1 scheme). For Android 7.0 (API level 24) and above, APKs can be verified with the APK Signature Scheme v2 (v2 scheme) or JAR signing (v1 scheme). For backwards compatibility, an APK can be signed with multiple signature schemes in order to make the app run on both newer and older SDK versions. <a href="https://source.android.com/security/apksigning/" title="APK Signing">Older platforms ignore v2 signatures and verify v1 signatures only</a>.</p>
+<h4 id="jar-signing-v1-scheme">JAR Signing (v1 Scheme)<a class="headerlink" href="#jar-signing-v1-scheme" title="Permanent link">&para;</a></h4>
+<p>The original version of app signing implements the signed APK as a standard signed JAR, which must contain all the entries in <code>META-INF/MANIFEST.MF</code>. All files must be signed with a common certificate. This scheme does not protect some parts of the APK, such as ZIP metadata. The drawback of this scheme is that the APK verifier needs to process untrusted data structures before applying the signature, and the verifier discards data the data structures don't cover. Also, the APK verifier must decompress all compressed files, which takes considerable time and memory.</p>
+<h4 id="apk-signature-scheme-v2-scheme">APK Signature Scheme (v2 Scheme)<a class="headerlink" href="#apk-signature-scheme-v2-scheme" title="Permanent link">&para;</a></h4>
+<p>With the APK signature scheme, the complete APK is hashed and signed, and an APK Signing Block is created and inserted into the APK. During validation, the v2 scheme checks the signatures of the entire APK file. This form of APK verification is faster and offers more comprehensive protection against modification. You can see the <a href="https://source.android.com/security/apksigning/v2#verification" title="APK Signature verification process">APK signature verification process for v2 Scheme</a> below.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/apk-validation-process.png" width="400px" /></p>
+<h4 id="apk-signature-scheme-v3-scheme">APK Signature Scheme (v3 Scheme)<a class="headerlink" href="#apk-signature-scheme-v3-scheme" title="Permanent link">&para;</a></h4>
+<p>The v3 APK Signing Block format is the same as v2. V3 adds information about the supported SDK versions and a proof-of-rotation struct to the APK signing block. In Android 9 (API level 28) and higher, APKs can be verified according to APK Signature Scheme v3, v2 or v1 scheme. Older platforms ignore v3 signatures and try to verify v2 then v1 signature.</p>
+<p>The proof-of-rotation attribute in the signed-data of the signing block consists of a singly-linked list, with each node containing a signing certificate used to sign previous versions of the app. To make backward compatibility work, the old signing certificates sign the new set of certificates, thus providing each new key with evidence that it should be as trusted as the older key(s).
+It is no longer possible to sign APKs independently, because the proof-of-rotation structure must have the old signing certificates signing the new set of certificates, rather than signing them one-by-one. You can see the <a href="https://source.android.com/security/apksigning/v3" title="APK Signature v3 scheme verification process">APK signature v3 scheme verification process</a> below.</p>
+<p><img src="../../../assets/Images/Chapters/0x05a/apk-validation-process-v3-scheme.png" width="400px" /></p>
+<h4 id="apk-signature-scheme-v4-scheme">APK Signature Scheme (v4 Scheme)<a class="headerlink" href="#apk-signature-scheme-v4-scheme" title="Permanent link">&para;</a></h4>
+<p>The APK Signature Scheme v4 was introduced along with Android 11 (API level 30) and requires all devices launched with Android 11 and up to have <a href="https://www.kernel.org/doc/html/latest/filesystems/fsverity.html">fs-verity</a> enabled by default. fs-verity is a Linux kernel feature that is primarily used for file authentication (detection of malicious modifications) due to its extremely efficient file hash calculation. Read requests only will succeed if the content verifies against trusted digital certificates that were loaded to the kernel keyring during boot time.</p>
+<p>The v4 signature requires a complementary v2 or v3 signature and in contrast to previous signature schemes, the v4 signature is stored in a separate file <code>&lt;apk name&gt;.apk.idsig</code>. Remember to specify it using the <code>--v4-signature-file</code> flag when verifying a v4-signed APK with <code>apksigner verify</code>.</p>
+<p>You can find more detailed information in the <a href="https://source.android.com/security/apksigning/v4">Android developer documentation</a>.</p>
+<h4 id="creating-your-certificate">Creating Your Certificate<a class="headerlink" href="#creating-your-certificate" title="Permanent link">&para;</a></h4>
+<p>Android uses public/private certificates to sign Android apps (.apk files). Certificates are bundles of information; in terms of security, keys are the most important part of that bundle. Public certificates contain users' public keys, and private certificates contain users' private keys. Public and private certificates are linked. Certificates are unique and can't be re-generated. Note that if a certificate is lost, it cannot be recovered, so updating any apps signed with that certificate becomes impossible.
+App creators can either reuse an existing private/public key pair that is in an available KeyStore or generate a new pair.
+In the Android SDK, a new key pair is generated with the <code>keytool</code> command. The following command creates a RSA key pair with a key length of 2048 bits and an expiry time of 7300 days = 20 years. The generated key pair is stored in the file 'myKeyStore.jks', which is in the current directory:</p>
+<div class="highlight"><pre><span></span><code>keytool<span class="w"> </span>-genkey<span class="w"> </span>-alias<span class="w"> </span>myDomain<span class="w"> </span>-keyalg<span class="w"> </span>RSA<span class="w"> </span>-keysize<span class="w"> </span><span class="m">2048</span><span class="w"> </span>-validity<span class="w"> </span><span class="m">7300</span><span class="w"> </span>-keystore<span class="w"> </span>myKeyStore.jks<span class="w"> </span>-storepass<span class="w"> </span>myStrongPassword
+</code></pre></div>
+<p>Safely storing your secret key and making sure it remains secret during its entire life cycle is of paramount importance. Anyone who gains access to the key will be able to publish updates to your apps with content that you don't control (thereby adding insecure features or accessing shared content with signature-based permissions). The trust that a user places in an app and its developers is based totally on such certificates; certificate protection and secure management are therefore vital for reputation and customer retention, and secret keys must never be shared with other individuals. Keys are stored in a binary file that can be protected with a password; such files are referred to as <em>KeyStores</em>. KeyStore passwords should be strong and known only to the key creator. For this reason, keys are usually stored on a dedicated build machine that developers have limited access to.
+An Android certificate must have a validity period that's longer than that of the associated app (including updated versions of the app). For example, Google Play will require certificates to remain valid until Oct 22nd, 2033 at least.</p>
+<h4 id="signing-an-application">Signing an Application<a class="headerlink" href="#signing-an-application" title="Permanent link">&para;</a></h4>
+<p>The goal of the signing process is to associate the app file (.apk) with the developer's public key. To achieve this, the developer calculates a hash of the APK file and encrypts it with their own private key. Third parties can then verify the app's authenticity (e.g., the fact that the app really comes from the user who claims to be the originator) by decrypting the encrypted hash with the author’s public key and verifying that it matches the actual hash of the APK file.</p>
+<p>Many Integrated Development Environments (IDE) integrate the app signing process to make it easier for the user. Be aware that some IDEs store private keys in clear text in configuration files; double-check this in case others are able to access such files and remove the information if necessary.
+Apps can be signed from the command line with the 'apksigner' tool provided by the Android SDK (API level 24 and higher). It is located at <code>[SDK-Path]/build-tools/[version]</code>. For API 24.0.2 and below, you can use 'jarsigner', which is part of the Java JDK. Details about the whole process can be found in official Android documentation; however, an example is given below to illustrate the point.</p>
+<div class="highlight"><pre><span></span><code>apksigner<span class="w"> </span>sign<span class="w"> </span>--out<span class="w"> </span>mySignedApp.apk<span class="w"> </span>--ks<span class="w"> </span>myKeyStore.jks<span class="w"> </span>myUnsignedApp.apk
+</code></pre></div>
+<p>In this example, an unsigned app ('myUnsignedApp.apk') will be signed with a private key from the developer KeyStore 'myKeyStore.jks' (located in the current directory). The app will become a signed app called 'mySignedApp.apk' and will be ready to release to stores.</p>
+<h5 id="zipalign">Zipalign<a class="headerlink" href="#zipalign" title="Permanent link">&para;</a></h5>
+<p>The <code>zipalign</code> tool should always be used to align the APK file before distribution. This tool aligns all uncompressed data (such as images, raw files, and 4-byte boundaries) within the APK, which helps improve memory management during app runtime.</p>
+<blockquote>
+<p>Zipalign must be used before the APK file is signed with apksigner.</p>
+</blockquote>
+<h3 id="publishing-process">Publishing Process<a class="headerlink" href="#publishing-process" title="Permanent link">&para;</a></h3>
+<p>Distributing apps from anywhere (your own site, any store, etc.) is possible because the Android ecosystem is open. However, Google Play is the most well-known, trusted, and popular store, and Google itself provides it. Amazon Appstore is the trusted default store for Kindle devices. If users want to install third-party apps from a non-trusted source, they must explicitly allow this with their device security settings.</p>
+<p>Apps can be installed on an Android device from a variety of sources: locally via USB, via Google's official app store (Google Play Store) or from alternative stores.</p>
+<p>Whereas other vendors may review and approve apps before they are actually published, Google will simply scan for known malware signatures; this minimizes the time between the beginning of the publishing process and public app availability.</p>
+<p>Publishing an app is quite straightforward; the main operation is making the signed APK file downloadable. On Google Play, publishing starts with account creation and is followed by app delivery through a dedicated interface. Details are available at <a href="https://play.google.com/console/about/guides/releasewithconfidence/" title="Review the checklists to plan your launch">the official Android documentation</a>.</p>
+<h2 id="android-application-attack-surface">Android Application Attack Surface<a class="headerlink" href="#android-application-attack-surface" title="Permanent link">&para;</a></h2>
+<p>The Android application attack surface consists of all components of the application, including the supportive material necessary to release the app and to support its functioning. The Android application may be vulnerable to attack if it does not:</p>
+<ul>
+<li>Validate all input by means of IPC communication or URL schemes, see also:</li>
+<li><a href="../0x05h-Testing-Platform-Interaction/#testing-for-sensitive-functionality-exposure-through-ipc-mstg-platform-4">Testing for Sensitive Functionality Exposure Through IPC</a></li>
+<li><a href="../0x05h-Testing-Platform-Interaction/#testing-deep-links-mstg-platform-3">Testing Deep Links</a></li>
+<li>Validate all input by the user in input fields.</li>
+<li>Validate the content loaded inside a WebView, see also:</li>
+<li><a href="../0x05h-Testing-Platform-Interaction/#testing-javascript-execution-in-webviews-mstg-platform-5">Testing JavaScript Execution in WebViews</a></li>
+<li><a href="../0x05h-Testing-Platform-Interaction/#testing-webview-protocol-handlers-mstg-platform-6">Testing WebView Protocol Handlers</a></li>
+<li><a href="../0x05h-Testing-Platform-Interaction/#determining-whether-java-objects-are-exposed-through-webviews-mstg-platform-7">Determining Whether Java Objects Are Exposed Through WebViews</a></li>
+<li>Securely communicate with backend servers or is susceptible to man-in-the-middle attacks between the server and the mobile application, see also:</li>
+<li><a href="../../General/0x04f-Testing-Network-Communication/#testing-network-communication">Testing Network Communication</a></li>
+<li><a href="../0x05g-Testing-Network-Communication/">Android Network Communication</a></li>
+<li>Securely stores all local data, or loads untrusted data from storage, see also:</li>
+<li><a href="../0x05d-Testing-Data-Storage/">Data Storage on Android</a></li>
+<li>Protect itself against compromised environments, repackaging or other local attacks, see also:</li>
+<li><a href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/">Android Anti-Reversing Defenses</a></li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

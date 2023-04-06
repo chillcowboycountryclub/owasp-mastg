@@ -1,0 +1,3278 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x06h-Testing-Platform-Interaction/">
+      
+      
+        <link rel="next" href="../0x06j-Testing-Resiliency-Against-Reverse-Engineering/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>iOS Code Quality and Build Settings - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ios-code-quality-and-build-settings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              iOS Code Quality and Build Settings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          iOS Code Quality and Build Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        iOS Code Quality and Build Settings
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#app-signing" class="md-nav__link">
+    App Signing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#third-party-libraries" class="md-nav__link">
+    Third-Party Libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-corruption-bugs" class="md-nav__link">
+    Memory Corruption Bugs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary-protection-mechanisms" class="md-nav__link">
+    Binary Protection Mechanisms
+  </a>
+  
+    <nav class="md-nav" aria-label="Binary Protection Mechanisms">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xcode-project-settings" class="md-nav__link">
+    Xcode Project Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Xcode Project Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stack-canary-protection" class="md-nav__link">
+    Stack Canary protection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pie-protection" class="md-nav__link">
+    PIE protection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#arc-protection" class="md-nav__link">
+    ARC protection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debuggable-apps" class="md-nav__link">
+    Debuggable Apps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-symbols" class="md-nav__link">
+    Debugging Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-code-and-error-logging" class="md-nav__link">
+    Debugging Code and Error Logging
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    Exception Handling
+  </a>
+  
+    <nav class="md-nav" aria-label="Exception Handling">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling-in-objective-c" class="md-nav__link">
+    Exception Handling in Objective-C
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling-in-swift" class="md-nav__link">
+    Exception Handling in Swift
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#making-sure-that-the-app-is-properly-signed-mstg-code-1" class="md-nav__link">
+    Making Sure that the App Is Properly Signed (MSTG-CODE-1)
+  </a>
+  
+    <nav class="md-nav" aria-label="Making Sure that the App Is Properly Signed (MSTG-CODE-1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-whether-the-app-is-debuggable-mstg-code-2" class="md-nav__link">
+    Testing whether the App is Debuggable (MSTG-CODE-2)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing whether the App is Debuggable (MSTG-CODE-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_1" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-for-debugging-symbols-mstg-code-3" class="md-nav__link">
+    Testing for Debugging Symbols (MSTG-CODE-3)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing for Debugging Symbols (MSTG-CODE-3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_2" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_1" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-for-debugging-code-and-verbose-error-logging-mstg-code-4" class="md-nav__link">
+    Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_3" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_2" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-for-weaknesses-in-third-party-libraries-mstg-code-5" class="md-nav__link">
+    Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_4" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#detecting-vulnerabilities-of-third-party-libraries" class="md-nav__link">
+    Detecting vulnerabilities of third party libraries
+  </a>
+  
+    <nav class="md-nav" aria-label="Detecting vulnerabilities of third party libraries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#swift-package-manager" class="md-nav__link">
+    Swift Package Manager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cocoapods" class="md-nav__link">
+    CocoaPods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#carthage" class="md-nav__link">
+    Carthage
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#discovered-library-vulnerabilities" class="md-nav__link">
+    Discovered library vulnerabilities
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_3" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listing-application-libraries" class="md-nav__link">
+    Listing Application Libraries
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-exception-handling-mstg-code-6" class="md-nav__link">
+    Testing Exception Handling (MSTG-CODE-6)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Exception Handling (MSTG-CODE-6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_5" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis-in-objective-c" class="md-nav__link">
+    Static Analysis in Objective-C
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis-in-swift" class="md-nav__link">
+    Static Analysis in Swift
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proper-error-handling" class="md-nav__link">
+    Proper Error Handling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-testing" class="md-nav__link">
+    Dynamic Testing
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-corruption-bugs-mstg-code-8" class="md-nav__link">
+    Memory Corruption Bugs (MSTG-CODE-8)
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Corruption Bugs (MSTG-CODE-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_6" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_4" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#make-sure-that-free-security-features-are-activated-mstg-code-9" class="md-nav__link">
+    Make Sure That Free Security Features Are Activated (MSTG-CODE-9)
+  </a>
+  
+    <nav class="md-nav" aria-label="Make Sure That Free Security Features Are Activated (MSTG-CODE-9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_7" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_5" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="ios-code-quality-and-build-settings">iOS Code Quality and Build Settings<a class="headerlink" href="#ios-code-quality-and-build-settings" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h3 id="app-signing">App Signing<a class="headerlink" href="#app-signing" title="Permanent link">&para;</a></h3>
+<p><a href="../0x06a-Platform-Overview/#code-signing">Code signing</a> your app assures users that the app has a known source and hasn't been modified since it was last signed. Before your app can integrate app services, be installed on a non-jailbroken device, or be submitted to the App Store, it must be signed with a certificate issued by Apple. For more information on how to request certificates and code sign your apps, review the <a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/Introduction/Introduction.html" title="App Distribution Guide">App Distribution Guide</a>.</p>
+<h3 id="third-party-libraries">Third-Party Libraries<a class="headerlink" href="#third-party-libraries" title="Permanent link">&para;</a></h3>
+<p>iOS applications often make use of third party libraries which accelerate development as the developer has to write less code in order to solve a problem. However, third party libraries may contain vulnerabilities, incompatible licensing, or malicious content. Additionally, it is difficult for organizations and developers to manage application dependencies, including monitoring library releases and applying available security patches.</p>
+<p>There are three widely used package management tools <a href="https://swift.org/package-manager" title="Swift Package Manager on Swift.org">Swift Package Manager</a>, <a href="https://github.com/Carthage/Carthage" title="Carthage on GitHub">Carthage</a>, and <a href="https://cocoapods.org" title="CocoaPods.org">CocoaPods</a>:</p>
+<ul>
+<li>The Swift Package Manager is open source, included with the Swift language, integrated into Xcode (since Xcode 11) and supports <a href="https://developer.apple.com/documentation/swift_packages" title="Swift Packages Documentation">Swift, Objective-C, Objective-C++, C, and C++</a> packages. It is written in Swift, decentralized and uses the Package.swift file to document and manage project dependencies.</li>
+<li>Carthage is open source and can be used for Swift and Objective-C packages. It is written in Swift, decentralized and uses the Cartfile file to document and manage project dependencies.</li>
+<li>CocoaPods is open source and can be used for Swift and Objective-C packages. It is written in Ruby, utilizes a centralized package registry for public and private packages and uses the Podfile file to document and manage project dependencies.</li>
+</ul>
+<p>There are two categories of libraries:</p>
+<ul>
+<li>Libraries that are not (or should not) be packed within the actual production application, such as <code>OHHTTPStubs</code> used for testing.</li>
+<li>Libraries that are packed within the actual production application, such as <code>Alamofire</code>.</li>
+</ul>
+<p>These libraries can lead to unwanted side-effects:</p>
+<ul>
+<li>A library can contain a vulnerability, which will make the application vulnerable. A good example is <code>AFNetworking</code> version 2.5.1, which contained a bug that disabled certificate validation. This vulnerability would allow attackers to execute man-in-the-middle attacks against apps that are using the library to connect to their APIs.</li>
+<li>A library can no longer be maintained or hardly be used, which is why no vulnerabilities are reported and/or fixed. This can lead to having bad and/or vulnerable code in your application through the library.</li>
+<li>A library can use a license, such as LGPL2.1, which requires the application author to provide access to the source code for those who use the application and request insight in its sources. In fact the application should then be allowed to be redistributed with modifications to its source code. This can endanger the intellectual property (IP) of the application.</li>
+</ul>
+<p>Please note that this issue can hold on multiple levels: When you use webviews with JavaScript running in the webview, the JavaScript libraries can have these issues as well. The same holds for plugins/libraries for Cordova, React-native and Xamarin apps.</p>
+<h3 id="memory-corruption-bugs">Memory Corruption Bugs<a class="headerlink" href="#memory-corruption-bugs" title="Permanent link">&para;</a></h3>
+<p>iOS applications have various ways to run into <a href="../../General/0x04h-Testing-Code-Quality/#memory-corruption-bugs">memory corruption bugs</a>: first there are the native code issues which have been mentioned in the general Memory Corruption Bugs section. Next, there are various unsafe operations with both Objective-C and Swift to actually wrap around native code which can create issues. Last, both Swift and Objective-C implementations can result in memory leaks due to retaining objects which are no longer in use.</p>
+<p>Learn more:</p>
+<ul>
+<li><a href="https://developer.ibm.com/tutorials/mo-ios-memory/">https://developer.ibm.com/tutorials/mo-ios-memory/</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html">https://developer.apple.com/library/archive/documentation/Cocoa/Conceptual/MemoryMgmt/Articles/MemoryMgmt.html</a></li>
+<li><a href="https://medium.com/zendesk-engineering/ios-identifying-memory-leaks-using-the-xcode-memory-graph-debugger-e84f097b9d15">https://medium.com/zendesk-engineering/ios-identifying-memory-leaks-using-the-xcode-memory-graph-debugger-e84f097b9d15</a></li>
+</ul>
+<h3 id="binary-protection-mechanisms">Binary Protection Mechanisms<a class="headerlink" href="#binary-protection-mechanisms" title="Permanent link">&para;</a></h3>
+<p>Detecting the presence of <a href="../../General/0x04h-Testing-Code-Quality/#binary-protection-mechanisms">binary protection mechanisms</a> heavily depend on the language used for developing the application.</p>
+<p>Although Xcode enables all binary security features by default, it may be relevant to verify this for old applications or to check for compiler flag misconfigurations. The following features are applicable:</p>
+<ul>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#position-independent-code"><strong>PIE (Position Independent Executable)</strong></a>:</li>
+<li>PIE applies to executable binaries (Mach-O type <code>MH_EXECUTE</code>).</li>
+<li>However it's not applicable for libraries (Mach-O type <code>MH_DYLIB</code>).</li>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#memory-management"><strong>Memory management</strong></a>:</li>
+<li>Both pure Objective-C, Swift and hybrid binaries should have ARC (Automatic Reference Counting) enabled.</li>
+<li>For C/C++ libraries, the developer is responsible for doing proper <a href="../../General/0x04h-Testing-Code-Quality/#manual-memory-management">manual memory management</a>. See <a href="#memory-corruption-bugs-mstg-code-8">"Memory Corruption Bugs (MSTG-CODE-8)"</a>.</li>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#stack-smashing-protection"><strong>Stack Smashing Protection</strong></a>: For pure Objective-C binaries, this should always be enabled. Since Swift is designed to be memory safe, if a library is purely written in Swift, and stack canaries weren’t enabled, the risk will be minimal.</li>
+</ul>
+<p>Learn more:</p>
+<ul>
+<li><a href="https://github.com/aidansteele/osx-abi-macho-file-format-reference">OS X ABI Mach-O File Format Reference</a></li>
+<li><a href="https://sensepost.com/blog/2021/on-ios-binary-protections/">On iOS Binary Protections</a></li>
+<li><a href="https://support.apple.com/en-gb/guide/security/sec15bfe098e/web">Security of runtime process in iOS and iPadOS</a></li>
+<li><a href="https://developer.apple.com/library/archive/documentation/DeveloperTools/Conceptual/MachOTopics/1-Articles/dynamic_code.html">Mach-O Programming Topics - Position-Independent Code</a></li>
+</ul>
+<p>Tests to detect the presence of these protection mechanisms heavily depend on the language used for developing the application. For example, existing techniques for detecting the presence of stack canaries do not work for pure Swift apps.</p>
+<h4 id="xcode-project-settings">Xcode Project Settings<a class="headerlink" href="#xcode-project-settings" title="Permanent link">&para;</a></h4>
+<h5 id="stack-canary-protection">Stack Canary protection<a class="headerlink" href="#stack-canary-protection" title="Permanent link">&para;</a></h5>
+<p>Steps for enabling stack canary protection in an iOS application:</p>
+<ol>
+<li>In Xcode, select your target in the "Targets" section, then click the "Build Settings" tab to view the target's settings.</li>
+<li>Make sure that the "-fstack-protector-all" option is selected in the "Other C Flags" section.</li>
+<li>Make sure that Position Independent Executables (PIE) support is enabled.</li>
+</ol>
+<h5 id="pie-protection">PIE protection<a class="headerlink" href="#pie-protection" title="Permanent link">&para;</a></h5>
+<p>Steps for building an iOS application as PIE:</p>
+<ol>
+<li>In Xcode, select your target in the "Targets" section, then click the "Build Settings" tab to view the target's settings.</li>
+<li>Set the iOS Deployment Target to iOS 4.3 or later.</li>
+<li>Make sure that "Generate Position-Dependent Code" (section "Apple Clang - Code Generation") is set to its default value ("NO").</li>
+<li>Make sure that "Generate Position-Dependent Executable" (section "Linking") is set to its default value ("NO").</li>
+</ol>
+<h5 id="arc-protection">ARC protection<a class="headerlink" href="#arc-protection" title="Permanent link">&para;</a></h5>
+<p>ARC is automatically enabled for Swift apps by the <code>swiftc</code> compiler. However, for Objective-C apps you'll have ensure that it's enabled by following these steps:</p>
+<ol>
+<li>In Xcode, select your target in the "Targets" section, then click the "Build Settings" tab to view the target's settings.</li>
+<li>Make sure that "Objective-C Automatic Reference Counting" is set to its default value ("YES").</li>
+</ol>
+<p>See the <a href="https://developer.apple.com/library/mac/qa/qa1788/_index.html" title="Technical Q&amp;A QA1788 Building a Position Independent Executable">Technical Q&amp;A QA1788 Building a Position Independent Executable</a>.</p>
+<h3 id="debuggable-apps">Debuggable Apps<a class="headerlink" href="#debuggable-apps" title="Permanent link">&para;</a></h3>
+<p>Apps can be made <a href="../0x06c-Reverse-Engineering-and-Tampering/#debugging">debuggable</a> by adding the <a href="https://developer.apple.com/documentation/security/notarizing_macos_software_before_distribution/resolving_common_notarization_issues" title="Resolving common notarization issues"><code>get-task-allow</code></a> key to the app entitlements file and setting it to <code>true</code>.</p>
+<p>While debugging is a useful feature when developing an app, it has to be turned off before releasing apps to the App Store or within an enterprise program. To do that you need to determine the mode in which your app is to be generated to check the flags in the environment:</p>
+<ul>
+<li>Select the build settings of the project</li>
+<li>Under 'Apple LVM - Preprocessing' and 'Preprocessor Macros', make sure 'DEBUG' or 'DEBUG_MODE' is not selected (Objective-C)</li>
+<li>Make sure that the "Debug executable" option is not selected.</li>
+<li>Or in the 'Swift Compiler - Custom Flags' section / 'Other Swift Flags', make sure the '-D DEBUG' entry does not exist.</li>
+</ul>
+<h3 id="debugging-symbols">Debugging Symbols<a class="headerlink" href="#debugging-symbols" title="Permanent link">&para;</a></h3>
+<p>As a good practice, as little explanatory information as possible should be provided with a compiled binary. The presence of additional metadata such as debug symbols might provide valuable information about the code, e.g. function names leaking information about what a function does. This metadata is not required to execute the binary and thus it is safe to discard it for the release build, which can be done by using proper compiler configurations. As a tester you should inspect all binaries delivered with the app and ensure that no debugging symbols are present (at least those revealing any valuable information about the code).</p>
+<p>When an iOS application is compiled, the compiler generates a list of debug symbols for each binary file in an app (the main app executable, frameworks, and app extensions). These symbols include class names, global variables, and method and function names which are mapped to specific files and line numbers where they're defined. <a href="https://developer.apple.com/documentation/xcode/building-your-app-to-include-debugging-information" title="Building Your App to Include Debugging Information">Debug builds</a> of an app place the debug symbols in a compiled binary by default, while release builds of an app place them in a companion <em>Debug Symbol file</em> (dSYM) to reduce the size of the distributed app.</p>
+<h3 id="debugging-code-and-error-logging">Debugging Code and Error Logging<a class="headerlink" href="#debugging-code-and-error-logging" title="Permanent link">&para;</a></h3>
+<p>To speed up verification and get a better understanding of errors, developers often include debugging code, such as verbose logging statements (using <code>NSLog</code>, <code>println</code>, <code>print</code>, <code>dump</code>, and <code>debugPrint</code>) about responses from their APIs and about their application's progress and/or state. Furthermore, there may be debugging code for "management-functionality", which is used by developers to set the application's state or mock responses from an API. Reverse engineers can easily use this information to track what's happening with the application. Therefore, debugging code should be removed from the application's release version.</p>
+<h3 id="exception-handling">Exception Handling<a class="headerlink" href="#exception-handling" title="Permanent link">&para;</a></h3>
+<p>Exceptions often occur after an application enters an abnormal or erroneous state.
+Testing exception handling is about making sure that the application will handle the exception and get into a safe state without exposing any sensitive information via its logging mechanisms or the UI.</p>
+<p>Bear in mind that exception handling in Objective-C is quite different from exception handling in Swift. Bridging the two approaches in an application that is written in both legacy Objective-C code and Swift code can be problematic.</p>
+<h4 id="exception-handling-in-objective-c">Exception Handling in Objective-C<a class="headerlink" href="#exception-handling-in-objective-c" title="Permanent link">&para;</a></h4>
+<p>Objective-C has two types of errors:</p>
+<p><strong>NSException:</strong></p>
+<p><code>NSException</code> is used to handle programming and low-level errors (e.g., division by 0 and out-of-bounds array access).
+An <code>NSException</code> can either be raised by <code>raise</code> or thrown with <code>@throw</code>. Unless caught, this exception will invoke the unhandled exception handler, with which you can log the statement (logging will halt the program). <code>@catch</code> allows you to recover from the exception if you're using a <code>@try</code>-<code>@catch</code>-block:</p>
+<div class="highlight"><pre><span></span><code><span class="w"> </span><span class="k">@try</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//do work here</span>
+<span class="w"> </span><span class="p">}</span>
+
+<span class="k">@catch</span><span class="w"> </span><span class="p">(</span><span class="bp">NSException</span><span class="w"> </span><span class="o">*</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//recover from exception</span>
+<span class="p">}</span>
+
+<span class="k">@finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//cleanup</span>
+</code></pre></div>
+<p>Bear in mind that using <code>NSException</code> comes with memory management pitfalls: you need to <a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Exceptions/Tasks/RaisingExceptions.html#//apple_ref/doc/uid/20000058-BBCCFIBF" title="Raising exceptions">clean up allocations</a> from the try block that are in the <a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/Exceptions/Tasks/HandlingExceptions.html" title="Handling Exceptions">finally block</a>. Note that you can promote <code>NSException</code> objects to <code>NSError</code> by instantiating an <code>NSError</code> in the <code>@catch</code> block.</p>
+<p><strong>NSError:</strong></p>
+<p><code>NSError</code> is used for all other types of <a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/ProgrammingWithObjectiveC/ErrorHandling/ErrorHandling.html" title="Dealing with Errors">errors</a>. Some Cocoa framework APIs provide errors as objects in their failure callback in case something goes wrong; those that don't provide them pass a pointer to an <code>NSError</code> object by reference. It is a good practice to provide a <code>BOOL</code> return type to the method that takes a pointer to an <code>NSError</code> object to indicate success or failure. If there's a return type, make sure to return <code>nil</code> for errors. If <code>NO</code> or <code>nil</code> is returned, it allows you to inspect the error/reason for failure.</p>
+<h4 id="exception-handling-in-swift">Exception Handling in Swift<a class="headerlink" href="#exception-handling-in-swift" title="Permanent link">&para;</a></h4>
+<p>Exception handing in Swift (2 - 5) is quite different. The try-catch block is not there to handle <code>NSException</code>. The block is used to handle errors that conform to the <code>Error</code> (Swift 3) or <code>ErrorType</code> (Swift 2) protocol. This can be challenging when Objective-C and Swift code are combined in an application. Therefore, <code>NSError</code> is preferable to <code>NSException</code> for programs written in both languages. Furthermore, error-handling is opt-in in Objective-C, but <code>throws</code> must be explicitly handled in Swift. To convert error-throwing, look at the <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/AdoptingCocoaDesignPatterns.html" title="Adopting Cocoa Design Patterns">Apple documentation</a>.
+Methods that can throw errors use the <code>throws</code> keyword. The <code>Result</code> type represents a success or failure, see <a href="https://developer.apple.com/documentation/swift/result">Result</a>, <a href="https://www.hackingwithswift.com/articles/161/how-to-use-result-in-swift">How to use Result in Swift 5</a> and <a href="https://www.swiftbysundell.com/posts/the-power-of-result-types-in-swift">The power of Result types in Swift</a>. There are four ways to <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/Swift_Programming_Language/ErrorHandling.html" title="Error Handling in Swift">handle errors in Swift</a>:</p>
+<ul>
+<li>Propagate the error from a function to the code that calls that function. In this situation, there's no <code>do-catch</code>; there's only a <code>throw</code> throwing the actual error or a <code>try</code> to execute the method that throws. The method containing the <code>try</code> also requires the <code>throws</code> keyword:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>func dosomething(argumentx:TypeX) throws {
+    try functionThatThrows(argumentx: argumentx)
+}
+</code></pre></div>
+<ul>
+<li>Handle the error with a <code>do-catch</code> statement. You can use the following pattern:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>func doTryExample() {
+    do {
+        try functionThatThrows(number: 203)
+    } catch NumberError.lessThanZero {
+        // Handle number is less than zero
+    } catch let NumberError.tooLarge(delta) {
+        // Handle number is too large (with delta value)
+    } catch {
+        // Handle any other errors
+    }
+}
+
+enum NumberError: Error {
+    case lessThanZero
+    case tooLarge(Int)
+    case tooSmall(Int)
+}
+
+func functionThatThrows(number: Int) throws -&gt; Bool {
+    if number &lt; 0 {
+        throw NumberError.lessThanZero
+    } else if number &lt; 10 {
+        throw NumberError.tooSmall(10 - number)
+    } else if number &gt; 100 {
+        throw NumberError.tooLarge(100 - number)
+    } else {
+        return true
+    }
+}
+</code></pre></div>
+<ul>
+<li>Handle the error as an optional value:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>    let x = try? functionThatThrows()
+    // In this case the value of x is nil in case of an error.
+</code></pre></div>
+<ul>
+<li>Use the <code>try!</code> expression to assert that the error won't occur.</li>
+<li>Handle the generic error as a <code>Result</code> return:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>enum ErrorType: Error {
+    case typeOne
+    case typeTwo
+}
+
+func functionWithResult(param: String?) -&gt; Result&lt;String, ErrorType&gt; {
+    guard let value = param else {
+        return .failure(.typeOne)
+    }
+    return .success(value)
+}
+
+func callResultFunction() {
+    let result = functionWithResult(param: &quot;OWASP&quot;)
+
+    switch result {
+    case let .success(value):
+        // Handle success
+    case let .failure(error):
+        // Handle failure (with error)
+    }
+}
+</code></pre></div>
+<ul>
+<li>Handle network and JSON decoding errors with a <code>Result</code> type:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>struct MSTG: Codable {
+    var root: String
+    var plugins: [String]
+    var structure: MSTGStructure
+    var title: String
+    var language: String
+    var description: String
+}
+
+struct MSTGStructure: Codable {
+    var readme: String
+}
+
+enum RequestError: Error {
+    case requestError(Error)
+    case noData
+    case jsonError
+}
+
+func getMSTGInfo() {
+    guard let url = URL(string: &quot;https://raw.githubusercontent.com/OWASP/owasp-mastg/master/book.json&quot;) else {
+        return
+    }
+
+    request(url: url) { result in
+        switch result {
+        case let .success(data):
+            // Handle success with MSTG data
+            let mstgTitle = data.title
+            let mstgDescription = data.description
+        case let .failure(error):
+            // Handle failure
+            switch error {
+            case let .requestError(error):
+                // Handle request error (with error)
+            case .noData:
+                // Handle no data received in response
+            case .jsonError:
+                // Handle error parsing JSON
+            }
+        }
+    }
+}
+
+func request(url: URL, completion: @escaping (Result&lt;MSTG, RequestError&gt;) -&gt; Void) {
+    let task = URLSession.shared.dataTask(with: url) { data, _, error in
+        if let error = error {
+            return completion(.failure(.requestError(error)))
+        } else {
+            if let data = data {
+                let decoder = JSONDecoder()
+                guard let response = try? decoder.decode(MSTG.self, from: data) else {
+                    return completion(.failure(.jsonError))
+                }
+                return completion(.success(response))
+            }
+        }
+    }
+    task.resume()
+}
+</code></pre></div>
+<h2 id="making-sure-that-the-app-is-properly-signed-mstg-code-1">Making Sure that the App Is Properly Signed (MSTG-CODE-1)<a class="headerlink" href="#making-sure-that-the-app-is-properly-signed-mstg-code-1" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis">Static Analysis<a class="headerlink" href="#static-analysis" title="Permanent link">&para;</a></h3>
+<p>You have to ensure that the app is <a href="https://developer.apple.com/documentation/xcode/using-the-latest-code-signature-format">using the latest code signature format</a>. You can retrieve the signing certificate information from the application's .app file with <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/CodeSigningGuide/Procedures/Procedures.html" title="Code Signing Tasks">codesign</a>. Codesign is used to create, check, and display code signatures, as well as inquire into the dynamic status of signed code in the system.</p>
+<p>After you get the application's IPA file, re-save it as a ZIP file and decompress the ZIP file. Navigate to the Payload directory, where the application's .app file will be.</p>
+<p>Execute the following <code>codesign</code> command to display the signing information:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>codesign<span class="w"> </span>-dvvv<span class="w"> </span>YOURAPP.app
+<span class="nv">Executable</span><span class="o">=</span>/Users/Documents/YOURAPP/Payload/YOURAPP.app/YOURNAME
+<span class="nv">Identifier</span><span class="o">=</span>com.example.example
+<span class="nv">Format</span><span class="o">=</span>app<span class="w"> </span>bundle<span class="w"> </span>with<span class="w"> </span>Mach-O<span class="w"> </span>universal<span class="w"> </span><span class="o">(</span>armv7<span class="w"> </span>arm64<span class="o">)</span>
+CodeDirectory<span class="w"> </span><span class="nv">v</span><span class="o">=</span><span class="m">20200</span><span class="w"> </span><span class="nv">size</span><span class="o">=</span><span class="m">154808</span><span class="w"> </span><span class="nv">flags</span><span class="o">=</span>0x0<span class="o">(</span>none<span class="o">)</span><span class="w"> </span><span class="nv">hashes</span><span class="o">=</span><span class="m">4830</span>+5<span class="w"> </span><span class="nv">location</span><span class="o">=</span>embedded
+Hash<span class="w"> </span><span class="nv">type</span><span class="o">=</span>sha256<span class="w"> </span><span class="nv">size</span><span class="o">=</span><span class="m">32</span>
+CandidateCDHash<span class="w"> </span><span class="nv">sha1</span><span class="o">=</span>455758418a5f6a878bb8fdb709ccfca52c0b5b9e
+CandidateCDHash<span class="w"> </span><span class="nv">sha256</span><span class="o">=</span>fd44efd7d03fb03563b90037f92b6ffff3270c46
+Hash<span class="w"> </span><span class="nv">choices</span><span class="o">=</span>sha1,sha256
+<span class="nv">CDHash</span><span class="o">=</span>fd44efd7d03fb03563b90037f92b6ffff3270c46
+Signature<span class="w"> </span><span class="nv">size</span><span class="o">=</span><span class="m">4678</span>
+<span class="nv">Authority</span><span class="o">=</span>iPhone<span class="w"> </span>Distribution:<span class="w"> </span>Example<span class="w"> </span>Ltd
+<span class="nv">Authority</span><span class="o">=</span>Apple<span class="w"> </span>Worldwide<span class="w"> </span>Developer<span class="w"> </span>Relations<span class="w"> </span>Certification<span class="w"> </span>Authority
+<span class="nv">Authority</span><span class="o">=</span>Apple<span class="w"> </span>Root<span class="w"> </span>CA
+Signed<span class="w"> </span><span class="nv">Time</span><span class="o">=</span><span class="m">4</span><span class="w"> </span>Aug<span class="w"> </span><span class="m">2017</span>,<span class="w"> </span><span class="m">12</span>:42:52
+Info.plist<span class="w"> </span><span class="nv">entries</span><span class="o">=</span><span class="m">66</span>
+<span class="nv">TeamIdentifier</span><span class="o">=</span>8LAMR92KJ8
+Sealed<span class="w"> </span>Resources<span class="w"> </span><span class="nv">version</span><span class="o">=</span><span class="m">2</span><span class="w"> </span><span class="nv">rules</span><span class="o">=</span><span class="m">12</span><span class="w"> </span><span class="nv">files</span><span class="o">=</span><span class="m">1410</span>
+Internal<span class="w"> </span>requirements<span class="w"> </span><span class="nv">count</span><span class="o">=</span><span class="m">1</span><span class="w"> </span><span class="nv">size</span><span class="o">=</span><span class="m">176</span>
+</code></pre></div>
+<p>There are various ways to distribute your app as described at <a href="https://developer.apple.com/business/distribute/" title="Apple Business">the Apple documentation</a>, which include using the App Store or via Apple Business Manager for custom or in-house distribution. In case of an in-house distribution scheme, make sure that no ad hoc certificates are used when the app is signed for distribution.</p>
+<h2 id="testing-whether-the-app-is-debuggable-mstg-code-2">Testing whether the App is Debuggable (MSTG-CODE-2)<a class="headerlink" href="#testing-whether-the-app-is-debuggable-mstg-code-2" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_1">Static Analysis<a class="headerlink" href="#static-analysis_1" title="Permanent link">&para;</a></h3>
+<p>Inspect the app entitlements and check the value of <code>get-task-allow</code> key. If it is set to <code>true</code>, the app is debuggable.</p>
+<p>Using codesign:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>codesign<span class="w"> </span>-d<span class="w"> </span>--entitlements<span class="w"> </span>-<span class="w"> </span>iGoat-Swift.app
+
+<span class="nv">Executable</span><span class="o">=</span>/Users/owasp/iGoat-Swift/Payload/iGoat-Swift.app/iGoat-Swift
+<span class="o">[</span>Dict<span class="o">]</span>
+<span class="w">    </span><span class="o">[</span>Key<span class="o">]</span><span class="w"> </span>application-identifier
+<span class="w">    </span><span class="o">[</span>Value<span class="o">]</span>
+<span class="w">        </span><span class="o">[</span>String<span class="o">]</span><span class="w"> </span>TNAJ496RHB.OWASP.iGoat-Swift
+<span class="w">    </span><span class="o">[</span>Key<span class="o">]</span><span class="w"> </span>com.apple.developer.team-identifier
+<span class="w">    </span><span class="o">[</span>Value<span class="o">]</span>
+<span class="w">        </span><span class="o">[</span>String<span class="o">]</span><span class="w"> </span>TNAJ496RHB
+<span class="w">    </span><span class="o">[</span>Key<span class="o">]</span><span class="w"> </span>get-task-allow
+<span class="w">    </span><span class="o">[</span>Value<span class="o">]</span>
+<span class="w">        </span><span class="o">[</span>Bool<span class="o">]</span><span class="w"> </span><span class="nb">true</span>
+<span class="w">    </span><span class="o">[</span>Key<span class="o">]</span><span class="w"> </span>keychain-access-groups
+<span class="w">    </span><span class="o">[</span>Value<span class="o">]</span>
+<span class="w">        </span><span class="o">[</span>Array<span class="o">]</span>
+<span class="w">            </span><span class="o">[</span>String<span class="o">]</span><span class="w"> </span>TNAJ496RHB.OWASP.iGoat-Swift
+<span class="sb">````</span>
+
+Using<span class="w"> </span>ldid:
+
+<span class="sb">```</span>xml
+$<span class="w"> </span>ldid<span class="w"> </span>-e<span class="w"> </span>iGoat-Swift.app/iGoat-Swift
+
+&lt;?xml<span class="w"> </span><span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span><span class="w"> </span><span class="nv">encoding</span><span class="o">=</span><span class="s2">&quot;UTF-8&quot;</span>?&gt;
+&lt;!DOCTYPE<span class="w"> </span>plist<span class="w"> </span>PUBLIC<span class="w"> </span><span class="s2">&quot;-//Apple//DTD PLIST 1.0//EN&quot;</span><span class="w"> </span><span class="s2">&quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;</span>&gt;
+&lt;plist<span class="w"> </span><span class="nv">version</span><span class="o">=</span><span class="s2">&quot;1.0&quot;</span>&gt;
+&lt;dict&gt;
+<span class="w">    </span>&lt;key&gt;application-identifier&lt;/key&gt;
+<span class="w">    </span>&lt;string&gt;TNAJ496RHB.OWASP.iGoat-Swift&lt;/string&gt;
+<span class="w">    </span>&lt;key&gt;com.apple.developer.team-identifier&lt;/key&gt;
+<span class="w">    </span>&lt;string&gt;TNAJ496RHB&lt;/string&gt;
+<span class="w">    </span>&lt;key&gt;get-task-allow&lt;/key&gt;
+<span class="w">    </span>&lt;true/&gt;
+<span class="w">    </span>&lt;key&gt;keychain-access-groups&lt;/key&gt;
+<span class="w">    </span>&lt;array&gt;
+<span class="w">        </span>&lt;string&gt;TNAJ496RHB.OWASP.iGoat-Swift&lt;/string&gt;
+<span class="w">    </span>&lt;/array&gt;
+&lt;/dict&gt;
+&lt;/plist&gt;
+</code></pre></div>
+<h3 id="dynamic-analysis">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis" title="Permanent link">&para;</a></h3>
+<p>Check whether you can attach a debugger directly, using Xcode. Next, check if you can debug the app on a jailbroken device after Clutching it. This is done using the debug-server which comes from the BigBoss repository at Cydia.</p>
+<p>Note: if the application is equipped with anti-reverse engineering controls, then the debugger can be detected and stopped.</p>
+<h2 id="testing-for-debugging-symbols-mstg-code-3">Testing for Debugging Symbols (MSTG-CODE-3)<a class="headerlink" href="#testing-for-debugging-symbols-mstg-code-3" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_2">Static Analysis<a class="headerlink" href="#static-analysis_2" title="Permanent link">&para;</a></h3>
+<p>To verify the existence of debug symbols you can use objdump from <a href="https://www.gnu.org/s/binutils/" title="Binutils">binutils</a> or <a href="https://llvm.org/docs/CommandGuide/llvm-objdump.html" title="llvm-objdump">llvm-objdump</a> to inspect all of the app binaries.</p>
+<p>In the following snippet we run objdump over <code>TargetApp</code> (the iOS main app executable) to show the typical output of a binary containing debug symbols which are marked with the <code>d</code> (debug) flag. Check the <a href="https://www.unix.com/man-page/osx/1/objdump/" title="objdump man page">objdump man page</a> for information about various other symbol flag characters.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>objdump<span class="w"> </span>--syms<span class="w"> </span>TargetApp
+
+0000000100007dc8<span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>-<span class="o">[</span>ViewController<span class="w"> </span>handleSubmitButton:<span class="o">]</span>
+000000010000809c<span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>-<span class="o">[</span>ViewController<span class="w"> </span>touchesBegan:withEvent:<span class="o">]</span>
+<span class="m">0000000100008158</span><span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>-<span class="o">[</span>ViewController<span class="w"> </span>viewDidLoad<span class="o">]</span>
+...
+000000010000916c<span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>_disable_gdb
+00000001000091d8<span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>_detect_injected_dylds
+00000001000092a4<span class="w"> </span>l<span class="w">    </span>d<span class="w">  </span>*UND*<span class="w"> </span>_isDebugged
+...
+</code></pre></div>
+<p>To prevent the inclusion of debug symbols, set <code>Strip Debug Symbols During Copy</code> to <code>YES</code> via the XCode project's build settings. Stripping debugging symbols will not only reduce the size of the binary but also increase the difficulty of reverse engineering.</p>
+<h3 id="dynamic-analysis_1">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_1" title="Permanent link">&para;</a></h3>
+<p>Dynamic analysis is not applicable for finding debugging symbols.</p>
+<h2 id="testing-for-debugging-code-and-verbose-error-logging-mstg-code-4">Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)<a class="headerlink" href="#testing-for-debugging-code-and-verbose-error-logging-mstg-code-4" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_3">Static Analysis<a class="headerlink" href="#static-analysis_3" title="Permanent link">&para;</a></h3>
+<p>You can take the following static analysis approach for the logging statements:</p>
+<ol>
+<li>Import the application's code into Xcode.</li>
+<li>Search the code for the following printing functions: <code>NSLog</code>, <code>println</code>, <code>print</code>, <code>dump</code>, <code>debugPrint</code>.</li>
+<li>When you find one of them, determine whether the developers used a wrapping function around the logging function for better mark up of the statements to be logged; if so, add that function to your search.</li>
+<li>For every result of steps 2 and 3, determine whether macros or debug-state related guards have been set to turn the logging off in the release build. Please note the change in how Objective-C can use preprocessor macros:</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifdef DEBUG</span>
+<span class="w">    </span><span class="c1">// Debug-only code</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>The procedure for enabling this behavior in Swift has changed: you need to either set environment variables in your scheme or set them as custom flags in the target's build settings. Please note that the following functions (which allow you to determine whether the app was built in the Swift 2.1. release-configuration) aren't recommended, as Xcode 8 and Swift 3 don't support these functions:</p>
+<ul>
+<li><code>_isDebugAssertConfiguration</code></li>
+<li><code>_isReleaseAssertConfiguration</code></li>
+<li><code>_isFastAssertConfiguration</code>.</li>
+</ul>
+<p>Depending on the application's setup, there may be more logging functions. For example, when <a href="https://github.com/CocoaLumberjack/CocoaLumberjack" title="CocoaLumberjack">CocoaLumberjack</a> is used, static analysis is a bit different.</p>
+<p>For the "debug-management" code (which is built-in): inspect the storyboards to see whether there are any flows and/or view-controllers that provide functionality different from the functionality the application should support. This functionality can be anything from debug views to printed error messages, from custom stub-response configurations to logs written to files on the application's file system or a remote server.</p>
+<p>As a developer, incorporating debug statements into your application's debug version should not be a problem as long as you make sure that the debug statements are never present in the application's release version.</p>
+<p>In Objective-C, developers can use preprocessor macros to filter out debug code:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifdef DEBUG</span>
+<span class="w">    </span><span class="c1">// Debug-only code</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<p>In Swift 2 (with Xcode 7), you have to set custom compiler flags for every target, and compiler flags have to start with "-D". So you can use the following annotations when the debug flag <code>DMSTG-DEBUG</code> is set:</p>
+<div class="highlight"><pre><span></span><code>#if MSTG-DEBUG
+    // Debug-only code
+#endif
+</code></pre></div>
+<p>In Swift 3 (with Xcode 8), you can set Active Compilation Conditions in Build settings/Swift compiler - Custom flags. Instead of a preprocessor, Swift 3 uses <a href="https://developer.apple.com/library/content/documentation/Swift/Conceptual/BuildingCocoaApps/InteractingWithCAPIs.html#//apple_ref/doc/uid/TP40014216-CH8-ID34" title="Swift conditional compilation blocks">conditional compilation blocks</a> based on the defined conditions:</p>
+<div class="highlight"><pre><span></span><code>#if DEBUG_LOGGING
+    // Debug-only code
+#endif
+</code></pre></div>
+<h3 id="dynamic-analysis_2">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_2" title="Permanent link">&para;</a></h3>
+<p>Dynamic analysis should be executed on both a simulator and a device because developers sometimes use target-based functions (instead of functions based on a release/debug-mode) to execute the debugging code.</p>
+<ol>
+<li>Run the application on a simulator and check for output in the console during the app's execution.</li>
+<li>Attach a device to your Mac, run the application on the device via Xcode, and check for output in the console during the app's execution.</li>
+</ol>
+<p>For the other "manager-based" debug code: click through the application on both a simulator and a device to see if you can find any functionality that allows an app's profiles to be pre-set, allows the actual server to be selected or allows responses from the API to be selected.</p>
+<h2 id="checking-for-weaknesses-in-third-party-libraries-mstg-code-5">Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)<a class="headerlink" href="#checking-for-weaknesses-in-third-party-libraries-mstg-code-5" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_4">Static Analysis<a class="headerlink" href="#static-analysis_4" title="Permanent link">&para;</a></h3>
+<h4 id="detecting-vulnerabilities-of-third-party-libraries">Detecting vulnerabilities of third party libraries<a class="headerlink" href="#detecting-vulnerabilities-of-third-party-libraries" title="Permanent link">&para;</a></h4>
+<p>In order to ensure that the libraries used by the apps are not carrying vulnerabilities, one can best check the dependencies installed by CocoaPods or Carthage.</p>
+<h5 id="swift-package-manager">Swift Package Manager<a class="headerlink" href="#swift-package-manager" title="Permanent link">&para;</a></h5>
+<p>In case <a href="https://swift.org/package-manager" title="Swift Package Manager on Swift.org">Swift Package Manager</a> is used for managing third party dependencies, the following steps can be taken to analyze the third party libraries for vulnerabilities:</p>
+<p>First, at the root of the project, where the Package.swift file is located, type</p>
+<div class="highlight"><pre><span></span><code>swift<span class="w"> </span>build
+</code></pre></div>
+<p>Next, check the file Package.resolved for the actual versions used and inspect the given libraries for known vulnerabilities.</p>
+<p>You can utilize the <a href="https://owasp.org/www-project-dependency-check/" title="OWASP Dependency-Check">OWASP Dependency-Check</a>'s experimental <a href="https://jeremylong.github.io/DependencyCheck/analyzers/swift.html" title="dependency-check - SWIFT Package Manager Analyzer">Swift Package Manager Analyzer</a> to identify the <a href="https://nvd.nist.gov/products/cpe" title="CPE">Common Platform Enumeration (CPE)</a> naming scheme of all dependencies and any corresponding <a href="https://cve.mitre.org/" title="CVE">Common Vulnerability and Exposure (CVE)</a> entries. Scan the application's Package.swift file and generate a report of known vulnerable libraries with the following command:</p>
+<div class="highlight"><pre><span></span><code>dependency-check<span class="w">  </span>--enableExperimental<span class="w"> </span>--out<span class="w"> </span>.<span class="w"> </span>--scan<span class="w"> </span>Package.swift
+</code></pre></div>
+<h5 id="cocoapods">CocoaPods<a class="headerlink" href="#cocoapods" title="Permanent link">&para;</a></h5>
+<p>In case <a href="https://cocoapods.org" title="CocoaPods.org">CocoaPods</a> is used for managing third party dependencies, the following steps can be taken to analyze the third party libraries for vulnerabilities.</p>
+<p>First, at the root of the project, where the Podfile is located, execute the following commands:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>gem<span class="w"> </span>install<span class="w"> </span>cocoapods
+pod<span class="w"> </span>install
+</code></pre></div>
+<p>Next, now that the dependency tree has been built, you can create an overview of the dependencies and their versions by running the following commands:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>gem<span class="w"> </span>install<span class="w"> </span>cocoapods-dependencies
+pod<span class="w"> </span>dependencies
+</code></pre></div>
+<p>The result of the steps above can now be used as input for searching different vulnerability feeds for known vulnerabilities.</p>
+<blockquote>
+<p>Note:</p>
+<ol>
+<li>If the developer packs all dependencies in terms of its own support library using a .podspec file, then this .podspec file can be checked with the experimental CocoaPods podspec checker.</li>
+<li>If the project uses CocoaPods in combination with Objective-C, SourceClear can be used.</li>
+<li>Using CocoaPods with HTTP-based links instead of HTTPS might allow for man-in-the-middle attacks during the download of the dependency, allowing an attacker to replace (parts of) the library with other content. Therefore, always use HTTPS.</li>
+</ol>
+</blockquote>
+<p>You can utilize the <a href="https://owasp.org/www-project-dependency-check/" title="OWASP Dependency-Check">OWASP Dependency-Check</a>'s experimental <a href="https://jeremylong.github.io/DependencyCheck/analyzers/cocoapods.html" title="dependency-check - CocoaPods Analyzer">CocoaPods Analyzer</a>
+to identify the <a href="https://nvd.nist.gov/products/cpe" title="CPE">Common Platform Enumeration (CPE)</a> naming scheme of all dependencies and any corresponding <a href="https://cve.mitre.org/" title="CVE">Common Vulnerability and Exposure (CVE)</a> entries. Scan the application's *.podspec and/or Podfile.lock files and generate a report of known vulnerable libraries with the following command:</p>
+<div class="highlight"><pre><span></span><code>dependency-check<span class="w">  </span>--enableExperimental<span class="w"> </span>--out<span class="w"> </span>.<span class="w"> </span>--scan<span class="w"> </span>Podfile.lock
+</code></pre></div>
+<h5 id="carthage">Carthage<a class="headerlink" href="#carthage" title="Permanent link">&para;</a></h5>
+<p>In case <a href="https://github.com/Carthage/Carthage" title="Carthage on GitHub">Carthage</a> is used for third party dependencies, then the following steps can be taken to analyze the third party libraries for vulnerabilities.</p>
+<p>First, at the root of the project, where the Cartfile is located, type</p>
+<div class="highlight"><pre><span></span><code>brew<span class="w"> </span>install<span class="w"> </span>carthage
+carthage<span class="w"> </span>update<span class="w"> </span>--platform<span class="w"> </span>iOS
+</code></pre></div>
+<p>Next, check the Cartfile.resolved for actual versions used and inspect the given libraries for known vulnerabilities.</p>
+<blockquote>
+<p>Note, at the time of writing this chapter, there is no automated support for Carthage based dependency analysis known to the authors. At least, this feature was already requested for the OWASP DependencyCheck tool but not yet implemented (see the <a href="https://github.com/jeremylong/DependencyCheck/issues/962" title="Add Carthage Analyze for Swift">GitHub issue</a>).</p>
+</blockquote>
+<h4 id="discovered-library-vulnerabilities">Discovered library vulnerabilities<a class="headerlink" href="#discovered-library-vulnerabilities" title="Permanent link">&para;</a></h4>
+<p>When a library is found to contain vulnerabilities, then the following reasoning applies:</p>
+<ul>
+<li>Is the library packaged with the application? Then check whether the library has a version in which the vulnerability is patched. If not, check whether the vulnerability actually affects the application. If that is the case or might be the case in the future, then look for an alternative which provides similar functionality, but without the vulnerabilities.</li>
+<li>Is the library not packaged with the application? See if there is a patched version in which the vulnerability is fixed. If this is not the case, check if the implications of the vulnerability for the build process. Could the vulnerability impede a build or weaken the security of the build-pipeline? Then try looking for an alternative in which the vulnerability is fixed.</li>
+</ul>
+<p>In case frameworks are added manually as linked libraries:</p>
+<ol>
+<li>Open the xcodeproj file and check the project properties.</li>
+<li>Go to the tab <strong>Build Phases</strong> and check the entries in <strong>Link Binary With Libraries</strong> for any of the libraries. See earlier sections on how to obtain similar information using <a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF" title="MobSF">MobSF</a>.</li>
+</ol>
+<p>In the case of copy-pasted sources: search the header files (in case of using Objective-C) and otherwise the Swift files for known method names for known libraries.</p>
+<p>Next, note that for hybrid applications, you will have to check the JavaScript dependencies with <a href="https://retirejs.github.io/retire.js/" title="RetireJS">RetireJS</a>. Similarly for Xamarin, you will have to check the C# dependencies.</p>
+<p>Last, if the application is a high-risk application, you will end up vetting the library manually. In that case there are specific requirements for native code, which are similar to the requirements established by the MASVS for the application as a whole. Next to that, it is good to vet whether all best practices for software engineering are applied.</p>
+<h3 id="dynamic-analysis_3">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_3" title="Permanent link">&para;</a></h3>
+<p>The dynamic analysis of this section comprises of two parts: the actual license verification and checking which libraries are involved in case of missing sources.</p>
+<p>It need to be validated whether the copyrights of the licenses have been adhered to. This often means that the application should have an <code>about</code> or <code>EULA</code> section in which the copy-right statements are noted as required by the license of the third party library.</p>
+<h4 id="listing-application-libraries">Listing Application Libraries<a class="headerlink" href="#listing-application-libraries" title="Permanent link">&para;</a></h4>
+<p>When performing app analysis, it is important to also analyze the app dependencies (usually in form of libraries or so-called iOS Frameworks) and ensure that they don't contain any vulnerabilities. Even when you don't have the source code, you can still identify some of the app dependencies using tools like <a href="https://github.com/sensepost/objection">objection</a>, <a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF">MobSF</a> or the <code>otool -L</code> command. Objection is the recommended tool, since it provides the most accurate results and it is easy to use. It contains a module to work with iOS Bundles, which offers two commands: <code>list_bundles</code> and <code>list_frameworks</code>.</p>
+<p>The <code>list_bundles</code> command lists all of the application’s bundles that are not related to Frameworks. The output contains executable name, bundle id, version of the library and path to the library.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios bundles list_bundles</span>
+Executable<span class="w">    </span>Bundle<span class="w">                                       </span>Version<span class="w">  </span>Path
+------------<span class="w">  </span>-----------------------------------------<span class="w">  </span>---------<span class="w">  </span>-------------------------------------------
+DVIA-v2<span class="w">       </span>com.highaltitudehacks.DVIAswiftv2.develop<span class="w">          </span><span class="m">2</span><span class="w">  </span>...-1F0C-4DB1-8C39-04ACBFFEE7C8/DVIA-v2.app
+CoreGlyphs<span class="w">    </span>com.apple.CoreGlyphs<span class="w">                               </span><span class="m">1</span><span class="w">  </span>...m/Library/CoreServices/CoreGlyphs.bundle
+</code></pre></div>
+<p>The <code>list_frameworks</code> command lists all of the application’s bundles that represent Frameworks.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios bundles list_frameworks</span>
+Executable<span class="w">      </span>Bundle<span class="w">                                     </span>Version<span class="w">    </span>Path
+--------------<span class="w">  </span>-----------------------------------------<span class="w">  </span>---------<span class="w">  </span>-------------------------------------------
+Bolts<span class="w">           </span>org.cocoapods.Bolts<span class="w">                        </span><span class="m">1</span>.9.0<span class="w">      </span>...8/DVIA-v2.app/Frameworks/Bolts.framework
+RealmSwift<span class="w">      </span>org.cocoapods.RealmSwift<span class="w">                   </span><span class="m">4</span>.1.1<span class="w">      </span>...A-v2.app/Frameworks/RealmSwift.framework
+<span class="w">                                                                      </span>...ystem/Library/Frameworks/IOKit.framework
+...
+</code></pre></div>
+<h2 id="testing-exception-handling-mstg-code-6">Testing Exception Handling (MSTG-CODE-6)<a class="headerlink" href="#testing-exception-handling-mstg-code-6" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_5">Static Analysis<a class="headerlink" href="#static-analysis_5" title="Permanent link">&para;</a></h3>
+<p>Review the source code to understand how the application handles various types of errors (IPC communications, remote services invocation, etc.). The following sections list examples of what you should check for each language at this stage.</p>
+<h4 id="static-analysis-in-objective-c">Static Analysis in Objective-C<a class="headerlink" href="#static-analysis-in-objective-c" title="Permanent link">&para;</a></h4>
+<p>Make sure that</p>
+<ul>
+<li>the application uses a well-designed and unified scheme to handle exceptions and errors,</li>
+<li>the Cocoa framework exceptions are handled correctly,</li>
+<li>the allocated memory in the <code>@try</code> blocks is released in the <code>@finally</code> blocks,</li>
+<li>for every <code>@throw</code>, the calling method has a proper <code>@catch</code> at the level of either the calling method or the <code>NSApplication</code>/<code>UIApplication</code> objects to clean up sensitive information and possibly recover,</li>
+<li>the application doesn't expose sensitive information while handling errors in its UI or in its log statements, and the statements are verbose enough to explain the issue to the user,</li>
+<li>high-risk applications' confidential information, such as keying material and authentication information, is always wiped during the execution of <code>@finally</code> blocks,</li>
+<li><code>raise</code> is rarely used (it's used when the program must be terminated without further warning),</li>
+<li><code>NSError</code> objects don't contain data that might leak sensitive information.</li>
+</ul>
+<h4 id="static-analysis-in-swift">Static Analysis in Swift<a class="headerlink" href="#static-analysis-in-swift" title="Permanent link">&para;</a></h4>
+<p>Make sure that</p>
+<ul>
+<li>the application uses a well-designed and unified scheme to handle errors,</li>
+<li>the application doesn't expose sensitive information while handling errors in its UI or in its log statements, and the statements are verbose enough to explain the issue to the user,</li>
+<li>high-risk applications' confidential information, such as keying material and authentication information, is always wiped during the execution of <code>defer</code> blocks,</li>
+<li><code>try!</code> is used only with proper guarding up front (to programmatically verify that the method that's called with <code>try!</code> can't throw an error).</li>
+</ul>
+<h4 id="proper-error-handling">Proper Error Handling<a class="headerlink" href="#proper-error-handling" title="Permanent link">&para;</a></h4>
+<p>Developers can implement proper error handling in several ways:</p>
+<ul>
+<li>Make sure that the application uses a well-designed and unified scheme to handle errors.</li>
+<li>Make sure that all logging is removed or guarded as described in the test case "Testing for Debugging Code and Verbose Error Logging".</li>
+<li>For a high-risk application written in Objective-C: create an exception handler that removes secrets that shouldn't be easily retrievable. The handler can be set via <code>NSSetUncaughtExceptionHandler</code>.</li>
+<li>Refrain from using <code>try!</code> in Swift unless you're certain that there's no error in the throwing method that's being called.</li>
+<li>Make sure that the Swift error doesn't propagate into too many intermediate methods.</li>
+</ul>
+<h3 id="dynamic-testing">Dynamic Testing<a class="headerlink" href="#dynamic-testing" title="Permanent link">&para;</a></h3>
+<p>There are several dynamic analysis methods:</p>
+<ul>
+<li>Enter unexpected values in the iOS application's UI fields.</li>
+<li>Test the custom URL schemes, pasteboard, and other inter-app communication controls by providing unexpected or exception-raising values.</li>
+<li>Tamper with the network communication and/or the files stored by the application.</li>
+<li>For Objective-C, you can use Cycript to hook into methods and provide them arguments that may cause the callee to throw an exception.</li>
+</ul>
+<p>In most cases, the application should not crash. Instead, it should</p>
+<ul>
+<li>recover from the error or enter a state from which it can inform the user that it can't continue,</li>
+<li>provide a message (which shouldn't leak sensitive information) to get the user to take appropriate action,</li>
+<li>withhold information from the application's logging mechanisms.</li>
+</ul>
+<h2 id="memory-corruption-bugs-mstg-code-8">Memory Corruption Bugs (MSTG-CODE-8)<a class="headerlink" href="#memory-corruption-bugs-mstg-code-8" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_6">Static Analysis<a class="headerlink" href="#static-analysis_6" title="Permanent link">&para;</a></h3>
+<p>Are there native code parts? If so: check for the given issues in the general memory corruption section. Native code is a little harder to spot when compiled. If you have the sources then you can see that C files use .c source files and .h header files and C++ uses .cpp files and .h files. This is a little different from the .swift and the .m source files for Swift and Objective-C. These files can be part of the sources, or part of third party libraries, registered as frameworks and imported through various tools, such as Carthage, the Swift Package Manager or Cocoapods.</p>
+<p>For any managed code (Objective-C / Swift) in the project, check the following items:</p>
+<ul>
+<li>The doubleFree issue: when <code>free</code> is called twice for a given region instead of once.</li>
+<li>Retaining cycles: look for cyclic dependencies by means of strong references of components to one another which keep materials in memory.</li>
+<li>Using instances of <code>UnsafePointer</code> can be managed wrongly, which will allow for various memory corruption issues.</li>
+<li>Trying to manage the reference count to an object by <code>Unmanaged</code> manually, leading to wrong counter numbers and a too late/too soon release.</li>
+</ul>
+<p><a href="https://academy.realm.io/posts/russ-bishop-unsafe-swift/" title="Russh Bishop on Unsafe Swift">A great talk is given on this subject at Realm academy</a> and <a href="https://www.raywenderlich.com/780-unsafe-swift-using-pointers-and-interacting-with-c" title="Unsafe Swift: Using Pointers And Interacting With C">a nice tutorial to see what is actually happening</a> is provided by Ray Wenderlich on this subject.</p>
+<blockquote>
+<p>Please note that with Swift 5 you can only deallocate full blocks, which means the playground has changed a bit.</p>
+</blockquote>
+<h3 id="dynamic-analysis_4">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_4" title="Permanent link">&para;</a></h3>
+<p>There are various tools provided which help to identify memory bugs within Xcode, such as the Debug Memory graph introduced in Xcode 8 and the Allocations and Leaks instrument in Xcode.</p>
+<p>Next, you can check whether memory is freed too fast or too slow by enabling <code>NSAutoreleaseFreedObjectCheckEnabled</code>, <code>NSZombieEnabled</code>, <code>NSDebugEnabled</code> in Xcode while testing the application.</p>
+<p>There are various well written explanations which can help with taking care of memory management. These can be found in the reference list of this chapter.</p>
+<h2 id="make-sure-that-free-security-features-are-activated-mstg-code-9">Make Sure That Free Security Features Are Activated (MSTG-CODE-9)<a class="headerlink" href="#make-sure-that-free-security-features-are-activated-mstg-code-9" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_7">Static Analysis<a class="headerlink" href="#static-analysis_7" title="Permanent link">&para;</a></h3>
+<p>You can use <a href="../../Tools/0x08a-Testing-Tools/#otool">otool</a> to check the binary security features described above. All the features are enabled in these examples.</p>
+<ul>
+<li>
+<p>PIE:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>unzip<span class="w"> </span>DamnVulnerableiOSApp.ipa
+$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>Payload/DamnVulnerableIOSApp.app
+$<span class="w"> </span>otool<span class="w"> </span>-hv<span class="w"> </span>DamnVulnerableIOSApp
+DamnVulnerableIOSApp<span class="w"> </span><span class="o">(</span>architecture<span class="w"> </span>armv7<span class="o">)</span>:
+Mach<span class="w"> </span>header
+magic<span class="w"> </span>cputype<span class="w"> </span>cpusubtype<span class="w"> </span>caps<span class="w"> </span>filetype<span class="w"> </span>ncmds<span class="w"> </span>sizeofcmds<span class="w"> </span>flags
+MH_MAGIC<span class="w"> </span>ARM<span class="w"> </span>V7<span class="w"> </span>0x00<span class="w"> </span>EXECUTE<span class="w"> </span><span class="m">38</span><span class="w"> </span><span class="m">4292</span><span class="w"> </span>NOUNDEFS<span class="w"> </span>DYLDLINK<span class="w"> </span>TWOLEVEL
+WEAK_DEFINES<span class="w"> </span>BINDS_TO_WEAK<span class="w"> </span>PIE
+DamnVulnerableIOSApp<span class="w"> </span><span class="o">(</span>architecture<span class="w"> </span>arm64<span class="o">)</span>:
+Mach<span class="w"> </span>header
+magic<span class="w"> </span>cputype<span class="w"> </span>cpusubtype<span class="w"> </span>caps<span class="w"> </span>filetype<span class="w"> </span>ncmds<span class="w"> </span>sizeofcmds<span class="w"> </span>flags
+MH_MAGIC_64<span class="w"> </span>ARM64<span class="w"> </span>ALL<span class="w"> </span>0x00<span class="w"> </span>EXECUTE<span class="w"> </span><span class="m">38</span><span class="w"> </span><span class="m">4856</span><span class="w"> </span>NOUNDEFS<span class="w"> </span>DYLDLINK<span class="w"> </span>TWOLEVEL
+WEAK_DEFINES<span class="w"> </span>BINDS_TO_WEAK<span class="w"> </span>PIE
+</code></pre></div>
+<p>The output shows that the Mach-O flag for <code>PIE</code> is set. This check is applicable to all - Objective-C, Swift and hybrid apps but only to the main executable.</p>
+</li>
+<li>
+<p>Stack canary:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>otool<span class="w"> </span>-Iv<span class="w"> </span>DamnVulnerableIOSApp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>stack
+0x0046040c<span class="w"> </span><span class="m">83177</span><span class="w"> </span>___stack_chk_fail
+0x0046100c<span class="w"> </span><span class="m">83521</span><span class="w"> </span>_sigaltstack
+0x004fc010<span class="w"> </span><span class="m">83178</span><span class="w"> </span>___stack_chk_guard
+0x004fe5c8<span class="w"> </span><span class="m">83177</span><span class="w"> </span>___stack_chk_fail
+0x004fe8c8<span class="w"> </span><span class="m">83521</span><span class="w"> </span>_sigaltstack
+0x00000001004b3fd8<span class="w"> </span><span class="m">83077</span><span class="w"> </span>___stack_chk_fail
+0x00000001004b4890<span class="w"> </span><span class="m">83414</span><span class="w"> </span>_sigaltstack
+0x0000000100590cf0<span class="w"> </span><span class="m">83078</span><span class="w"> </span>___stack_chk_guard
+0x00000001005937f8<span class="w"> </span><span class="m">83077</span><span class="w"> </span>___stack_chk_fail
+0x0000000100593dc8<span class="w"> </span><span class="m">83414</span><span class="w"> </span>_sigaltstack
+</code></pre></div>
+<p>In the above output, the presence of <code>__stack_chk_fail</code> indicates that stack canaries are being used. This check is applicable to pure Objective-C and hybrid apps, but not necessarily to pure Swift apps (i.e. it is OK if it's shown as disabled because Swift is memory safe by design).</p>
+</li>
+<li>
+<p>ARC:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>otool<span class="w"> </span>-Iv<span class="w"> </span>DamnVulnerableIOSApp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>release
+0x0045b7dc<span class="w"> </span><span class="m">83156</span><span class="w"> </span>___cxa_guard_release
+0x0045fd5c<span class="w"> </span><span class="m">83414</span><span class="w"> </span>_objc_autorelease
+0x0045fd6c<span class="w"> </span><span class="m">83415</span><span class="w"> </span>_objc_autoreleasePoolPop
+0x0045fd7c<span class="w"> </span><span class="m">83416</span><span class="w"> </span>_objc_autoreleasePoolPush
+0x0045fd8c<span class="w"> </span><span class="m">83417</span><span class="w"> </span>_objc_autoreleaseReturnValue
+0x0045ff0c<span class="w"> </span><span class="m">83441</span><span class="w"> </span>_objc_release
+<span class="o">[</span>SNIP<span class="o">]</span>
+</code></pre></div>
+<p>This check is applicable to all cases, including pure Swift apps where it's automatically enabled.</p>
+</li>
+</ul>
+<h3 id="dynamic-analysis_5">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_5" title="Permanent link">&para;</a></h3>
+<p>These checks can be performed dynamically using <a href="../../Tools/0x08a-Testing-Tools/#objection">objection</a>. Here's one example:</p>
+<div class="highlight"><pre><span></span><code>com.yourcompany.PPClient<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios info binary</span>
+Name<span class="w">                  </span>Type<span class="w">     </span>Encrypted<span class="w">    </span>PIE<span class="w">    </span>ARC<span class="w">    </span>Canary<span class="w">    </span>Stack<span class="w"> </span>Exec<span class="w">    </span>RootSafe
+--------------------<span class="w">  </span>-------<span class="w">  </span>-----------<span class="w">  </span>-----<span class="w">  </span>-----<span class="w">  </span>--------<span class="w">  </span>------------<span class="w">  </span>----------
+PayPal<span class="w">                </span>execute<span class="w">  </span>True<span class="w">         </span>True<span class="w">   </span>True<span class="w">   </span>True<span class="w">      </span>False<span class="w">         </span>False
+CardinalMobile<span class="w">        </span>dylib<span class="w">    </span>False<span class="w">        </span>False<span class="w">  </span>True<span class="w">   </span>True<span class="w">      </span>False<span class="w">         </span>False
+FraudForce<span class="w">            </span>dylib<span class="w">    </span>False<span class="w">        </span>False<span class="w">  </span>True<span class="w">   </span>True<span class="w">      </span>False<span class="w">         </span>False
+...
+</code></pre></div>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-CODE-1: "The app is signed and provisioned with a valid certificate, of which the private key is properly protected."</li>
+<li>MSTG-CODE-2: "The app has been built in release mode, with settings appropriate for a release build (e.g. non-debuggable)."</li>
+<li>MSTG-CODE-3: "Debugging symbols have been removed from native binaries."</li>
+<li>MSTG-CODE-4: "Debugging code and developer assistance code (e.g. test code, backdoors, hidden settings) have been removed. The app does not log verbose errors or debugging messages."</li>
+<li>MSTG-CODE-5: "All third party components used by the mobile app, such as libraries and frameworks, are identified, and checked for known vulnerabilities."</li>
+<li>MSTG-CODE-6: "The app catches and handles possible exceptions."</li>
+<li>MSTG-CODE-8: "In unmanaged code, memory is allocated, freed and used securely."</li>
+<li>MSTG-CODE-9: "Free security features offered by the toolchain, such as byte-code minification, stack protection, PIE support and automatic reference counting, are activated."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

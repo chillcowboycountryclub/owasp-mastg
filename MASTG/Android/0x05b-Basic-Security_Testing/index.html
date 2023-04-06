@@ -1,0 +1,3741 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x05a-Platform-Overview/">
+      
+      
+        <link rel="next" href="../0x05c-Reverse-Engineering-and-Tampering/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>Android Basic Security Testing - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#android-basic-security-testing" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Android Basic Security Testing
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Android Basic Security Testing
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Android Basic Security Testing
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#android-testing-setup" class="md-nav__link">
+    Android Testing Setup
+  </a>
+  
+    <nav class="md-nav" aria-label="Android Testing Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#host-device" class="md-nav__link">
+    Host Device
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-device" class="md-nav__link">
+    Testing Device
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Device">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-on-a-real-device" class="md-nav__link">
+    Testing on a Real Device
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-on-an-emulator" class="md-nav__link">
+    Testing on an Emulator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#getting-privileged-access" class="md-nav__link">
+    Getting Privileged Access
+  </a>
+  
+    <nav class="md-nav" aria-label="Getting Privileged Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#which-mobiles-can-be-rooted" class="md-nav__link">
+    Which Mobiles Can Be Rooted
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#rooting-with-magisk" class="md-nav__link">
+    Rooting with Magisk
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#root-detection" class="md-nav__link">
+    Root Detection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#basic-testing-operations" class="md-nav__link">
+    Basic Testing Operations
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Testing Operations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#accessing-the-device-shell" class="md-nav__link">
+    Accessing the Device Shell
+  </a>
+  
+    <nav class="md-nav" aria-label="Accessing the Device Shell">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#remote-shell" class="md-nav__link">
+    Remote Shell
+  </a>
+  
+    <nav class="md-nav" aria-label="Remote Shell">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#connect-to-multiple-devices" class="md-nav__link">
+    Connect to Multiple Devices
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-to-a-device-over-wi-fi" class="md-nav__link">
+    Connect to a Device over Wi-Fi
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#connect-to-a-device-via-ssh" class="md-nav__link">
+    Connect to a Device via SSH
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#on-device-shell-app" class="md-nav__link">
+    On-device Shell App
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#host-device-data-transfer" class="md-nav__link">
+    Host-Device Data Transfer
+  </a>
+  
+    <nav class="md-nav" aria-label="Host-Device Data Transfer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-adb" class="md-nav__link">
+    Using adb
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-android-studio-device-file-explorer" class="md-nav__link">
+    Using Android Studio Device File Explorer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-objection" class="md-nav__link">
+    Using objection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-termux" class="md-nav__link">
+    Using Termux
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obtaining-and-extracting-apps" class="md-nav__link">
+    Obtaining and Extracting Apps
+  </a>
+  
+    <nav class="md-nav" aria-label="Obtaining and Extracting Apps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#alternative-app-stores" class="md-nav__link">
+    Alternative App Stores
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-gplaycli" class="md-nav__link">
+    Using gplaycli
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extracting-the-app-package-from-the-device" class="md-nav__link">
+    Extracting the App Package from the Device
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-instant-apps" class="md-nav__link">
+    Testing Instant Apps
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#repackaging-apps" class="md-nav__link">
+    Repackaging Apps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-apps" class="md-nav__link">
+    Installing Apps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#information-gathering" class="md-nav__link">
+    Information Gathering
+  </a>
+  
+    <nav class="md-nav" aria-label="Information Gathering">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#listing-installed-apps" class="md-nav__link">
+    Listing Installed Apps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exploring-the-app-package" class="md-nav__link">
+    Exploring the App Package
+  </a>
+  
+    <nav class="md-nav" aria-label="Exploring the App Package">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#the-android-manifest" class="md-nav__link">
+    The Android Manifest
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-binary" class="md-nav__link">
+    App Binary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compiled-app-binary" class="md-nav__link">
+    Compiled App Binary
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#native-libraries" class="md-nav__link">
+    Native Libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#other-app-resources" class="md-nav__link">
+    Other App Resources
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#accessing-app-data-directories" class="md-nav__link">
+    Accessing App Data Directories
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#monitoring-system-logs" class="md-nav__link">
+    Monitoring System Logs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-a-network-testing-environment" class="md-nav__link">
+    Setting up a Network Testing Environment
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting up a Network Testing Environment">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#basic-network-monitoringsniffing" class="md-nav__link">
+    Basic Network Monitoring/Sniffing
+  </a>
+  
+    <nav class="md-nav" aria-label="Basic Network Monitoring/Sniffing">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#firebasegoogle-cloud-messaging-fcmgcm" class="md-nav__link">
+    Firebase/Google Cloud Messaging (FCM/GCM)
+  </a>
+  
+    <nav class="md-nav" aria-label="Firebase/Google Cloud Messaging (FCM/GCM)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#preparation-of-test-setup" class="md-nav__link">
+    Preparation of Test Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#http" class="md-nav__link">
+    HTTP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xmpp" class="md-nav__link">
+    XMPP
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intercepting-the-requests" class="md-nav__link">
+    Intercepting the Requests
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#end-to-end-encryption-for-push-notifications" class="md-nav__link">
+    End-to-End Encryption for Push Notifications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-an-interception-proxy" class="md-nav__link">
+    Setting Up an Interception Proxy
+  </a>
+  
+    <nav class="md-nav" aria-label="Setting Up an Interception Proxy">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#interception-proxy-for-a-virtual-device" class="md-nav__link">
+    Interception Proxy for a Virtual Device
+  </a>
+  
+    <nav class="md-nav" aria-label="Interception Proxy for a Virtual Device">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#setting-up-a-web-proxy-on-an-android-virtual-device-avd" class="md-nav__link">
+    Setting Up a Web Proxy on an Android Virtual Device (AVD)
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installing-a-ca-certificate-on-the-virtual-device" class="md-nav__link">
+    Installing a CA Certificate on the Virtual Device
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#interception-proxy-for-a-physical-device" class="md-nav__link">
+    Interception Proxy for a Physical Device
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bypassing-the-network-security-configuration" class="md-nav__link">
+    Bypassing the Network Security Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Bypassing the Network Security Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-custom-user-certificates-to-the-network-security-configuration" class="md-nav__link">
+    Adding Custom User Certificates to the Network Security Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#adding-the-proxys-certificate-among-system-trusted-cas-using-magisk" class="md-nav__link">
+    Adding the Proxy's certificate among system trusted CAs using Magisk
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manually-adding-the-proxys-certificate-among-system-trusted-cas" class="md-nav__link">
+    Manually adding the Proxy's certificate among system trusted CAs
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#potential-obstacles" class="md-nav__link">
+    Potential Obstacles
+  </a>
+  
+    <nav class="md-nav" aria-label="Potential Obstacles">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#client-isolation-in-wireless-networks" class="md-nav__link">
+    Client Isolation in Wireless Networks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#non-proxy-aware-apps" class="md-nav__link">
+    Non-Proxy Aware Apps
+  </a>
+  
+    <nav class="md-nav" aria-label="Non-Proxy Aware Apps">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#iptables" class="md-nav__link">
+    iptables
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bettercap" class="md-nav__link">
+    bettercap
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#proxy-detection" class="md-nav__link">
+    Proxy Detection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bypassing-certificate-pinning" class="md-nav__link">
+    Bypassing Certificate Pinning
+  </a>
+  
+    <nav class="md-nav" aria-label="Bypassing Certificate Pinning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#bypassing-methods" class="md-nav__link">
+    Bypassing Methods
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bypass-custom-certificate-pinning-statically" class="md-nav__link">
+    Bypass Custom Certificate Pinning Statically
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#bypass-custom-certificate-pinning-dynamically" class="md-nav__link">
+    Bypass Custom Certificate Pinning Dynamically
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="android-basic-security-testing">Android Basic Security Testing<a class="headerlink" href="#android-basic-security-testing" title="Permanent link">&para;</a></h1>
+<p>In the previous chapter, we provided an overview of the Android platform and described the structure of its apps. In this chapter, we'll talk about setting up a security testing environment and introduce basic processes and techniques you can use to test Android apps for security flaws. These basic processes are the foundation for the test cases outlined in the following chapters.</p>
+<h2 id="android-testing-setup">Android Testing Setup<a class="headerlink" href="#android-testing-setup" title="Permanent link">&para;</a></h2>
+<p>You can set up a fully functioning test environment on almost any machine running Windows, Linux, or macOS.</p>
+<h3 id="host-device">Host Device<a class="headerlink" href="#host-device" title="Permanent link">&para;</a></h3>
+<p>At the very least, you'll need <a href="../../Tools/0x08a-Testing-Tools/#android-studio">Android Studio</a> (which comes with the <a href="../../Tools/0x08a-Testing-Tools/#android-sdk">Android SDK</a>) platform tools, an emulator, and an app to manage the various SDK versions and framework components. Android Studio also comes with an Android Virtual Device (AVD) Manager application for creating emulator images. Make sure that the newest <a href="https://developer.android.com/studio/releases/sdk-tools">SDK tools</a> and <a href="https://developer.android.com/studio/releases/platform-tools">platform tools</a> packages are installed on your system.</p>
+<p>In addition, you may want to complete your host setup by installing the <a href="../../Tools/0x08a-Testing-Tools/#android-ndk">Android NDK</a> if you're planning to work with apps containing native libraries (it will be also relevant in the chapter "<a href="../0x05c-Reverse-Engineering-and-Tampering/">Tampering and Reverse Engineering on Android</a>").</p>
+<p>Sometimes it can be useful to display or control devices from the computer. To achieve this, you can use <a href="../../Tools/0x08a-Testing-Tools/#scrcpy">Scrcpy</a>.</p>
+<h3 id="testing-device">Testing Device<a class="headerlink" href="#testing-device" title="Permanent link">&para;</a></h3>
+<p>For dynamic analysis, you'll need an Android device to run the target app on. In principle, you can test without a real Android device and use only the emulator. However, apps execute quite slowly on a emulator, and simulators may not give realistic results. Testing on a real device makes for a smoother process and a more realistic environment. On the other hand, emulators allow you to easily change SDK versions or create multiple devices. A full overview of the pros and cons of each approach is listed in the table below.</p>
+<table>
+<thead>
+<tr>
+<th>Property</th>
+<th>Physical</th>
+<th>Emulator/Simulator</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ability to restore</td>
+<td>Softbricks are always possible, but new firmware can typically still be flashed. Hardbricks are very rare.</td>
+<td>Emulators can crash or become corrupt, but a new one can be created or a snapshot can be restored.</td>
+</tr>
+<tr>
+<td>Reset</td>
+<td>Can be restored to factory settings or reflashed.</td>
+<td>Emulators can be deleted and recreated.</td>
+</tr>
+<tr>
+<td>Snapshots</td>
+<td>Not possible.</td>
+<td>Supported, great for malware analysis.</td>
+</tr>
+<tr>
+<td>Speed</td>
+<td>Much faster than emulators.</td>
+<td>Typically slow, but improvements are being made.</td>
+</tr>
+<tr>
+<td>Cost</td>
+<td>Typically start at $200 for a usable device. You may require different devices, such as one with or without a biometric sensor.</td>
+<td>Both free and commercial solutions exist.</td>
+</tr>
+<tr>
+<td>Ease of rooting</td>
+<td>Highly dependent on the device.</td>
+<td>Typically rooted by default.</td>
+</tr>
+<tr>
+<td>Ease of emulator detection</td>
+<td>It's not an emulator, so emulator checks are not applicable.</td>
+<td>Many artefacts will exist, making it easy to detect that the app is running in an emulator.</td>
+</tr>
+<tr>
+<td>Ease of root detection</td>
+<td>Easier to hide root, as many root detection algorithms check for emulator properties. With Magisk Systemless root it's nearly impossible to detect.</td>
+<td>Emulators will almost always trigger root detection algorithms due to the fact that they are built for testing with many artefacts that can be found.</td>
+</tr>
+<tr>
+<td>Hardware interaction</td>
+<td>Easy interaction through Bluetooth, NFC, 4G, Wi-Fi, biometrics, camera, GPS, gyroscope, ...</td>
+<td>Usually fairly limited, with emulated hardware input (e.g. random GPS coordinates)</td>
+</tr>
+<tr>
+<td>API level support</td>
+<td>Depends on the device and the community. Active communities will keep distributing updated versions (e.g. LineageOS), while less popular devices may only receive a few updates. Switching between versions requires flashing the device, a tedious process.</td>
+<td>Always supports the latest versions, including beta releases. Emulators containing specific API levels can easily be downloaded and launched.</td>
+</tr>
+<tr>
+<td>Native library support</td>
+<td>Native libraries are usually built for ARM devices, so they will work on a physical device.</td>
+<td>Some emulators run on x86 CPUs, so they may not be able to run packaged native libraries.</td>
+</tr>
+<tr>
+<td>Malware danger</td>
+<td>Malware samples can infect a device, but if you can clear out the device storage and flash a clean firmware, thereby restoring it to factory settings, this should not be a problem. Be aware that there are malware samples that try to exploit the USB bridge.</td>
+<td>Malware samples can infect an emulator, but the emulator can simply be removed and recreated. It is also possible to create snapshots and compare different snapshots to help in malware analysis. Be aware that there are malware proofs of concept which try to attack the hypervisor.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="testing-on-a-real-device">Testing on a Real Device<a class="headerlink" href="#testing-on-a-real-device" title="Permanent link">&para;</a></h4>
+<p>Almost any physical device can be used for testing, but there are a few considerations to be made. First, the device needs to be rootable. This is typically either done through an exploit, or through an unlocked bootloader. Exploits are not always available, and the bootloader may be locked permanently, or it may only be unlocked once the carrier contract has been terminated.</p>
+<p>The best candidates are flagship Google pixel devices built for developers. These devices typically come with an unlockable bootloader, opensource firmware, kernel, radio available online and official OS source code. The developer communities prefer Google devices as the OS is closest to the android open source project. These devices generally have the longest support windows with 2 years of OS updates and 1 year of security updates after that.</p>
+<p>Alternatively, Google's <a href="https://www.android.com/one/" title="Android One">Android One</a> project contains devices that will receive the same support windows (2 years of OS updates, 1 year of security updates) and have near-stock experiences. While it was originally started as a project for low-end devices, the program has evolved to include mid-range and high-end smartphones, many of which are actively supported by the modding community.</p>
+<p>Devices that are supported by the <a href="https://lineageos.org/" title="LineageOS">LineageOS</a> project are also very good candidates for test devices. They have an active community, easy to follow flashing and rooting instructions and the latest Android versions are typically quickly available as a Lineage installation. LineageOS also continues support for new Android versions long after the OEM has stopped distributing updates.</p>
+<p>When working with an Android physical device, you'll want to enable Developer Mode and USB debugging on the device in order to use the <a href="../../Tools/0x08a-Testing-Tools/#adb">ADB</a> debugging interface. Since Android 4.2 (API level 16), the <strong>Developer options</strong> sub menu in the Settings app is hidden by default. To activate it, tap the <strong>Build number</strong> section of the <strong>About phone</strong> view seven times. Note that the build number field's location varies slightly by device. For example, on LG Phones, it is under <strong>About phone</strong> -&gt; <strong>Software information</strong>. Once you have done this, <strong>Developer options</strong> will be shown at bottom of the Settings menu. Once developer options are activated, you can enable debugging with the <strong>USB debugging</strong> switch.</p>
+<h4 id="testing-on-an-emulator">Testing on an Emulator<a class="headerlink" href="#testing-on-an-emulator" title="Permanent link">&para;</a></h4>
+<p>Multiple emulators exist, once again with their own strengths and weaknesses:</p>
+<p>Free emulators:</p>
+<ul>
+<li><a href="https://developer.android.com/studio/run/managing-avds.html" title="Create and Manage Virtual Devices">Android Virtual Device (AVD)</a> - The official android emulator, distributed with Android Studio.</li>
+<li><a href="https://www.android-x86.org/" title="Android X86">Android X86</a> - An x86 port of the Android code base</li>
+</ul>
+<p>Commercial emulators:</p>
+<ul>
+<li><a href="https://www.genymotion.com/download/" title="Genymotion">Genymotion</a> - Mature emulator with many features, both as local and cloud-based solution. Free version available for non-commercial use.</li>
+<li><a href="https://corellium.com/" title="Corellium">Corellium</a> - Offers custom device virtualization through a cloud-based or on-prem solution.</li>
+</ul>
+<p>Although there exist several free Android emulators, we recommend using AVD as it provides enhanced features appropriate for testing your app compared to the others. In the remainder of this guide, we will use the official AVD to perform tests.</p>
+<p>AVD supports some hardware emulation, such as GPS or SMS through its so-called <a href="https://developer.android.com/studio/run/advanced-emulator-usage#extended" title="Extended Controls">Extended Controls</a> as well as <a href="https://developer.android.com/guide/topics/sensors/sensors_overview#test-with-the-android-emulator" title="Testing motion sensors on emulators">motion sensors</a>.</p>
+<p>You can either start an Android Virtual Device (AVD) by using the AVD Manager in Android Studio or start the AVD manager from the command line with the <code>android</code> command, which is found in the tools directory of the Android SDK:</p>
+<div class="highlight"><pre><span></span><code>./android<span class="w"> </span>avd
+</code></pre></div>
+<p>Several tools and VMs that can be used to test an app within an emulator environment are available:</p>
+<ul>
+<li><a href="https://github.com/MobSF/Mobile-Security-Framework-MobSF" title="MobSF">MobSF</a></li>
+<li><a href="https://github.com/mseclab/nathan" title="Nathan">Nathan</a> (not updated since 2016)</li>
+</ul>
+<p>Please also verify the "<a href="../../Tools/0x08a-Testing-Tools/">Testing Tools</a>" chapter at the end of this book.</p>
+<h4 id="getting-privileged-access">Getting Privileged Access<a class="headerlink" href="#getting-privileged-access" title="Permanent link">&para;</a></h4>
+<p><em>Rooting</em> (i.e., modifying the OS so that you can run commands as the root user) is recommended for testing on a real device. This gives you full control over the operating system and allows you to bypass restrictions such as app sandboxing. These privileges in turn allow you to use techniques like code injection and function hooking more easily.</p>
+<p>Note that rooting is risky, and three main consequences need to be clarified before you proceed. Rooting can have the following negative effects:</p>
+<ul>
+<li>voiding the device warranty (always check the manufacturer's policy before taking any action)</li>
+<li>"bricking" the device, i.e., rendering it inoperable and unusable</li>
+<li>creating additional security risks (because built-in exploit mitigations are often removed)</li>
+</ul>
+<p>You should not root a personal device that you store your private information on. We recommend getting a cheap, dedicated test device instead. Many older devices, such as Google's Nexus series, can run the newest Android versions and are perfectly fine for testing.</p>
+<p><strong>You need to understand that rooting your device is ultimately YOUR decision and that OWASP shall in no way be held responsible for any damage. If you're uncertain, seek expert advice before starting the rooting process.</strong></p>
+<h5 id="which-mobiles-can-be-rooted">Which Mobiles Can Be Rooted<a class="headerlink" href="#which-mobiles-can-be-rooted" title="Permanent link">&para;</a></h5>
+<p>Virtually any Android mobile can be rooted. Commercial versions of Android OS (which are Linux OS evolutions at the kernel level) are optimized for the mobile world. Some features have been removed or disabled for these versions, for example, non-privileged users' ability to become the 'root' user (who has elevated privileges). Rooting a phone means allowing users to become the root user, e.g., adding a standard Linux executable called <code>su</code>, which is used to change to another user account.</p>
+<p>To root a mobile device, first unlock its boot loader. The unlocking procedure depends on the device manufacturer. However, for practical reasons, rooting some mobile devices is more popular than rooting others, particularly when it comes to security testing: devices created by Google and manufactured by companies like Samsung, LG, and Motorola are among the most popular, particularly because they are used by many developers. The device warranty is not nullified when the boot loader is unlocked and Google provides many tools to support the root itself. A curated list of guides for rooting all major brand devices is posted on the <a href="https://www.xda-developers.com/root/" title="Guide to rooting mobile devices">XDA forums</a>.</p>
+<h5 id="rooting-with-magisk">Rooting with Magisk<a class="headerlink" href="#rooting-with-magisk" title="Permanent link">&para;</a></h5>
+<p>Magisk ("Magic Mask") is one way to root your Android device. Its specialty lies in the way the modifications on the system are performed. While other rooting tools alter the actual data on the system partition, Magisk does not (which is called "systemless"). This enables a way to hide the modifications from root-sensitive applications (e.g. for banking or games) and allows using the official Android OTA upgrades without the need to unroot the device beforehand.</p>
+<p>You can get familiar with Magisk reading the official <a href="https://topjohnwu.github.io/Magisk/" title="Magisk Documentation">documentation on GitHub</a>. If you don't have Magisk installed, you can find installation instructions in <a href="https://topjohnwu.github.io/Magisk/" title="Magisk Documentation">the documentation</a>. If you use an official Android version and plan to upgrade it, Magisk provides a <a href="https://topjohnwu.github.io/Magisk/ota.html" title="OTA Installation">tutorial on GitHub</a>.</p>
+<p>Furthermore, developers can use the power of Magisk to create custom modules and <a href="https://github.com/Magisk-Modules-Repo/submission" title="Submission">submit</a> them to the official <a href="https://github.com/Magisk-Modules-Repo" title="Magisk-Modules-Repo">Magisk Modules repository</a>. Submitted modules can then be installed inside the Magisk Manager application. One of these installable modules is a systemless version of the famous <a href="../../Tools/0x08a-Testing-Tools/#xposed">Xposed Framework</a> (available for SDK versions up to 27).</p>
+<h5 id="root-detection">Root Detection<a class="headerlink" href="#root-detection" title="Permanent link">&para;</a></h5>
+<p>An extensive list of root detection methods is presented in the "Testing Anti-Reversing Defenses on Android" chapter.</p>
+<p>For a typical mobile app security build, you'll usually want to test a debug build with root detection disabled. If such a build is not available for testing, you can disable root detection in a variety of ways that will be introduced later in this book.</p>
+<h2 id="basic-testing-operations">Basic Testing Operations<a class="headerlink" href="#basic-testing-operations" title="Permanent link">&para;</a></h2>
+<h3 id="accessing-the-device-shell">Accessing the Device Shell<a class="headerlink" href="#accessing-the-device-shell" title="Permanent link">&para;</a></h3>
+<p>One of the most common things you do when testing an app is accessing the device shell. In this section we'll see how to access the Android shell both remotely from your host computer with/without a USB cable and locally from the device itself.</p>
+<h4 id="remote-shell">Remote Shell<a class="headerlink" href="#remote-shell" title="Permanent link">&para;</a></h4>
+<p>In order to connect to the shell of an Android device from your host computer, <a href="../../Tools/0x08a-Testing-Tools/#adb">adb</a> is usually your tool of choice (unless you prefer to use remote SSH access, e.g. <a href="https://wiki.termux.com/wiki/Remote_Access#Using_the_SSH_server" title="Using the SSH server">via Termux</a>).</p>
+<p>For this section we assume that you've properly enabled Developer Mode and USB debugging as explained in "Testing on a Real Device". Once you've connected your Android device via USB, you can access the remote device's shell by running:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>shell
+</code></pre></div>
+<blockquote>
+<p>press Control + D or type <code>exit</code> to quit</p>
+</blockquote>
+<p>Once in the remote shell, if your device is rooted or you're using the emulator, you can get root access by running <code>su</code>:</p>
+<div class="highlight"><pre><span></span><code>bullhead:/<span class="w"> </span>$<span class="w"> </span>su
+bullhead:/<span class="w"> </span><span class="c1"># id</span>
+<span class="nv">uid</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">0</span><span class="o">(</span>root<span class="o">)</span><span class="w"> </span><span class="nv">context</span><span class="o">=</span>u:r:su:s0
+</code></pre></div>
+<blockquote>
+<p>Only if you're working with an emulator you may alternatively restart adb with root permissions with the command <code>adb root</code> so next time you enter <code>adb shell</code> you'll have root access already. This also allows to transfer data bidirectionally between your host computer and the Android file system, even with access to locations where only the root user has access to (via <code>adb push/pull</code>). See more about data transfer in section "<a href="#host-device-data-transfer" title="Host-Device Data Transfer">Host-Device Data Transfer</a>" below.</p>
+</blockquote>
+<h5 id="connect-to-multiple-devices">Connect to Multiple Devices<a class="headerlink" href="#connect-to-multiple-devices" title="Permanent link">&para;</a></h5>
+<p>If you have more than one device, remember to include the <code>-s</code> flag followed by the device serial ID on all your <code>adb</code> commands (e.g. <code>adb -s emulator-5554 shell</code> or <code>adb -s 00b604081540b7c6 shell</code>). You can get a list of all connected devices and their serial IDs by using the following command:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>devices
+List<span class="w"> </span>of<span class="w"> </span>devices<span class="w"> </span>attached
+00c907098530a82c<span class="w">    </span>device
+emulator-5554<span class="w">    </span>device
+</code></pre></div>
+<h5 id="connect-to-a-device-over-wi-fi">Connect to a Device over Wi-Fi<a class="headerlink" href="#connect-to-a-device-over-wi-fi" title="Permanent link">&para;</a></h5>
+<p>You can also access your Android device without using the USB cable. For this you'll have to connect both your host computer and your Android device to the same Wi-Fi network and follow the next steps:</p>
+<ul>
+<li>Connect the device to the host computer with a USB cable and set the target device to listen for a TCP/IP connection on port 5555: <code>adb tcpip 5555</code>.</li>
+<li>Disconnect the USB cable from the target device and run <code>adb connect &lt;device_ip_address&gt;</code>. Check that the device is now available by running <code>adb devices</code>.</li>
+<li>Open the shell with <code>adb shell</code>.</li>
+</ul>
+<p>However, notice that by doing this you leave your device open to anyone being in the same network and knowing the IP address of your device. You may rather prefer using the USB connection.</p>
+<blockquote>
+<p>For example, on a Nexus device, you can find the IP address at <strong>Settings</strong> -&gt; <strong>System</strong> -&gt; <strong>About phone</strong> -&gt; <strong>Status</strong> -&gt; <strong>IP address</strong> or by going to the <strong>Wi-Fi</strong> menu and tapping once on the network you're connected to.</p>
+</blockquote>
+<p>See the full instructions and considerations in the <a href="https://developer.android.com/studio/command-line/adb#wireless" title="Connect to a device over Wi-Fi">Android Developers Documentation</a>.</p>
+<h5 id="connect-to-a-device-via-ssh">Connect to a Device via SSH<a class="headerlink" href="#connect-to-a-device-via-ssh" title="Permanent link">&para;</a></h5>
+<p>If you prefer, you can also enable SSH access. A convenient option is to use <a href="../../Tools/0x08a-Testing-Tools/#termux">Termux</a>, which you can easily <a href="https://wiki.termux.com/wiki/Remote_Access#Using_the_SSH_server" title="Using the SSH server">configure to offer SSH access</a> (with password or public key authentication) and start it with the command <code>sshd</code> (starts by default on port 8022). In order to connect to the Termux via SSH you can simply run the command <code>ssh -p 8022 &lt;ip_address&gt;</code> (where <code>ip_address</code> is the actual remote device IP). This option has some additional benefits as it allows to access the file system via SFTP also on port 8022.</p>
+<h4 id="on-device-shell-app">On-device Shell App<a class="headerlink" href="#on-device-shell-app" title="Permanent link">&para;</a></h4>
+<p>While usually using an on-device shell (terminal emulator) such as <a href="../../Tools/0x08a-Testing-Tools/#termux">Termux</a> might be very tedious compared to a remote shell, it can prove handy for debugging in case of, for example, network issues or to check some configuration.</p>
+<h3 id="host-device-data-transfer">Host-Device Data Transfer<a class="headerlink" href="#host-device-data-transfer" title="Permanent link">&para;</a></h3>
+<h4 id="using-adb">Using adb<a class="headerlink" href="#using-adb" title="Permanent link">&para;</a></h4>
+<p>You can copy files to and from a device by using the <a href="../../Tools/0x08a-Testing-Tools/#adb">adb</a> commands <code>adb pull &lt;remote&gt; &lt;local&gt;</code> and <code>adb push &lt;local&gt; &lt;remote&gt;</code> <a href="https://developer.android.com/studio/command-line/adb#copyfiles" title="Copy files to/from a device">commands</a>. Their usage is very straightforward. For example, the following will copy <code>foo.txt</code> from your current directory (local) to the <code>sdcard</code> folder (remote):</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>push<span class="w"> </span>foo.txt<span class="w"> </span>/sdcard/foo.txt
+</code></pre></div>
+<p>This approach is commonly used when you know exactly what you want to copy and from/to where and also supports bulk file transfer, e.g. you can pull (copy) a whole directory from the Android device to your host computer.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>pull<span class="w"> </span>/sdcard
+/sdcard/:<span class="w"> </span><span class="m">1190</span><span class="w"> </span>files<span class="w"> </span>pulled.<span class="w"> </span><span class="m">14</span>.1<span class="w"> </span>MB/s<span class="w"> </span><span class="o">(</span><span class="m">304526427</span><span class="w"> </span>bytes<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="m">20</span>.566s<span class="o">)</span>
+</code></pre></div>
+<h4 id="using-android-studio-device-file-explorer">Using Android Studio Device File Explorer<a class="headerlink" href="#using-android-studio-device-file-explorer" title="Permanent link">&para;</a></h4>
+<p>Android Studio has a <a href="https://developer.android.com/studio/debug/device-file-explorer" title="Device File Explorer">built-in Device File Explorer</a> which you can open by going to <strong>View</strong> -&gt; <strong>Tool Windows</strong> -&gt; <strong>Device File Explorer</strong>.</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/android-studio-file-device-explorer.png" width="400px" /></p>
+<p>If you're using a rooted device you can now start exploring the whole file system. However, when using a non-rooted device accessing the app sandboxes won't work unless the app is debuggable and even then you are "jailed" within the app sandbox.</p>
+<h4 id="using-objection">Using objection<a class="headerlink" href="#using-objection" title="Permanent link">&para;</a></h4>
+<p>This option is useful when you are working on a specific app and want to copy files you might encounter inside its sandbox (notice that you'll only have access to the files that the target app has access to). This approach works without having to set the app as debuggable, which is otherwise required when using Android Studio's Device File Explorer.</p>
+<p>First, connect to the app with Objection as explained in "<a href="../../Tools/0x08a-Testing-Tools/#objection" title="Testing Tools - Objection">Recommended Tools - Objection</a>". Then, use <code>ls</code> and <code>cd</code> as you normally would on your terminal to explore the available files:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>frida-ps<span class="w"> </span>-U<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>owasp
+<span class="m">21228</span><span class="w">  </span>sg.vp.owasp_mobile.omtg_android
+
+$<span class="w"> </span>objection<span class="w"> </span>-g<span class="w"> </span>sg.vp.owasp_mobile.omtg_android<span class="w"> </span>explore
+
+...g.vp.owasp_mobile.omtg_android<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>google:<span class="w"> </span><span class="m">8</span>.1.0<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># cd ..</span>
+/data/user/0/sg.vp.owasp_mobile.omtg_android
+
+...g.vp.owasp_mobile.omtg_android<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>google:<span class="w"> </span><span class="m">8</span>.1.0<span class="o">)</span><span class="w">  </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ls</span>
+Type<span class="w">       </span>...<span class="w">  </span>Name
+---------<span class="w">  </span>...<span class="w">  </span>-------------------
+Directory<span class="w">  </span>...<span class="w">  </span>cache
+Directory<span class="w">  </span>...<span class="w">  </span>code_cache
+Directory<span class="w">  </span>...<span class="w">  </span>lib
+Directory<span class="w">  </span>...<span class="w">  </span>shared_prefs
+Directory<span class="w">  </span>...<span class="w">  </span>files
+Directory<span class="w">  </span>...<span class="w">  </span>app_ACRA-approved
+Directory<span class="w">  </span>...<span class="w">  </span>app_ACRA-unapproved
+Directory<span class="w">  </span>...<span class="w">  </span>databases
+
+Readable:<span class="w"> </span>True<span class="w">  </span>Writable:<span class="w"> </span>True
+</code></pre></div>
+<p>One you have a file you want to download you can just run <code>file download &lt;some_file&gt;</code>. This will download that file to your working directory. The same way you can upload files using <code>file upload</code>.</p>
+<div class="highlight"><pre><span></span><code>...<span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ls</span>
+Type<span class="w">    </span>...<span class="w">  </span>Name
+------<span class="w">  </span>...<span class="w">  </span>-----------------------------------------------
+File<span class="w">    </span>...<span class="w">  </span>sg.vp.owasp_mobile.omtg_android_preferences.xml
+
+Readable:<span class="w"> </span>True<span class="w">  </span>Writable:<span class="w"> </span>True
+...<span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># file download sg.vp.owasp_mobile.omtg_android_preferences.xml</span>
+Downloading<span class="w"> </span>...
+Streaming<span class="w"> </span>file<span class="w"> </span>from<span class="w"> </span>device...
+Writing<span class="w"> </span>bytes<span class="w"> </span>to<span class="w"> </span>destination...
+Successfully<span class="w"> </span>downloaded<span class="w"> </span>...<span class="w"> </span>to<span class="w"> </span>sg.vp.owasp_mobile.omtg_android_preferences.xml
+</code></pre></div>
+<p>The downside is that, at the time of this writing, objection does not support bulk file transfer yet, so you're restricted to copy individual files. Still, this can come handy in some scenarios where you're already exploring the app using objection anyway and find some interesting file. Instead of for example taking note of the full path of that file and use <code>adb pull &lt;path_to_some_file&gt;</code> from a separate terminal, you might just want to directly do <code>file download &lt;some_file&gt;</code>.</p>
+<h4 id="using-termux">Using Termux<a class="headerlink" href="#using-termux" title="Permanent link">&para;</a></h4>
+<p>If you have a rooted device, have <a href="../../Tools/0x08a-Testing-Tools/#termux">Termux</a> installed and have <a href="https://wiki.termux.com/wiki/Remote_Access#Using_the_SSH_server" title="Using the SSH server">properly configured SSH access</a> on it, you should have an SFTP (SSH File Transfer Protocol) server already running on port 8022. You may access it from your terminal:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>sftp<span class="w"> </span>-P<span class="w"> </span><span class="m">8022</span><span class="w"> </span>root@localhost
+...
+sftp&gt;<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/data/data
+sftp&gt;<span class="w"> </span>ls<span class="w"> </span>-1
+...
+sg.vantagepoint.helloworldjni
+sg.vantagepoint.uncrackable1
+sg.vp.owasp_mobile.omtg_android
+</code></pre></div>
+<p>Or simply by using an SFTP-capable client like <a href="https://filezilla-project.org/download.php" title="Download FileZilla">FileZilla</a>:</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/sftp-with-filezilla.png" width="400px" /></p>
+<p>Check the <a href="https://wiki.termux.com/wiki/Remote_Access" title="Termux Remote Access">Termux Wiki</a> to learn more about remote file access methods.</p>
+<h3 id="obtaining-and-extracting-apps">Obtaining and Extracting Apps<a class="headerlink" href="#obtaining-and-extracting-apps" title="Permanent link">&para;</a></h3>
+<p>There are several ways of extracting APK files from a device. You will need to decide which one is the easiest method depending if the app is public or private.</p>
+<h4 id="alternative-app-stores">Alternative App Stores<a class="headerlink" href="#alternative-app-stores" title="Permanent link">&para;</a></h4>
+<p>One of the easiest options is to download the APK from websites that mirror public applications from the Google Play Store. However, keep in mind that these sites are not official and there is no guarantee that the application hasn't been repackaged or contain malware. A few reputable websites that host APKs and are not known for modifying apps and even list SHA-1 and SHA-256 checksums of the apps are:</p>
+<ul>
+<li><a href="https://apkmirror.com" title="APKMirror">APKMirror</a></li>
+<li><a href="https://apkpure.com" title="APKPure">APKPure</a></li>
+</ul>
+<p>Beware that you do not have control over these sites and you cannot guarantee what they do in the future. Only use them if it's your only option left.</p>
+<h4 id="using-gplaycli">Using gplaycli<a class="headerlink" href="#using-gplaycli" title="Permanent link">&para;</a></h4>
+<p>You can use <a href="../../Tools/0x08a-Testing-Tools/#gplaycli">gplaycli</a> to download (<code>-d</code>) the selected APK by specifying its AppID (add <code>-p</code> to show a progress bar and <code>-v</code> for verbosity):</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>gplaycli<span class="w"> </span>-p<span class="w"> </span>-v<span class="w"> </span>-d<span class="w"> </span>com.google.android.keep
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>GPlayCli<span class="w"> </span>version<span class="w"> </span><span class="m">3</span>.26<span class="w"> </span><span class="o">[</span>Python3.7.4<span class="o">]</span>
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Configuration<span class="w"> </span>file<span class="w"> </span>is<span class="w"> </span>~/.config/gplaycli/gplaycli.conf
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Device<span class="w"> </span>is<span class="w"> </span>bacon
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Using<span class="w"> </span>cached<span class="w"> </span>token.
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Using<span class="w"> </span>auto<span class="w"> </span>retrieved<span class="w"> </span>token<span class="w"> </span>to<span class="w"> </span>connect<span class="w"> </span>to<span class="w"> </span>API
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>/<span class="w"> </span><span class="m">1</span><span class="w"> </span>com.google.android.keep
+<span class="o">[</span><span class="c1">################################] 15.78MB/15.78MB - 00:00:02 6.57MB/s/s</span>
+<span class="o">[</span>INFO<span class="o">]</span><span class="w"> </span>Download<span class="w"> </span><span class="nb">complete</span>
+</code></pre></div>
+<p>The <code>com.google.android.keep.apk</code> file will be in your current directory. As you might imagine, this approach is a very convenient way to download APKs, especially with regards to automation.</p>
+<blockquote>
+<p>You may use your own Google Play credentials or token. By default, gplaycli will use <a href="https://github.com/matlink/gplaycli/blob/3.26/gplaycli/gplaycli.py#L106" title="gplaycli Fallback Token">an internally provided token</a>.</p>
+</blockquote>
+<h4 id="extracting-the-app-package-from-the-device">Extracting the App Package from the Device<a class="headerlink" href="#extracting-the-app-package-from-the-device" title="Permanent link">&para;</a></h4>
+<p>Obtaining app packages from the device is the recommended method as we can guarantee the app hasn't been modified by a third-party. To obtain applications from a rooted or non-rooted device, you can use the following methods:</p>
+<p>Use <code>adb pull</code> to retrieve the APK. If you don't know the package name, the first step is to list all the applications installed on the device:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>list<span class="w"> </span>packages
+</code></pre></div>
+<p>Once you have located the package name of the application, you need the full path where it is stored on the system to download it.</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>path<span class="w"> </span>&lt;package<span class="w"> </span>name&gt;
+</code></pre></div>
+<p>With the full path to the APK, you can now simply use <code>adb pull</code> to extract it.</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>pull<span class="w"> </span>&lt;apk<span class="w"> </span>path&gt;
+</code></pre></div>
+<p>The APK will be downloaded in your working directory.</p>
+<p>Alternatively, there are also apps like <a href="https://play.google.com/store/apps/details?id=com.ext.ui" title="APK Extractor">APK Extractor</a> that do not require root and can even share the extracted APK via your preferred method. This can be useful if you don't feel like connecting the device or setting up adb over the network to transfer the file.</p>
+<h4 id="testing-instant-apps">Testing Instant Apps<a class="headerlink" href="#testing-instant-apps" title="Permanent link">&para;</a></h4>
+<p>With <a href="https://developer.android.com/topic/google-play-instant/overview" title="Google Play Instant">Google Play Instant</a> you can create Instant apps which can be instantly launched from a browser or the "try now" button from the app store from Android 5.0 (API level 21) onward. They do not require any form of installation. There are a few challenges with an instant app:</p>
+<ul>
+<li>There is a limited amount of size you can have with an instant app.</li>
+<li>Only a reduced number of permissions can be used, which are documented at <a href="https://developer.android.com/topic/google-play-instant/getting-started/instant-enabled-app-bundle?tenant=irina#request-supported-permissions" title="Permission documentation for Android Instant Apps">Android Instant app documentation</a>.</li>
+</ul>
+<p>The combination of these can lead to insecure decisions, such as: stripping too much of the authorization/authentication/confidentiality logic from an app, which allows for information leakage.</p>
+<p>Note: Instant apps require an App Bundle. App Bundles are described in the "<a href="../0x05a-Platform-Overview/#app-bundles">App Bundles</a>" section of the "Android Platform Overview" chapter.</p>
+<p><strong>Static Analysis Considerations:</strong></p>
+<p>Static analysis can be either done after reverse engineering a downloaded instant app, or by analyzing the App Bundle. When you analyze the App Bundle, check the Android Manifest to see whether <code>dist:module dist:instant="true"</code> is set for a given module (either the base or a specific module with <code>dist:module</code> set). Next, check for the various entry points, which entry points are set (by means of <code>&lt;data android:path="&lt;/PATH/HERE&gt;" /&gt;</code>).</p>
+<p>Now follow the entry points, like you would do for any Activity and check:</p>
+<ul>
+<li>Is there any data retrieved by the app which should require privacy protection of that data? If so, are all required controls in place?</li>
+<li>Are all communications secured?</li>
+<li>When you need more functionalities, are the right security controls downloaded as well?</li>
+</ul>
+<p><strong>Dynamic Analysis Considerations:</strong></p>
+<p>There are multiple ways to start the dynamic analysis of your instant app. In all cases, you will first have to install the support for instant apps and add the <code>ia</code> executable to your <code>$PATH</code>.</p>
+<p>The installation of instant app support is taken care off through the following command:</p>
+<div class="highlight"><pre><span></span><code><span class="nb">cd</span><span class="w"> </span>path/to/android/sdk/tools/bin<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>./sdkmanager<span class="w"> </span><span class="s1">&#39;extras;google;instantapps&#39;</span>
+</code></pre></div>
+<p>Next, you have to add <code>path/to/android/sdk/extras/google/instantapps/ia</code> to your <code>$PATH</code>.</p>
+<p>After the preparation, you can test instant apps locally on a device running Android 8.1 (API level 27) or later. The app can be tested in different ways:</p>
+<ul>
+<li>Test the app locally:
+  Deploy the app via Android Studio (and enable the <code>Deploy as instant app</code> checkbox in the Run/Configuration dialog) or deploy the app using the following command:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>ia<span class="w"> </span>run<span class="w"> </span>output-from-build-command<span class="w"> </span>&lt;app-artifact&gt;
+</code></pre></div>
+<ul>
+<li>Test the app using the Play Console:</li>
+<li>Upload your App Bundle to the Google Play Console</li>
+<li>Prepare the uploaded bundle for a release to the internal test track.</li>
+<li>Sign into an internal tester account on a device, then launch your instant experience from either an external prepared link or via the <code>try now</code> button in the App store from the testers account.</li>
+</ul>
+<p>Now that you can test the app, check whether:</p>
+<ul>
+<li>There are any data which require privacy controls and whether these controls are in place.</li>
+<li>All communications are sufficiently secured.</li>
+<li>When you need more functionalities, are the right security controls downloaded as well for these functionalities?</li>
+</ul>
+<h3 id="repackaging-apps">Repackaging Apps<a class="headerlink" href="#repackaging-apps" title="Permanent link">&para;</a></h3>
+<p>If you need to test on a non-jailbroken device you should learn how to repackage an app to enable dynamic testing on it.</p>
+<p>Use a computer to perform all the steps indicated in the article <a href="https://github.com/sensepost/objection/wiki/Patching-Android-Applications">"Patching Android Applications"</a> from the objection Wiki. Once you're done you'll be able to patch an APK by calling the objection command:</p>
+<div class="highlight"><pre><span></span><code>objection<span class="w"> </span>patchapk<span class="w"> </span>--source<span class="w"> </span>app-release.apk
+</code></pre></div>
+<p>The patched application then needs to be installed using adb, as explained in <a href="#installing-apps">"Installing Apps"</a>.</p>
+<blockquote>
+<p>This repackaging method is enough for most use cases. For more advanced repackaging, refer to <a href="../0x05c-Reverse-Engineering-and-Tampering/#patching-repackaging-and-re-signing">"Android Tampering and Reverse Engineering - Patching, Repackaging and Re-Signing"</a>.</p>
+</blockquote>
+<h3 id="installing-apps">Installing Apps<a class="headerlink" href="#installing-apps" title="Permanent link">&para;</a></h3>
+<p>Use <code>adb install</code> to install an APK on an emulator or connected device.</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>install<span class="w"> </span>path_to_apk
+</code></pre></div>
+<p>Note that if you have the original source code and use Android Studio, you do not need to do this because Android Studio handles the packaging and installation of the app for you.</p>
+<h3 id="information-gathering">Information Gathering<a class="headerlink" href="#information-gathering" title="Permanent link">&para;</a></h3>
+<p>One fundamental step when analyzing apps is information gathering. This can be done by inspecting the app package on your host computer or remotely by accessing the app data on the device. You'll find more advanced techniques in the subsequent chapters but, for now, we will focus on the basics: getting a list of all installed apps, exploring the app package and accessing the app data directories on the device itself. This should give you a bit of context about what the app is all about without even having to reverse engineer it or perform more advanced analysis. We will be answering questions such as:</p>
+<ul>
+<li>Which files are included in the package?</li>
+<li>Which native libraries does the app use?</li>
+<li>Which app components does the app define? Any services or content providers?</li>
+<li>Is the app debuggable?</li>
+<li>Does the app contain a network security policy?</li>
+<li>Does the app create any new files when being installed?</li>
+</ul>
+<h4 id="listing-installed-apps">Listing Installed Apps<a class="headerlink" href="#listing-installed-apps" title="Permanent link">&para;</a></h4>
+<p>When targeting apps that are installed on the device, you'll first have to figure out the correct package name of the application you want to analyze. You can retrieve the installed apps either by using <code>pm</code> (Android Package Manager) or by using <code>frida-ps</code>:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>list<span class="w"> </span>packages
+package:sg.vantagepoint.helloworldjni
+package:eu.chainfire.supersu
+package:org.teamsik.apps.hackingchallenge.easy
+package:org.teamsik.apps.hackingchallenge.hard
+package:sg.vp.owasp_mobile.omtg_android
+</code></pre></div>
+<p>You can include flags to show only third party apps (<code>-3</code>) and the location of their APK file (<code>-f</code>), which you can use afterwards to download it via <code>adb pull</code>:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>list<span class="w"> </span>packages<span class="w"> </span>-3<span class="w"> </span>-f
+package:/data/app/sg.vantagepoint.helloworldjni-1/base.apk<span class="o">=</span>sg.vantagepoint.helloworldjni
+package:/data/app/eu.chainfire.supersu-1/base.apk<span class="o">=</span>eu.chainfire.supersu
+package:/data/app/org.teamsik.apps.hackingchallenge.easy-1/base.apk<span class="o">=</span>org.teamsik.apps.hackingchallenge.easy
+package:/data/app/org.teamsik.apps.hackingchallenge.hard-1/base.apk<span class="o">=</span>org.teamsik.apps.hackingchallenge.hard
+package:/data/app/sg.vp.owasp_mobile.omtg_android-kR0ovWl9eoU_yh0jPJ9caQ<span class="o">==</span>/base.apk<span class="o">=</span>sg.vp.owasp_mobile.omtg_android
+</code></pre></div>
+<p>This is the same as running <code>adb shell pm path &lt;app_package_id&gt;</code> on an app package ID:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>path<span class="w"> </span>sg.vp.owasp_mobile.omtg_android
+package:/data/app/sg.vp.owasp_mobile.omtg_android-kR0ovWl9eoU_yh0jPJ9caQ<span class="o">==</span>/base.apk
+</code></pre></div>
+<p>Use <code>frida-ps -Uai</code> to get all apps (<code>-a</code>) currently installed (<code>-i</code>) on the connected USB device (<code>-U</code>):</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>frida-ps<span class="w"> </span>-Uai
+<span class="w">  </span>PID<span class="w">  </span>Name<span class="w">                                      </span>Identifier
+-----<span class="w">  </span>----------------------------------------<span class="w">  </span>---------------------------------------
+<span class="w">  </span><span class="m">766</span><span class="w">  </span>Android<span class="w"> </span>System<span class="w">                            </span>android
+<span class="m">21228</span><span class="w">  </span>Attack<span class="w"> </span>me<span class="w"> </span><span class="k">if</span><span class="w"> </span>u<span class="w"> </span>can<span class="w">                        </span>sg.vp.owasp_mobile.omtg_android
+<span class="w"> </span><span class="m">4281</span><span class="w">  </span>Termux<span class="w">                                    </span>com.termux
+<span class="w">    </span>-<span class="w">  </span>Uncrackable1<span class="w">                              </span>sg.vantagepoint.uncrackable1
+</code></pre></div>
+<p>Note that this also shows the PID of the apps that are running at the moment. Take a note of the "Identifier" and the PID if any as you'll need them afterwards.</p>
+<h4 id="exploring-the-app-package">Exploring the App Package<a class="headerlink" href="#exploring-the-app-package" title="Permanent link">&para;</a></h4>
+<p>Once you have collected the package name of the application you want to target, you'll want to start gathering information about it. First, retrieve the APK as explained in <a href="#obtaining-and-extracting-apps">"Basic Testing Operations - Obtaining and Extracting Apps"</a>.</p>
+<p>APK files are actually ZIP files that can be unpacked using a standard decompression utility such as <code>unzip</code>. However, we recommend using <a href="../../Tools/0x08a-Testing-Tools/#apktool">apktool</a> which additionally decodes the AndroidManifest.xml and disassembles the app binaries (classes.dex) to smali code:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>apktool<span class="w"> </span>d<span class="w"> </span>UnCrackable-Level3.apk
+$<span class="w"> </span>tree
+.
+├──<span class="w"> </span>AndroidManifest.xml
+├──<span class="w"> </span>apktool.yml
+├──<span class="w"> </span>lib
+├──<span class="w"> </span>original
+│<span class="w">   </span>├──<span class="w"> </span>AndroidManifest.xml
+│<span class="w">   </span>└──<span class="w"> </span>META-INF
+│<span class="w">       </span>├──<span class="w"> </span>CERT.RSA
+│<span class="w">       </span>├──<span class="w"> </span>CERT.SF
+│<span class="w">       </span>└──<span class="w"> </span>MANIFEST.MF
+├──<span class="w"> </span>res
+...
+└──<span class="w"> </span>smali
+</code></pre></div>
+<p>The following files are unpacked:</p>
+<ul>
+<li>AndroidManifest.xml: contains the definition of the app's package name, target and minimum <a href="https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels" title="API Levels">API level</a>, app configuration, app components, permissions, etc.</li>
+<li>original/META-INF: contains the app's metadata</li>
+<li>MANIFEST.MF: stores hashes of the app resources</li>
+<li>CERT.RSA: the app's certificate(s)</li>
+<li>CERT.SF: list of resources and the SHA-1 digest of the corresponding lines in the MANIFEST.MF file</li>
+<li>assets: directory containing app assets (files used within the Android app, such as XML files, JavaScript files, and pictures), which the <a href="https://developer.android.com/reference/android/content/res/AssetManager">AssetManager</a> can retrieve</li>
+<li>classes.dex: classes compiled in the DEX file format, that Dalvik virtual machine/Android Runtime can process. DEX is Java bytecode for the Dalvik Virtual Machine. It is optimized for small devices</li>
+<li>lib: directory containing 3rd party libraries that are part of the APK</li>
+<li>res: directory containing resources that haven't been compiled into resources.arsc</li>
+<li>resources.arsc: file containing precompiled resources, such as XML files for the layout</li>
+</ul>
+<p>As unzipping with the standard <code>unzip</code> utility leaves some files such as the <code>AndroidManifest.xml</code> unreadable, it's better to unpack the APK using <a href="../../Tools/0x08a-Testing-Tools/#apktool">apktool</a>.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>ls<span class="w"> </span>-alh
+total<span class="w"> </span><span class="m">32</span>
+drwxr-xr-x<span class="w">    </span><span class="m">9</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>306B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>.
+drwxr-xr-x<span class="w">    </span><span class="m">5</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>170B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>..
+-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">    </span>10K<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>AndroidManifest.xml
+-rw-r--r--<span class="w">    </span><span class="m">1</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>401B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>apktool.yml
+drwxr-xr-x<span class="w">    </span><span class="m">6</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>204B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>assets
+drwxr-xr-x<span class="w">    </span><span class="m">3</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>102B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>lib
+drwxr-xr-x<span class="w">    </span><span class="m">4</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>136B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>original
+drwxr-xr-x<span class="w">  </span><span class="m">131</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span><span class="m">4</span>.3K<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>res
+drwxr-xr-x<span class="w">    </span><span class="m">9</span><span class="w"> </span>sven<span class="w">  </span>staff<span class="w">   </span>306B<span class="w"> </span>Dec<span class="w">  </span><span class="m">5</span><span class="w"> </span><span class="m">16</span>:29<span class="w"> </span>smali
+</code></pre></div>
+<h5 id="the-android-manifest">The Android Manifest<a class="headerlink" href="#the-android-manifest" title="Permanent link">&para;</a></h5>
+<p>The Android Manifest is the main source of information, it includes a lot of interesting information such as the package name, the permissions, app components, etc.</p>
+<p>Here's a non-exhaustive list of some info and the corresponding keywords that you can easily search for in the Android Manifest by just inspecting the file or by using <code>grep -i &lt;keyword&gt; AndroidManifest.xml</code>:</p>
+<ul>
+<li>App permissions: <code>permission</code> (see "<a href="../0x05h-Testing-Platform-Interaction/" title="Testing Platform Interaction">Android Platform APIs</a>")</li>
+<li>Backup allowance: <code>android:allowBackup</code> (see "<a href="../0x05d-Testing-Data-Storage/" title="Testing Data Storage)">Data Storage on Android</a></li>
+<li>App components: <code>activity</code>, <code>service</code>, <code>provider</code>, <code>receiver</code> (see "<a href="../0x05h-Testing-Platform-Interaction/" title="Testing Platform Interaction">Android Platform APIs</a>" and "<a href="../0x05d-Testing-Data-Storage/" title="Testing Data Storage)">Data Storage on Android</a></li>
+<li>Debuggable flag: <code>debuggable</code> (see "<a href="../0x05i-Testing-Code-Quality-and-Build-Settings/" title="Testing Code Quality and Build Settings">Code Quality and Build Settings of Android Apps</a>")</li>
+</ul>
+<p>Please refer to the mentioned chapters to learn more about how to test each of these points.</p>
+<h5 id="app-binary">App Binary<a class="headerlink" href="#app-binary" title="Permanent link">&para;</a></h5>
+<p>As seen above in "<a href="#exploring-the-app-package" title="Exploring the App Package">Exploring the App Package</a>", the app binary (<code>classes.dex</code>) can be found in the root directory of the app package. It is a so-called DEX (Dalvik Executable) file that contains compiled Java code. Due to its nature, after applying some conversions you'll be able to use a decompiler to produce Java code. We've also seen the folder <code>smali</code> that was obtained after we run apktool. This contains the disassembled Dalvik bytecode in an intermediate language called smali, which is a human-readable representation of the Dalvik executable.</p>
+<p>Refer to the section "<a href="../0x05c-Reverse-Engineering-and-Tampering/#reviewing-decompiled-java-code" title="Reviewing Decompiled Java Code">Reviewing Decompiled Java Code</a>" in the chapter "<a href="../0x05c-Reverse-Engineering-and-Tampering/">Tampering and Reverse Engineering on Android</a>" for more information about how to reverse engineer DEX files.</p>
+<h5 id="compiled-app-binary">Compiled App Binary<a class="headerlink" href="#compiled-app-binary" title="Permanent link">&para;</a></h5>
+<p>In some cases it might be useful to retrieve the compiled app binary (.odex).</p>
+<p>First get the path to the app's data directory:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>shell<span class="w"> </span>pm<span class="w"> </span>path<span class="w"> </span>com.example.myapplication
+package:/data/app/~~DEMFPZh7R4qfUwwwh1czYA<span class="o">==</span>/com.example.myapplication-pOslqiQkJclb_1Vk9-WAXg<span class="o">==</span>/base.apk
+</code></pre></div>
+<p>Remove the <code>/base.apk</code> part, add <code>/oat/arm64/base.odex</code> and use the resulting path to pull the base.odex from the device:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>root
+adb<span class="w"> </span>pull<span class="w"> </span>/data/app/~~DEMFPZh7R4qfUwwwh1czYA<span class="o">==</span>/com.example.myapplication-pOslqiQkJclb_1Vk9-WAXg<span class="o">==</span>/oat/arm64/base.odex
+</code></pre></div>
+<p>Note that the exact directory will be different based on your Android version. If the <code>/oat/arm64/base.odex</code> file can't be found, manually search in the directory returned by <code>pm path</code>.</p>
+<h5 id="native-libraries">Native Libraries<a class="headerlink" href="#native-libraries" title="Permanent link">&para;</a></h5>
+<p>You can inspect the <code>lib</code> folder in the APK:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>ls<span class="w"> </span>-1<span class="w"> </span>lib/armeabi/
+libdatabase_sqlcipher.so
+libnative.so
+libsqlcipher_android.so
+libstlport_shared.so
+</code></pre></div>
+<p>or from the device with objection:</p>
+<div class="highlight"><pre><span></span><code>...g.vp.owasp_mobile.omtg_android<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>google:<span class="w"> </span><span class="m">8</span>.1.0<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ls lib</span>
+Type<span class="w">    </span>...<span class="w">  </span>Name
+------<span class="w">  </span>...<span class="w">  </span>------------------------
+File<span class="w">    </span>...<span class="w">  </span>libnative.so
+File<span class="w">    </span>...<span class="w">  </span>libdatabase_sqlcipher.so
+File<span class="w">    </span>...<span class="w">  </span>libstlport_shared.so
+File<span class="w">    </span>...<span class="w">  </span>libsqlcipher_android.so
+</code></pre></div>
+<p>For now this is all information you can get about the native libraries unless you start reverse engineering them, which is done using a different approach than the one used to reverse the app binary as this code cannot be decompiled but only disassembled. Refer to the section "<a href="../0x05c-Reverse-Engineering-and-Tampering/#reviewing-disassembled-native-code" title="Reviewing Disassemble Native Code">Reviewing Disassemble Native Code</a>" in the chapter "<a href="../0x05c-Reverse-Engineering-and-Tampering/">Tampering and Reverse Engineering on Android</a>" for more information about how to reverse engineer these libraries.</p>
+<h5 id="other-app-resources">Other App Resources<a class="headerlink" href="#other-app-resources" title="Permanent link">&para;</a></h5>
+<p>It is normally worth taking a look at the rest of the resources and files that you may find in the root folder of the APK as some times they contain additional goodies like key stores, encrypted databases, certificates, etc.</p>
+<h4 id="accessing-app-data-directories">Accessing App Data Directories<a class="headerlink" href="#accessing-app-data-directories" title="Permanent link">&para;</a></h4>
+<p>Once you have installed the app, there is further information to explore, where tools like objection come in handy.</p>
+<p>When using objection you can retrieve different kinds of information, where <code>env</code> will show you all the directory information of the app.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>objection<span class="w"> </span>-g<span class="w"> </span>sg.vp.owasp_mobile.omtg_android<span class="w"> </span>explore
+
+...g.vp.owasp_mobile.omtg_android<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>google:<span class="w"> </span><span class="m">8</span>.1.0<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># env</span>
+
+Name<span class="w">                    </span>Path
+----------------------<span class="w">  </span>---------------------------------------------------------------------------
+cacheDirectory<span class="w">          </span>/data/user/0/sg.vp.owasp_mobile.omtg_android/cache
+codeCacheDirectory<span class="w">      </span>/data/user/0/sg.vp.owasp_mobile.omtg_android/code_cache
+externalCacheDirectory<span class="w">  </span>/storage/emulated/0/Android/data/sg.vp.owasp_mobile.omtg_android/cache
+filesDirectory<span class="w">          </span>/data/user/0/sg.vp.owasp_mobile.omtg_android/files
+obbDir<span class="w">                  </span>/storage/emulated/0/Android/obb/sg.vp.owasp_mobile.omtg_android
+packageCodePath<span class="w">         </span>/data/app/sg.vp.owasp_mobile.omtg_android-kR0ovWl9eoU_yh0jPJ9caQ<span class="o">==</span>/base.apk
+</code></pre></div>
+<p>Among this information we find:</p>
+<ul>
+<li>The internal data directory (aka. sandbox directory) which is at <code>/data/data/[package-name]</code> or <code>/data/user/0/[package-name]</code></li>
+<li>The external data directory at <code>/storage/emulated/0/Android/data/[package-name]</code> or <code>/sdcard/Android/data/[package-name]</code></li>
+<li>The path to the app package in <code>/data/app/</code></li>
+</ul>
+<p>The internal data directory is used by the app to store data created during runtime and has the following basic structure:</p>
+<div class="highlight"><pre><span></span><code>...g.vp.owasp_mobile.omtg_android<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>google:<span class="w"> </span><span class="m">8</span>.1.0<span class="o">)</span><span class="w">  </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ls</span>
+Type<span class="w">       </span>...<span class="w">  </span>Name
+---------<span class="w">  </span>...<span class="w">  </span>-------------------
+Directory<span class="w">  </span>...<span class="w">  </span>cache
+Directory<span class="w">  </span>...<span class="w">  </span>code_cache
+Directory<span class="w">  </span>...<span class="w">  </span>lib
+Directory<span class="w">  </span>...<span class="w">  </span>shared_prefs
+Directory<span class="w">  </span>...<span class="w">  </span>files
+Directory<span class="w">  </span>...<span class="w">  </span>databases
+
+Readable:<span class="w"> </span>True<span class="w">  </span>Writable:<span class="w"> </span>True
+</code></pre></div>
+<p>Each folder has its own purpose:</p>
+<ul>
+<li><strong>cache</strong>: This location is used for data caching. For example, the WebView cache is found in this directory.</li>
+<li><strong>code_cache</strong>: This is the location of the file system's application-specific cache directory designed for storing cached code. On devices running Android 5.0 (API level 21) or later, the system will delete any files stored in this location when the app or the entire platform is upgraded.</li>
+<li><strong>lib</strong>: This folder stores native libraries written in C/C++. These libraries can have one of several file extensions, including .so and .dll (x86 support). This folder contains subdirectories for the platforms the app has native libraries for, including</li>
+<li>armeabi: compiled code for all ARM-based processors</li>
+<li>armeabi-v7a: compiled code for all ARM-based processors, version 7 and above only</li>
+<li>arm64-v8a: compiled code for all 64-bit ARM-based processors, version 8 and above based only</li>
+<li>x86: compiled code for x86 processors only</li>
+<li>x86_64: compiled code for x86_64 processors only</li>
+<li>mips: compiled code for MIPS processors</li>
+<li><strong>shared_prefs</strong>: This folder contains an XML file that stores values saved via the <a href="https://developer.android.com/training/basics/data-storage/shared-preferences.html" title="SharedPreferences APIs">SharedPreferences APIs</a>.</li>
+<li><strong>files</strong>: This folder stores regular files created by the app.</li>
+<li><strong>databases</strong>: This folder stores SQLite database files generated by the app at runtime, e.g., user data files.</li>
+</ul>
+<p>However, the app might store more data not only inside these folders but also in the parent folder (<code>/data/data/[package-name]</code>).</p>
+<p>Refer to the "<a href="../0x05d-Testing-Data-Storage/" title="Testing Data Storage">Testing Data Storage</a>" chapter for more information and best practices on securely storing sensitive data.</p>
+<h4 id="monitoring-system-logs">Monitoring System Logs<a class="headerlink" href="#monitoring-system-logs" title="Permanent link">&para;</a></h4>
+<p>On Android you can easily inspect the log of system messages by using <a href="https://developer.android.com/tools/debugging/debugging-log.html" title="Debugging with Logcat"><code>Logcat</code></a>. There are two ways to execute Logcat:</p>
+<ul>
+<li>Logcat is part of <em>Dalvik Debug Monitor Server</em> (DDMS) in Android Studio. If the app is running in debug mode, the log output will be shown in the Android Monitor on the Logcat tab. You can filter the app's log output by defining patterns in Logcat.</li>
+</ul>
+<p><img src="../../../assets/Images/Chapters/0x05b/log_output_Android_Studio.png" width="100%" /></p>
+<ul>
+<li>You can execute Logcat with adb to store the log output permanently:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>logcat<span class="w"> </span>&gt;<span class="w"> </span>logcat.log
+</code></pre></div>
+<p>With the following command you can specifically grep for the log output of the app in scope, just insert the package name. Of course your app needs to be running for <code>ps</code> to be able to get its PID.</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>logcat<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>adb<span class="w"> </span>shell<span class="w"> </span>ps<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>&lt;package-name&gt;<span class="w"> </span><span class="p">|</span><span class="w"> </span>awk<span class="w"> </span><span class="s1">&#39;{print $2}&#39;</span><span class="k">)</span><span class="s2">&quot;</span>
+</code></pre></div>
+<h2 id="setting-up-a-network-testing-environment">Setting up a Network Testing Environment<a class="headerlink" href="#setting-up-a-network-testing-environment" title="Permanent link">&para;</a></h2>
+<h3 id="basic-network-monitoringsniffing">Basic Network Monitoring/Sniffing<a class="headerlink" href="#basic-network-monitoringsniffing" title="Permanent link">&para;</a></h3>
+<p><a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/" title="Android remote sniffing using Tcpdump, nc and Wireshark">Remotely sniffing all Android traffic in real-time is possible</a> with <a href="../../Tools/0x08a-Testing-Tools/#tcpdump">tcpdump</a>, netcat (nc), and <a href="../../Tools/0x08a-Testing-Tools/#wireshark">Wireshark</a>. First, make sure that you have the latest version of <a href="https://www.androidtcpdump.com/">Android tcpdump</a> on your phone. Here are the <a href="https://wladimir-tm4pda.github.io/porting/tcpdump.html" title="Installing tcpdump">installation steps</a>:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>root
+adb<span class="w"> </span>remount
+adb<span class="w"> </span>push<span class="w"> </span>/wherever/you/put/tcpdump<span class="w"> </span>/system/xbin/tcpdump
+</code></pre></div>
+<p>If execution of <code>adb root</code> returns the error <code>adbd cannot run as root in production builds</code>, install tcpdump as follows:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>push<span class="w"> </span>/wherever/you/put/tcpdump<span class="w"> </span>/data/local/tmp/tcpdump
+adb<span class="w"> </span>shell
+su
+mount<span class="w"> </span>-o<span class="w"> </span>rw,remount<span class="w"> </span>/system<span class="p">;</span>
+cp<span class="w"> </span>/data/local/tmp/tcpdump<span class="w"> </span>/system/xbin/
+<span class="nb">cd</span><span class="w"> </span>/system/xbin
+chmod<span class="w"> </span><span class="m">755</span><span class="w"> </span>tcpdump
+</code></pre></div>
+<p>In certain production builds, you might encounter an error <code>mount: '/system' not in /proc/mounts</code>.</p>
+<p>In that case, you can replace the above line <code>$ mount -o rw,remount /system;</code> with <code>$ mount -o rw,remount /</code>, as described in <a href="https://stackoverflow.com/a/28018008" title="How can I remount my Android/system as read-write in a bash script using adb?">this Stack Overflow post</a>.</p>
+<blockquote>
+<p>Remember: To use tcpdump, you need root privileges on the phone!</p>
+</blockquote>
+<p>Execute <code>tcpdump</code> once to see if it works. Once a few packets have come in, you can stop tcpdump by pressing CTRL+c.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>tcpdump
+tcpdump:<span class="w"> </span>verbose<span class="w"> </span>output<span class="w"> </span>suppressed,<span class="w"> </span>use<span class="w"> </span>-v<span class="w"> </span>or<span class="w"> </span>-vv<span class="w"> </span><span class="k">for</span><span class="w"> </span>full<span class="w"> </span>protocol<span class="w"> </span>decode
+listening<span class="w"> </span>on<span class="w"> </span>wlan0,<span class="w"> </span>link-type<span class="w"> </span>EN10MB<span class="w"> </span><span class="o">(</span>Ethernet<span class="o">)</span>,<span class="w"> </span>capture<span class="w"> </span>size<span class="w"> </span><span class="m">262144</span><span class="w"> </span>bytes
+<span class="m">04</span>:54:06.590751<span class="w"> </span><span class="m">00</span>:9e:1e:10:7f:69<span class="w"> </span><span class="o">(</span>oui<span class="w"> </span>Unknown<span class="o">)</span><span class="w"> </span>&gt;<span class="w"> </span>Broadcast,<span class="w"> </span>RRCP-0x23<span class="w"> </span>reply
+<span class="m">04</span>:54:09.659658<span class="w"> </span><span class="m">00</span>:9e:1e:10:7f:69<span class="w"> </span><span class="o">(</span>oui<span class="w"> </span>Unknown<span class="o">)</span><span class="w"> </span>&gt;<span class="w"> </span>Broadcast,<span class="w"> </span>RRCP-0x23<span class="w"> </span>reply
+<span class="m">04</span>:54:10.579795<span class="w"> </span><span class="m">00</span>:9e:1e:10:7f:69<span class="w"> </span><span class="o">(</span>oui<span class="w"> </span>Unknown<span class="o">)</span><span class="w"> </span>&gt;<span class="w"> </span>Broadcast,<span class="w"> </span>RRCP-0x23<span class="w"> </span>reply
+^C
+<span class="m">3</span><span class="w"> </span>packets<span class="w"> </span>captured
+<span class="m">3</span><span class="w"> </span>packets<span class="w"> </span>received<span class="w"> </span>by<span class="w"> </span>filter
+<span class="m">0</span><span class="w"> </span>packets<span class="w"> </span>dropped<span class="w"> </span>by<span class="w"> </span>kernel
+</code></pre></div>
+<p>To remotely sniff the Android phone's network traffic, first execute <code>tcpdump</code> and pipe its output to <code>netcat</code> (nc):</p>
+<div class="highlight"><pre><span></span><code>tcpdump<span class="w"> </span>-i<span class="w"> </span>wlan0<span class="w"> </span>-s0<span class="w"> </span>-w<span class="w"> </span>-<span class="w"> </span><span class="p">|</span><span class="w"> </span>nc<span class="w"> </span>-l<span class="w"> </span>-p<span class="w"> </span><span class="m">11111</span>
+</code></pre></div>
+<p>The tcpdump command above involves</p>
+<ul>
+<li>listening on the wlan0 interface,</li>
+<li>defining the size (snapshot length) of the capture in bytes to get everything (-s0), and</li>
+<li>writing to a file (-w). Instead of a filename, we pass <code>-</code>, which will make tcpdump write to stdout.</li>
+</ul>
+<p>By using the pipe (<code>|</code>), we sent all output from tcpdump to netcat, which opens a listener on port 11111. You'll usually want to monitor the wlan0 interface. If you need another interface, list the available options with the command <code>$ ip addr</code>.</p>
+<p>To access port 11111, you need to forward the port to your host computer via adb.</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>forward<span class="w"> </span>tcp:11111<span class="w"> </span>tcp:11111
+</code></pre></div>
+<p>The following command connects you to the forwarded port via netcat and piping to Wireshark.</p>
+<div class="highlight"><pre><span></span><code>nc<span class="w"> </span>localhost<span class="w"> </span><span class="m">11111</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>wireshark<span class="w"> </span>-k<span class="w"> </span>-S<span class="w"> </span>-i<span class="w"> </span>-
+</code></pre></div>
+<p>Wireshark should start immediately (-k). It gets all data from stdin (-i -) via netcat, which is connected to the forwarded port. You should see all the phone's traffic from the wlan0 interface.</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/Android_Wireshark.png" width="100%" /></p>
+<p>You can display the captured traffic in a human-readable format with Wireshark. Figure out which protocols are used and whether they are unencrypted. Capturing all traffic (TCP and UDP) is important, so you should execute all functions of the tested application and analyze it.</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/tcpdump_and_wireshard_on_android.png" width="400px" /></p>
+<p>This neat little trick allows you now to identify what kind of protocols are used and to which endpoints the app is talking to. The questions is now, how can I test the endpoints if Burp is not capable of showing the traffic? There is no easy answer for this, but a few Burp plugins that can get you started.</p>
+<h4 id="firebasegoogle-cloud-messaging-fcmgcm">Firebase/Google Cloud Messaging (FCM/GCM)<a class="headerlink" href="#firebasegoogle-cloud-messaging-fcmgcm" title="Permanent link">&para;</a></h4>
+<p>Firebase Cloud Messaging (FCM), the successor to Google Cloud Messaging (GCM), is a free service offered by Google that allows you to send messages between an application server and client apps. The server and client app communicate via the FCM/GCM connection server, which handles downstream and upstream messages.</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/FCM-notifications-overview.png" width="100%" /></p>
+<p>Downstream messages (push notifications) are sent from the application server to the client app; upstream messages are sent from the client app to the server.</p>
+<p>FCM is available for Android, iOS, and Chrome. FCM currently provides two connection server protocols: HTTP and XMPP. As described in the <a href="https://firebase.google.com/docs/cloud-messaging/server#choose" title="Differences of HTTP and XMPP in FCM">official documentation</a>, these protocols are implemented differently. The following example demonstrates how to intercept both protocols.</p>
+<h5 id="preparation-of-test-setup">Preparation of Test Setup<a class="headerlink" href="#preparation-of-test-setup" title="Permanent link">&para;</a></h5>
+<p>You need to either configure iptables on your phone or use bettercap to be able to intercept traffic.</p>
+<p>FCM can use either XMPP or HTTP to communicate with the Google backend.</p>
+<h5 id="http">HTTP<a class="headerlink" href="#http" title="Permanent link">&para;</a></h5>
+<p>FCM uses the ports 5228, 5229, and 5230 for HTTP communication. Usually, only port 5228 is used.</p>
+<ul>
+<li>Configure local port forwarding for the ports used by FCM. The following example applies to macOS:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 5228-&gt; 127.0.0.1 port 8080</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 5229 -&gt; 127.0.0.1 port 8080</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 5230 -&gt; 127.0.0.1 port 8080</span>
+<span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>pfctl<span class="w"> </span>-ef<span class="w"> </span>-
+</code></pre></div>
+<ul>
+<li>The interception proxy must listen to the port specified in the port forwarding rule above (port 8080).</li>
+</ul>
+<h5 id="xmpp">XMPP<a class="headerlink" href="#xmpp" title="Permanent link">&para;</a></h5>
+<p>For XMPP communication, <a href="https://firebase.google.com/docs/cloud-messaging/xmpp-server-ref" title="Firebase via XMPP">FCM uses ports</a> 5235 (Production) and 5236 (Testing).</p>
+<ul>
+<li>Configure local port forwarding for the ports used by FCM. The following example applies to macOS:</li>
+</ul>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 5235-&gt; 127.0.0.1 port 8080</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 5236 -&gt; 127.0.0.1 port 8080</span>
+<span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>pfctl<span class="w"> </span>-ef<span class="w"> </span>-
+</code></pre></div>
+<h5 id="intercepting-the-requests">Intercepting the Requests<a class="headerlink" href="#intercepting-the-requests" title="Permanent link">&para;</a></h5>
+<p>The interception proxy must listen to the port specified in the port forwarding rule above (port 8080).</p>
+<p>Start the app and trigger a function that uses FCM. You should see HTTP messages in your interception proxy.</p>
+<p><img src="../../../assets/Images/Chapters/0x05b/FCM_Intercept.png" width="100%" /></p>
+<h5 id="end-to-end-encryption-for-push-notifications">End-to-End Encryption for Push Notifications<a class="headerlink" href="#end-to-end-encryption-for-push-notifications" title="Permanent link">&para;</a></h5>
+<p>As an additional layer of security, push notifications can be encrypted by using <a href="https://github.com/google/capillary" title="Capillary">Capillary</a>. Capillary is a library to simplify the sending of end-to-end (E2E) encrypted push messages from Java-based application servers to Android clients.</p>
+<h3 id="setting-up-an-interception-proxy">Setting Up an Interception Proxy<a class="headerlink" href="#setting-up-an-interception-proxy" title="Permanent link">&para;</a></h3>
+<p>Several tools support the network analysis of applications that rely on the HTTP(S) protocol. The most important tools are the so-called interception proxies; <a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a> and <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp Suite</a> Professional are the most famous. An interception proxy gives the tester a man-in-the-middle position. This position is useful for reading and/or modifying all app requests and endpoint responses, which are used for testing Authorization, Session, Management, etc.</p>
+<h4 id="interception-proxy-for-a-virtual-device">Interception Proxy for a Virtual Device<a class="headerlink" href="#interception-proxy-for-a-virtual-device" title="Permanent link">&para;</a></h4>
+<h5 id="setting-up-a-web-proxy-on-an-android-virtual-device-avd">Setting Up a Web Proxy on an Android Virtual Device (AVD)<a class="headerlink" href="#setting-up-a-web-proxy-on-an-android-virtual-device-avd" title="Permanent link">&para;</a></h5>
+<p>The following procedure, which works on the Android emulator that ships with Android Studio 3.x, is for setting up an HTTP proxy on the emulator:</p>
+<ol>
+<li>Set up your proxy to listen on localhost and for example port 8080.</li>
+<li>
+<p>Configure the HTTP proxy in the emulator settings:</p>
+<ul>
+<li>Click on the three dots in the emulator menu bar</li>
+<li>Open the <strong>Settings</strong> Menu</li>
+<li>Click on the <strong>Proxy</strong> tab</li>
+<li>Select <strong>Manual proxy configuration</strong></li>
+<li>Enter "127.0.0.1" in the <strong>Host Name</strong> field and your proxy port in the <strong>Port number</strong> field (e.g., "8080")</li>
+<li>Tap <strong>Apply</strong></li>
+</ul>
+</li>
+</ol>
+<p><img src="../../../assets/Images/Chapters/0x05b/emulator-proxy.png" width="100%" /></p>
+<p>HTTP and HTTPS requests should now be routed over the proxy on the host computer. If not, try toggling airplane mode off and on.</p>
+<p>A proxy for an AVD can also be configured on the command line by using the <a href="https://developer.android.com/studio/run/emulator-commandline" title="Emulator Command">emulator command</a> when starting an AVD. The following example starts the AVD Nexus_5X_API_23 and sets a proxy to 127.0.0.1 and port 8080.</p>
+<div class="highlight"><pre><span></span><code>emulator<span class="w"> </span>@Nexus_5X_API_23<span class="w"> </span>-http-proxy<span class="w"> </span><span class="m">127</span>.0.0.1:8080
+</code></pre></div>
+<h5 id="installing-a-ca-certificate-on-the-virtual-device">Installing a CA Certificate on the Virtual Device<a class="headerlink" href="#installing-a-ca-certificate-on-the-virtual-device" title="Permanent link">&para;</a></h5>
+<p>An easy way to install a CA certificate is to push the certificate to the device and add it to the certificate store via Security Settings. For example, you can install the PortSwigger (Burp) CA certificate as follows:</p>
+<ol>
+<li>Start Burp and use a web browser on the host to navigate to burp/, then download <code>cacert.der</code> by clicking the "CA Certificate" button.</li>
+<li>Change the file extension from <code>.der</code> to <code>.cer</code>.</li>
+<li>
+<p>Push the file to the emulator:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>push<span class="w"> </span>cacert.cer<span class="w"> </span>/sdcard/
+</code></pre></div>
+</li>
+<li>
+<p>Navigate to <strong>Settings</strong> -&gt; <strong>Security</strong> -&gt; <strong>Install from SD Card</strong>.</p>
+</li>
+<li>Scroll down and tap <code>cacert.cer</code>.</li>
+</ol>
+<p>You should then be prompted to confirm installation of the certificate (you'll also be asked to set a device PIN if you haven't already).</p>
+<p>This installs the certificate in the user certificate store (tested on Genymotion VM). In order to place the certificate in the root store you can perform the following steps:</p>
+<ol>
+<li>Run adb as root with <code>adb root</code> and <code>adb shell</code>.</li>
+<li>Locate the newly installed certificate at <code>/data/misc/user/0/cacerts-added/</code>.</li>
+<li>Copy the certificate to the following folder <code>/system/etc/security/cacerts/</code>.</li>
+<li>Reboot the Android VM.</li>
+</ol>
+<p>For Android 7.0 (API level 24) and above follow the same procedure described in the "<a href="#bypassing-the-network-security-configuration" title="Bypassing the Network Security Configuration">Bypassing the Network Security Configuration</a>" section.</p>
+<h4 id="interception-proxy-for-a-physical-device">Interception Proxy for a Physical Device<a class="headerlink" href="#interception-proxy-for-a-physical-device" title="Permanent link">&para;</a></h4>
+<p>The available network setup options must be evaluated first. The mobile device used for testing and the host computer running the interception proxy must be connected to the same Wi-Fi network. Use either an (existing) access point or create <a href="https://portswigger.net/support/creating-an-ad-hoc-wireless-network-in-os-x" title="Creating an Ad-hoc Wireless Network in OS X">an ad-hoc wireless network</a>.</p>
+<p>Once you've configured the network and established a connection between the testing host computer and the mobile device, several steps remain.</p>
+<ul>
+<li>The proxy must be <a href="https://portswigger.net/support/configuring-an-android-device-to-work-with-burp" title="Configuring an Android Device to Work With Burp">configured to point to the interception proxy</a>.</li>
+<li>The <a href="https://portswigger.net/support/installing-burp-suites-ca-certificate-in-an-android-device" title="Installing Burp\'s CA Certificate in an Android Device">interception proxy's CA certificate must be added to the trusted certificates in the Android device's certificate storage</a>. The location of the menu used to store CA certificates may depend on the Android version and Android OEM modifications of the settings menu.</li>
+<li>Some application (e.g. the <a href="https://bugs.chromium.org/p/chromium/issues/detail?id=475745" title="Chromium Issue 475745">Chrome browser</a>) may show <code>NET::ERR_CERT_VALIDITY_TOO_LONG</code> errors, if the leaf certificate happens to have a validity extending a certain time (39 months in case of Chrome). This happens if the default Burp CA certificate is used, since the Burp Suite issues leaf certificates with the same validity as its CA certificate. You can circumvent this by creating your own CA certificate and import it to the Burp Suite, as explained in this <a href="https://blog.nviso.be/2018/01/31/using-a-custom-root-ca-with-burp-for-inspecting-android-n-traffic/" title="Using a custom root CA with Burp for inspecting Android N traffic">blog post</a>.</li>
+</ul>
+<p>After completing these steps and starting the app, the requests should show up in the interception proxy.</p>
+<blockquote>
+<p>A video of setting up <a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a> with an Android device can be found on <a href="https://security.secure.force.com/security/tools/webapp/zapandroidsetup" title="Setting up ZAP for Android">secure.force.com</a>.</p>
+</blockquote>
+<p>A few other differences: from Android 8.0 (API level 26) onward, the network behavior of the app changes when HTTPS traffic is tunneled through another connection. And from Android 9 (API level 28) onward, the SSLSocket and SSLEngine will behave a little bit different in terms of error handling when something goes wrong during the handshakes.</p>
+<p>As mentioned before, starting with Android 7.0 (API level 24), the Android OS will no longer trust user CA certificates by default, unless specified in the application. In the following section, we explain two methods to bypass this Android security control.</p>
+<h4 id="bypassing-the-network-security-configuration">Bypassing the Network Security Configuration<a class="headerlink" href="#bypassing-the-network-security-configuration" title="Permanent link">&para;</a></h4>
+<p>In this section we will present several methods to bypass Android's <a href="../0x05g-Testing-Network-Communication/#android-network-security-configuration">Network Security Configuration</a>.</p>
+<h5 id="adding-custom-user-certificates-to-the-network-security-configuration">Adding Custom User Certificates to the Network Security Configuration<a class="headerlink" href="#adding-custom-user-certificates-to-the-network-security-configuration" title="Permanent link">&para;</a></h5>
+<p>There are different configurations available for the Network Security Configuration to <a href="https://developer.android.com/training/articles/security-config#CustomTrust" title="Custom Trust">add non-system Certificate Authorities</a> via the src attribute:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">[&quot;system&quot;</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">&quot;user&quot;</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">&quot;raw</span><span class="w"> </span><span class="err">resource&quot;]</span>
+<span class="w">              </span><span class="na">overridePins=</span><span class="s">[&quot;true&quot;</span><span class="w"> </span><span class="err">|</span><span class="w"> </span><span class="err">&quot;false&quot;]</span><span class="w"> </span><span class="nt">/&gt;</span>
+</code></pre></div>
+<p>Each certificate can be one of the following:</p>
+<ul>
+<li><code>"raw resource"</code> is an ID pointing to a file containing X.509 certificates</li>
+<li><code>"system"</code> for the pre-installed system CA certificates</li>
+<li><code>"user"</code> for user-added CA certificates</li>
+</ul>
+<p>The CA certificates trusted by the app can be a system trusted CA as well as a user CA. Usually you will have added the certificate of your interception proxy already as additional CA in Android. Therefore we will focus on the "user" setting, which allows you to force the Android app to trust this certificate with the following Network Security Configuration below:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;network-security-config&gt;</span>
+<span class="w">   </span><span class="nt">&lt;base-config&gt;</span>
+<span class="w">      </span><span class="nt">&lt;trust-anchors&gt;</span>
+<span class="w">          </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;system&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">          </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;user&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">      </span><span class="nt">&lt;/trust-anchors&gt;</span>
+<span class="w">   </span><span class="nt">&lt;/base-config&gt;</span>
+<span class="nt">&lt;/network-security-config&gt;</span>
+</code></pre></div>
+<p>To implement this new setting you must follow the steps below:</p>
+<ul>
+<li>
+<p>Decompile the app using a decompilation tool like apktool:</p>
+<div class="highlight"><pre><span></span><code>apktool<span class="w"> </span>d<span class="w"> </span>&lt;filename&gt;.apk
+</code></pre></div>
+</li>
+<li>
+<p>Make the application trust user certificates by creating a Network Security Configuration that includes <code>&lt;certificates src="user" /&gt;</code> as explained above</p>
+</li>
+<li>
+<p>Go into the directory created by apktool when decompiling the app and rebuild the app using apktool. The new apk will be in the <code>dist</code> directory.</p>
+<div class="highlight"><pre><span></span><code>apktool<span class="w"> </span>b
+</code></pre></div>
+</li>
+<li>
+<p>You need to repackage the app, as explained in the "<a href="../0x05c-Reverse-Engineering-and-Tampering/#repackaging" title="Repackaging">Repackaging</a>" section of the "Reverse Engineering and Tampering" chapter. For more details on the repackaging process you can also consult the <a href="https://developer.android.com/studio/publish/app-signing#signing-manually">Android developer documentation</a>, that explains the process as a whole.</p>
+</li>
+</ul>
+<p>Note that even if this method is quite simple its major drawback is that you have to apply this operation for each application you want to evaluate which is additional overhead for testing.</p>
+<blockquote>
+<p>Bear in mind that if the app you are testing has additional hardening measures, like verification of the app signature you might not be able to start the app anymore. As part of the repackaging you will sign the app with your own key and therefore the signature changes will result in triggering such checks that might lead to immediate termination of the app. You would need to identify and disable such checks either by patching them during repackaging of the app or dynamic instrumentation through Frida.</p>
+</blockquote>
+<p>There is a python script available that automates the steps described above called <a href="https://github.com/51j0/Android-CertKiller" title="Android-CertKiller">Android-CertKiller</a>. This Python script can extract the APK from an installed Android app, decompile it, make it debuggable, add a new Network Security Configuration that allows user certificates, builds and signs the new APK and installs the new APK with the SSL Bypass.</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>main.py<span class="w"> </span>-w
+
+***************************************
+Android<span class="w"> </span>CertKiller<span class="w"> </span><span class="o">(</span>v0.1<span class="o">)</span>
+***************************************
+
+CertKiller<span class="w"> </span>Wizard<span class="w"> </span>Mode
+---------------------------------
+List<span class="w"> </span>of<span class="w"> </span>devices<span class="w"> </span>attached
+4200dc72f27bc44d<span class="w">    </span>device
+
+---------------------------------
+
+Enter<span class="w"> </span>Application<span class="w"> </span>Package<span class="w"> </span>Name:<span class="w"> </span>nsc.android.mstg.owasp.org.android_nsc
+
+Package:<span class="w"> </span>/data/app/nsc.android.mstg.owasp.org.android_nsc-1/base.apk
+
+I.<span class="w"> </span>Initiating<span class="w"> </span>APK<span class="w"> </span>extraction<span class="w"> </span>from<span class="w"> </span>device
+<span class="w">   </span><span class="nb">complete</span>
+------------------------------
+I.<span class="w"> </span>Decompiling
+<span class="w">   </span><span class="nb">complete</span>
+------------------------------
+I.<span class="w"> </span>Applying<span class="w"> </span>SSL<span class="w"> </span>bypass
+<span class="w">   </span><span class="nb">complete</span>
+------------------------------
+I.<span class="w"> </span>Building<span class="w"> </span>New<span class="w"> </span>APK
+<span class="w">   </span><span class="nb">complete</span>
+------------------------------
+I.<span class="w"> </span>Signing<span class="w"> </span>APK
+<span class="w">   </span><span class="nb">complete</span>
+------------------------------
+
+Would<span class="w"> </span>you<span class="w"> </span>like<span class="w"> </span>to<span class="w"> </span>install<span class="w"> </span>the<span class="w"> </span>APK<span class="w"> </span>on<span class="w"> </span>your<span class="w"> </span>device<span class="o">(</span>y/N<span class="o">)</span>:<span class="w"> </span>y
+------------------------------------
+<span class="w"> </span>Installing<span class="w"> </span>Unpinned<span class="w"> </span>APK
+------------------------------
+Finished
+</code></pre></div>
+<h5 id="adding-the-proxys-certificate-among-system-trusted-cas-using-magisk">Adding the Proxy's certificate among system trusted CAs using Magisk<a class="headerlink" href="#adding-the-proxys-certificate-among-system-trusted-cas-using-magisk" title="Permanent link">&para;</a></h5>
+<p>In order to avoid the obligation of configuring the Network Security Configuration for each application, we must force the device to accept the proxy's certificate as one of the systems trusted certificates.</p>
+<p>There is a <a href="https://github.com/NVISO-BE/MagiskTrustUserCerts" title="Magisk Trust User Certs">Magisk module</a> that will automatically add all user-installed CA certificates to the list of system trusted CAs.</p>
+<p>Download the latest version of the module at the <a href="https://github.com/NVISO-BE/MagiskTrustUserCerts/releases" title="Magisk Trust User Certs - Releases">Github Release page</a>, push the downloaded file over to the device and import it in the Magisk Manager's "Module" view by clicking on the <code>+</code> button. Finally, a restart is required by Magisk Manager to let changes take effect.</p>
+<p>From now on, any CA certificate that is installed by the user via "Settings", "Security &amp; location", "Encryption &amp; credentials", "Install from storage" (location may differ) is automatically pushed into the system's trust store by this Magisk module. Reboot and verify that the CA certificate is listed in "Settings", "Security &amp; location", "Encryption &amp; credentials", "Trusted credentials" (location may differ).</p>
+<h5 id="manually-adding-the-proxys-certificate-among-system-trusted-cas">Manually adding the Proxy's certificate among system trusted CAs<a class="headerlink" href="#manually-adding-the-proxys-certificate-among-system-trusted-cas" title="Permanent link">&para;</a></h5>
+<p>Alternatively, you can follow the following steps manually in order to achieve the same result:</p>
+<ul>
+<li>Make the /system partition writable, which is only possible on a rooted device. Run the 'mount' command to make sure the /system is writable: <code>mount -o rw,remount /system</code>. If this command fails, try running the following command <code>mount -o rw,remount -t ext4 /system</code></li>
+<li>
+<p>Prepare the proxy's CA certificates to match system certificates format. Export the proxy's certificates in <code>der</code> format (this is the default format in Burp Suite) then run the following commands:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-inform<span class="w"> </span>DER<span class="w"> </span>-in<span class="w"> </span>cacert.der<span class="w"> </span>-out<span class="w"> </span>cacert.pem
+$<span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-inform<span class="w"> </span>PEM<span class="w"> </span>-subject_hash_old<span class="w"> </span>-in<span class="w"> </span>cacert.pem<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1
+mv<span class="w"> </span>cacert.pem<span class="w"> </span>&lt;hash&gt;.0
+</code></pre></div>
+</li>
+<li>
+<p>Finally, copy the <code>&lt;hash&gt;.0</code> file into the directory /system/etc/security/cacerts and then run the following command:</p>
+<div class="highlight"><pre><span></span><code>chmod<span class="w"> </span><span class="m">644</span><span class="w"> </span>&lt;hash&gt;.0
+</code></pre></div>
+</li>
+</ul>
+<p>By following the steps described above you allow any application to trust the proxy's certificate, which allows you to intercept its traffic, unless of course the application uses SSL pinning.</p>
+<h3 id="potential-obstacles">Potential Obstacles<a class="headerlink" href="#potential-obstacles" title="Permanent link">&para;</a></h3>
+<p>Applications often implement security controls that make it more difficult to perform a security review of the application, such as root detection and certificate pinning. Ideally, you would acquire both a version of the application that has these controls enabled, and one where the controls are disabled. This allows you to analyze the proper implementation of the controls, after which you can continue with the less-secure version for further tests.</p>
+<p>Of course, this is not always possible, and you may need to perform a black-box assessment on an application where all security controls are enabled. The section below shows you how you can circumvent certificate pinning for different applications.</p>
+<h4 id="client-isolation-in-wireless-networks">Client Isolation in Wireless Networks<a class="headerlink" href="#client-isolation-in-wireless-networks" title="Permanent link">&para;</a></h4>
+<p>Once you have setup an interception proxy and have a MITM position you might still not be able to see anything. This might be due to restrictions in the app (see next section) but can also be due to so called client isolation in the Wi-Fi that you are connected to.</p>
+<p><a href="https://documentation.meraki.com/MR/Firewall_and_Traffic_Shaping/Wireless_Client_Isolation" title="Wireless Client Isolation">Wireless Client Isolation</a> is a security feature that prevents wireless clients from communicating with one another. This feature is useful for guest and BYOD SSIDs adding a level of security to limit attacks and threats between devices connected to the wireless networks.</p>
+<p>What to do if the Wi-Fi we need for testing has client isolation?</p>
+<p>You can configure the proxy on your Android device to point to 127.0.0.1:8080, connect your phone via USB to your host computer and use adb to make a reverse port forwarding:</p>
+<div class="highlight"><pre><span></span><code>adb<span class="w"> </span>reverse<span class="w"> </span>tcp:8080<span class="w"> </span>tcp:8080
+</code></pre></div>
+<p>Once you have done this all proxy traffic on your Android phone will be going to port 8080 on 127.0.0.1 and it will be redirected via adb to 127.0.0.1:8080 on your host computer and you will see now the traffic in your Burp. With this trick you are able to test and intercept traffic also in Wi-Fis that have client isolation.</p>
+<h4 id="non-proxy-aware-apps">Non-Proxy Aware Apps<a class="headerlink" href="#non-proxy-aware-apps" title="Permanent link">&para;</a></h4>
+<p>Once you have setup an interception proxy and have a MITM position you might still not be able to see anything. This is mainly due to the following reasons:</p>
+<ul>
+<li>The app is using a framework like Xamarin that simply is not using the proxy settings of the Android OS or</li>
+<li>The app you are testing is verifying if a proxy is set and is not allowing now any communication.</li>
+</ul>
+<p>In both scenarios you would need additional steps to finally being able to see the traffic. In the sections below we are describing two different solutions, bettercap and iptables.</p>
+<p>You could also use an access point that is under your control to redirect the traffic, but this would require additional hardware and we focus for now on software solutions.</p>
+<blockquote>
+<p>For both solutions you need to activate "Support invisible proxying" in Burp, in Proxy Tab/Options/Edit Interface.</p>
+</blockquote>
+<h5 id="iptables">iptables<a class="headerlink" href="#iptables" title="Permanent link">&para;</a></h5>
+<p>You can use iptables on the Android device to redirect all traffic to your interception proxy. The following command would redirect port 80 to your proxy running on port 8080</p>
+<div class="highlight"><pre><span></span><code>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-A<span class="w"> </span>OUTPUT<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">80</span><span class="w"> </span>-j<span class="w"> </span>DNAT<span class="w"> </span>--to-destination<span class="w"> </span>&lt;Your-Proxy-IP&gt;:8080
+</code></pre></div>
+<p>Verify the iptables settings and check the IP and port.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-L
+Chain<span class="w"> </span>PREROUTING<span class="w"> </span><span class="o">(</span>policy<span class="w"> </span>ACCEPT<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+
+Chain<span class="w"> </span>INPUT<span class="w"> </span><span class="o">(</span>policy<span class="w"> </span>ACCEPT<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+
+Chain<span class="w"> </span>OUTPUT<span class="w"> </span><span class="o">(</span>policy<span class="w"> </span>ACCEPT<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+DNAT<span class="w">       </span>tcp<span class="w">  </span>--<span class="w">  </span>anywhere<span class="w">             </span>anywhere<span class="w">             </span>tcp<span class="w"> </span>dpt:5288<span class="w"> </span>to:&lt;Your-Proxy-IP&gt;:8080
+
+Chain<span class="w"> </span>POSTROUTING<span class="w"> </span><span class="o">(</span>policy<span class="w"> </span>ACCEPT<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+
+Chain<span class="w"> </span>natctrl_nat_POSTROUTING<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="w"> </span>references<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+
+Chain<span class="w"> </span>oem_nat_pre<span class="w"> </span><span class="o">(</span><span class="m">0</span><span class="w"> </span>references<span class="o">)</span>
+target<span class="w">     </span>prot<span class="w"> </span>opt<span class="w"> </span><span class="nb">source</span><span class="w">               </span>destination
+</code></pre></div>
+<p>In case you want to reset the iptables configuration you can flush the rules:</p>
+<div class="highlight"><pre><span></span><code>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-F
+</code></pre></div>
+<h5 id="bettercap">bettercap<a class="headerlink" href="#bettercap" title="Permanent link">&para;</a></h5>
+<p>Read the chapter "<a href="../../General/0x04f-Testing-Network-Communication/" title="Testing Network Communication">Testing Network Communication</a>" and the test case "<a href="../../General/0x04f-Testing-Network-Communication/#simulating-a-man-in-the-middle-attack-with-bettercap" title="Simulating a MitM Attack">Simulating a Man-in-the-Middle Attack</a>" for further preparation and instructions for running bettercap.</p>
+<p>The host computer where you run your proxy and the Android device must be connected to the same wireless network. Start bettercap with the following command, replacing the IP address below (X.X.X.X) with the IP address of your Android device.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>sudo<span class="w"> </span>bettercap<span class="w"> </span>-eval<span class="w"> </span><span class="s2">&quot;set arp.spoof.targets X.X.X.X; arp.spoof on; set arp.spoof.internal true; set arp.spoof.fullduplex true;&quot;</span>
+bettercap<span class="w"> </span>v2.22<span class="w"> </span><span class="o">(</span>built<span class="w"> </span><span class="k">for</span><span class="w"> </span>darwin<span class="w"> </span>amd64<span class="w"> </span>with<span class="w"> </span>go1.12.1<span class="o">)</span><span class="w"> </span><span class="o">[</span><span class="nb">type</span><span class="w"> </span><span class="s1">&#39;help&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>commands<span class="o">]</span>
+
+<span class="o">[</span><span class="m">19</span>:21:39<span class="o">]</span><span class="w"> </span><span class="o">[</span>sys.log<span class="o">]</span><span class="w"> </span><span class="o">[</span>inf<span class="o">]</span><span class="w"> </span>arp.spoof<span class="w"> </span>enabling<span class="w"> </span>forwarding
+<span class="o">[</span><span class="m">19</span>:21:39<span class="o">]</span><span class="w"> </span><span class="o">[</span>sys.log<span class="o">]</span><span class="w"> </span><span class="o">[</span>inf<span class="o">]</span><span class="w"> </span>arp.spoof<span class="w"> </span>arp<span class="w"> </span>spoofer<span class="w"> </span>started,<span class="w"> </span>probing<span class="w"> </span><span class="m">1</span><span class="w"> </span>targets.
+</code></pre></div>
+<h4 id="proxy-detection">Proxy Detection<a class="headerlink" href="#proxy-detection" title="Permanent link">&para;</a></h4>
+<p>Some mobile apps are trying to detect if a proxy is set. If that's the case they will assume that this is malicious and will not work properly.</p>
+<p>In order to bypass such a protection mechanism you could either setup bettercap or configure iptables that don't need a proxy setup on your Android phone. A third option we didn't mention before and that is applicable in this scenario is using Frida. It is possible on Android to detect if a system proxy is set by querying the <a href="https://developer.android.com/reference/android/net/ProxyInfo" title="ProxyInfo"><code>ProxyInfo</code></a> class and check the getHost() and getPort() methods. There might be various other methods to achieve the same task and you would need to decompile the APK in order to identify the actual class and method name.</p>
+<p>Below you can find boiler plate source code for a Frida script that will help you to overload the method (in this case called isProxySet) that is verifying if a proxy is set and will always return false. Even if a proxy is now configured the app will now think that none is set as the function returns false.</p>
+<div class="highlight"><pre><span></span><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span>
+<span class="w">    </span><span class="nx">Java</span><span class="p">.</span><span class="nx">perform</span><span class="p">(</span><span class="kd">function</span><span class="w"> </span><span class="p">(){</span>
+<span class="w">        </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[*] Script loaded&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="kd">var</span><span class="w"> </span><span class="nb">Proxy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Java</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="s2">&quot;&lt;package-name&gt;.&lt;class-name&gt;&quot;</span><span class="p">)</span>
+
+<span class="w">        </span><span class="nb">Proxy</span><span class="p">.</span><span class="nx">isProxySet</span><span class="p">.</span><span class="nx">overload</span><span class="p">().</span><span class="nx">implementation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="kd">function</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;[*] isProxySet function invoked&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="kc">false</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">});</span>
+<span class="p">});</span>
+</code></pre></div>
+<h3 id="bypassing-certificate-pinning">Bypassing Certificate Pinning<a class="headerlink" href="#bypassing-certificate-pinning" title="Permanent link">&para;</a></h3>
+<p>Some applications will implement SSL Pinning, which prevents the application from accepting your intercepting certificate as a valid certificate. This means that you will not be able to monitor the traffic between the application and the server.</p>
+<p>For most applications, certificate pinning can be bypassed within seconds, but only if the app uses the API functions that are covered by these tools. If the app is implementing SSL Pinning with a custom framework or library, the SSL Pinning must be manually patched and deactivated, which can be time-consuming.</p>
+<p>This section describes various ways to bypass SSL Pinning and gives guidance about what you should do when the existing tools don't help.</p>
+<h4 id="bypassing-methods">Bypassing Methods<a class="headerlink" href="#bypassing-methods" title="Permanent link">&para;</a></h4>
+<p>There are several ways to bypass certificate pinning for a black box test, depending on the frameworks available on the device:</p>
+<ul>
+<li>Cydia Substrate: Install the <a href="https://github.com/iSECPartners/Android-SSL-TrustKiller" title="Android-SSL-TrustKiller">Android-SSL-TrustKiller</a> package.</li>
+<li>Frida: Use the <a href="https://codeshare.frida.re/@akabe1/frida-multiple-unpinning/" title="Project: frida-multiple-unpinning">frida-multiple-unpinning</a> script.</li>
+<li>Objection: Use the <code>android sslpinning disable</code> command.</li>
+<li>Xposed: Install the <a href="https://github.com/ViRb3/TrustMeAlready" title="TrustMeAlready">TrustMeAlready</a> or <a href="https://github.com/ac-pm/SSLUnpinning_Xposed" title="SSLUnpinning">SSLUnpinning</a> module.</li>
+</ul>
+<p>If you have a rooted device with frida-server installed, you can bypass SSL pinning by running the following <a href="../../Tools/0x08a-Testing-Tools/#objection">Objection</a> command (<a href="#repackaging-apps">repackage your app</a> if you're using a non-rooted device):</p>
+<div class="highlight"><pre><span></span><code>android<span class="w"> </span>sslpinning<span class="w"> </span>disable
+</code></pre></div>
+<p>Here's an example of the output:</p>
+<p><img alt="objection Android SSL Pinning Bypass" src="Images/Chapters/0x05b/android_ssl_pinning_bypass.png" /></p>
+<p>See also <a href="https://github.com/sensepost/objection/blob/master/objection/console/helpfiles/android.sslpinning.disable.txt">Objection's help on Disabling SSL Pinning for Android</a> for further information and inspect the <a href="https://github.com/sensepost/objection/blob/master/agent/src/android/pinning.ts" title="pinning.ts">pinning.ts</a> file to understand how the bypass works.</p>
+<h4 id="bypass-custom-certificate-pinning-statically">Bypass Custom Certificate Pinning Statically<a class="headerlink" href="#bypass-custom-certificate-pinning-statically" title="Permanent link">&para;</a></h4>
+<p>Somewhere in the application, both the endpoint and the certificate (or its hash) must be defined. After decompiling the application, you can search for:</p>
+<ul>
+<li>Certificate hashes: <code>grep -ri "sha256\|sha1" ./smali</code>. Replace the identified hashes with the hash of your proxy's CA. Alternatively, if the hash is accompanied by a domain name, you can try modifying the domain name to a non-existing domain so that the original domain is not pinned. This works well on obfuscated OkHTTP implementations.</li>
+<li>Certificate files: <code>find ./assets -type f \( -iname \*.cer -o -iname \*.crt \)</code>. Replace these files with your proxy's certificates, making sure they are in the correct format.</li>
+<li>Truststore files: <code>find ./ -type f \( -iname \*.jks -o -iname \*.bks \)</code>. Add your proxy's certificates to the truststore and make sure they are in the correct format.</li>
+</ul>
+<blockquote>
+<p>Keep in mind that an app might contain files without extension. The most common file locations are <code>assets</code> and <code>res</code> directories, which should also be investigated.</p>
+</blockquote>
+<p>As an example, let's say that you find an application which uses a BKS (BouncyCastle) truststore and it's stored in the file <code>res/raw/truststore.bks</code>. To bypass SSL Pinning you need to add your proxy's certificate to the truststore with the command line tool <code>keytool</code>. <code>Keytool</code> comes with the Java SDK and the following values are needed to execute the command:</p>
+<ul>
+<li>password - Password for the keystore. Look in the decompiled app code for the hardcoded password.</li>
+<li>providerpath - Location of the BouncyCastle Provider jar file. You can download it from <a href="https://www.bouncycastle.org/latest_releases.html" title="https://www.bouncycastle.org/latest_releases.html">The Legion of the Bouncy Castle</a>.</li>
+<li>proxy.cer - Your proxy's certificate.</li>
+<li>aliascert - Unique value which will be used as alias for your proxy's certificate.</li>
+</ul>
+<p>To add your proxy's certificate use the following command:</p>
+<div class="highlight"><pre><span></span><code>keytool<span class="w"> </span>-importcert<span class="w"> </span>-v<span class="w"> </span>-trustcacerts<span class="w"> </span>-file<span class="w"> </span>proxy.cer<span class="w"> </span>-alias<span class="w"> </span>aliascert<span class="w"> </span>-keystore<span class="w"> </span><span class="s2">&quot;res/raw/truststore.bks&quot;</span><span class="w"> </span>-provider<span class="w"> </span>org.bouncycastle.jce.provider.BouncyCastleProvider<span class="w"> </span>-providerpath<span class="w"> </span><span class="s2">&quot;providerpath/bcprov-jdk15on-164.jar&quot;</span><span class="w"> </span>-storetype<span class="w"> </span>BKS<span class="w"> </span>-storepass<span class="w"> </span>password
+</code></pre></div>
+<p>To list certificates in the BKS truststore use the following command:</p>
+<div class="highlight"><pre><span></span><code>keytool<span class="w"> </span>-list<span class="w"> </span>-keystore<span class="w"> </span><span class="s2">&quot;res/raw/truststore.bks&quot;</span><span class="w"> </span>-provider<span class="w"> </span>org.bouncycastle.jce.provider.BouncyCastleProvider<span class="w"> </span>-providerpath<span class="w"> </span><span class="s2">&quot;providerpath/bcprov-jdk15on-164.jar&quot;</span><span class="w">  </span>-storetype<span class="w"> </span>BKS<span class="w"> </span>-storepass<span class="w"> </span>password
+</code></pre></div>
+<p>After making these modifications, repackage the application using apktool and install it on your device.</p>
+<p>If the application uses native libraries to implement network communication, further reverse engineering is needed. An example of such an approach can be found in the blog post <a href="https://serializethoughts.wordpress.com/2016/08/18/bypassing-ssl-pinning-in-android-applications/" title="Bypassing SSL Pinning in Android Applications">Identifying the SSL Pinning logic in smali code, patching it, and reassembling the APK</a></p>
+<h4 id="bypass-custom-certificate-pinning-dynamically">Bypass Custom Certificate Pinning Dynamically<a class="headerlink" href="#bypass-custom-certificate-pinning-dynamically" title="Permanent link">&para;</a></h4>
+<p>Bypassing the pinning logic dynamically makes it more convenient as there is no need to bypass any integrity checks and it's much faster to perform trial &amp; error attempts.</p>
+<p>Finding the correct method to hook is typically the hardest part and can take quite some time depending on the level of obfuscation. As developers typically reuse existing libraries, it is a good approach to search for strings and license files that identify the used library. Once the library has been identified, examine the non-obfuscated source code to find methods which are suited for dynamic instrumentation.</p>
+<p>As an example, let's say that you find an application which uses an obfuscated OkHTTP3 library. The <a href="https://square.github.io/okhttp/3.x/okhttp/" title="OkHTTP3 documentation">documentation</a> shows that the <code>CertificatePinner.Builder</code> class is responsible for adding pins for specific domains. If you can modify the arguments to the <a href="https://square.github.io/okhttp/3.x/okhttp/okhttp3/CertificatePinner.Builder.html#add-java.lang.String-java.lang.String...-" title="Builder.add method">Builder.add method</a>, you can change the hashes to the correct hashes belonging to your certificate. Finding the correct method can be done in either two ways, as explained in <a href="https://blog.nviso.eu/2019/04/02/circumventing-ssl-pinning-in-obfuscated-apps-with-okhttp/">this blog post</a> by Jeroen Beckers:</p>
+<ul>
+<li>Search for hashes and domain names as explained in the previous section. The actual pinning method will typically be used or defined in close proximity to these strings</li>
+<li>Search for the method signature in the SMALI code</li>
+</ul>
+<p>For the Builder.add method, you can find the possible methods by running the following grep command: <code>grep -ri java/lang/String;\[Ljava/lang/String;)L ./</code></p>
+<p>This command will search for all methods that take a string and a variable list of strings as arguments, and return a complex object. Depending on the size of the application, this may have one or multiple matches in the code.</p>
+<p>Hook each method with Frida and print the arguments. One of them will print out a domain name and a certificate hash, after which you can modify the arguments to circumvent the implemented pinning.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Signing Manually (Android developer documentation) - <a href="https://developer.android.com/studio/publish/app-signing#signing-manually">https://developer.android.com/studio/publish/app-signing#signing-manually</a></li>
+<li>Custom Trust - <a href="https://developer.android.com/training/articles/security-config#CustomTrust">https://developer.android.com/training/articles/security-config#CustomTrust</a></li>
+<li>Android Network Security Configuration training - <a href="https://developer.android.com/training/articles/security-config">https://developer.android.com/training/articles/security-config</a></li>
+<li>Security Analyst’s Guide to Network Security Configuration in Android P - <a href="https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/">https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/</a></li>
+<li>Android 8.0 Behavior Changes - <a href="https://developer.android.com/about/versions/oreo/android-8.0-changes">https://developer.android.com/about/versions/oreo/android-8.0-changes</a></li>
+<li>Android 9.0 Behavior Changes - <a href="https://developer.android.com/about/versions/pie/android-9.0-changes-all#device-security-changes">https://developer.android.com/about/versions/pie/android-9.0-changes-all#device-security-changes</a></li>
+<li>Codenames, Tags and Build Numbers - <a href="https://source.android.com/setup/start/build-numbers">https://source.android.com/setup/start/build-numbers</a></li>
+<li>Create and Manage Virtual Devices - <a href="https://developer.android.com/studio/run/managing-avds.html">https://developer.android.com/studio/run/managing-avds.html</a></li>
+<li>Guide to rooting mobile devices - <a href="https://www.xda-developers.com/root/">https://www.xda-developers.com/root/</a></li>
+<li>API Levels - <a href="https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels">https://developer.android.com/guide/topics/manifest/uses-sdk-element#ApiLevels</a></li>
+<li>AssetManager - <a href="https://developer.android.com/reference/android/content/res/AssetManager">https://developer.android.com/reference/android/content/res/AssetManager</a></li>
+<li>SharedPreferences APIs - <a href="https://developer.android.com/training/basics/data-storage/shared-preferences.html">https://developer.android.com/training/basics/data-storage/shared-preferences.html</a></li>
+<li>Debugging with Logcat - <a href="https://developer.android.com/studio/command-line/logcat">https://developer.android.com/studio/command-line/logcat</a></li>
+<li>Android's APK format - <a href="https://en.wikipedia.org/wiki/Apk_(file_format)">https://en.wikipedia.org/wiki/Apk_(file_format)</a></li>
+<li>Android remote sniffing using Tcpdump, nc and Wireshark - <a href="https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/">https://blog.dornea.nu/2015/02/20/android-remote-sniffing-using-tcpdump-nc-and-wireshark/</a></li>
+<li>Wireless Client Isolation - <a href="https://documentation.meraki.com/MR/Firewall_and_Traffic_Shaping/Wireless_Client_Isolation">https://documentation.meraki.com/MR/Firewall_and_Traffic_Shaping/Wireless_Client_Isolation</a></li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

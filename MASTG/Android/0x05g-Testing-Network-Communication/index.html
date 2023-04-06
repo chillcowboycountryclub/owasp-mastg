@@ -1,0 +1,2935 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x05f-Testing-Local-Authentication/">
+      
+      
+        <link rel="next" href="../0x05h-Testing-Platform-Interaction/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>Android Network Communication - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#android-network-communication" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Android Network Communication
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Android Network Communication
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Android Network Communication
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#android-network-security-configuration" class="md-nav__link">
+    Android Network Security Configuration
+  </a>
+  
+    <nav class="md-nav" aria-label="Android Network Security Configuration">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#default-configurations" class="md-nav__link">
+    Default Configurations
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#certificate-pinning" class="md-nav__link">
+    Certificate Pinning
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#security-provider" class="md-nav__link">
+    Security Provider
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-data-encryption-on-the-network-mstg-network-1" class="md-nav__link">
+    Testing Data Encryption on the Network (MSTG-NETWORK-1)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Data Encryption on the Network (MSTG-NETWORK-1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#testing-network-requests-over-secure-protocols" class="md-nav__link">
+    Testing Network Requests over Secure Protocols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-network-api-usage" class="md-nav__link">
+    Testing Network API Usage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#testing-for-cleartext-traffic" class="md-nav__link">
+    Testing for Cleartext Traffic
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-tls-settings-mstg-network-2" class="md-nav__link">
+    Testing the TLS Settings (MSTG-NETWORK-2)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-endpoint-identify-verification-mstg-network-3" class="md-nav__link">
+    Testing Endpoint Identify Verification (MSTG-NETWORK-3)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Endpoint Identify Verification (MSTG-NETWORK-3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_1" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#verifying-the-target-sdk-version" class="md-nav__link">
+    Verifying the Target SDK Version
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#analyzing-custom-trust-anchors" class="md-nav__link">
+    Analyzing Custom Trust Anchors
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verifying-the-server-certificate" class="md-nav__link">
+    Verifying the Server Certificate
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#webview-server-certificate-verification" class="md-nav__link">
+    WebView Server Certificate Verification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#apache-cordova-certificate-verification" class="md-nav__link">
+    Apache Cordova Certificate Verification
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#hostname-verification" class="md-nav__link">
+    Hostname Verification
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_1" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4" class="md-nav__link">
+    Testing Custom Certificate Stores and Certificate Pinning (MSTG-NETWORK-4)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Custom Certificate Stores and Certificate Pinning (MSTG-NETWORK-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_2" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#network-security-configuration" class="md-nav__link">
+    Network Security Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#trustmanager" class="md-nav__link">
+    TrustManager
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-libraries-and-webviews" class="md-nav__link">
+    Network Libraries and WebViews
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#xamarin-applications" class="md-nav__link">
+    Xamarin Applications
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cordova-applications" class="md-nav__link">
+    Cordova Applications
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_2" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-the-security-provider-mstg-network-6" class="md-nav__link">
+    Testing the Security Provider (MSTG-NETWORK-6)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing the Security Provider (MSTG-NETWORK-6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_3" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_3" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="android-network-communication">Android Network Communication<a class="headerlink" href="#android-network-communication" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>Almost every Android app acts as a client to one or more remote services. As this network communication usually takes place over untrusted networks such as public Wi-Fi, classical network based-attacks become a potential issue.</p>
+<p>Most modern mobile apps use variants of HTTP-based web services, as these protocols are well-documented and supported.</p>
+<h3 id="android-network-security-configuration">Android Network Security Configuration<a class="headerlink" href="#android-network-security-configuration" title="Permanent link">&para;</a></h3>
+<p>Starting on Android 7.0 (API level 24), Android apps can customize their network security settings using the so-called <a href="https://developer.android.com/training/articles/security-config">Network Security Configuration</a> feature which offers the following key capabilities:</p>
+<ul>
+<li><strong>Cleartext traffic</strong>: Protect apps from accidental usage of cleartext traffic (or enables it).</li>
+<li><strong>Custom trust anchors</strong>: Customize which Certificate Authorities (CAs) are trusted for an app's secure connections. For example, trusting particular self-signed certificates or restricting the set of public CAs that the app trusts.</li>
+<li><strong>Certificate pinning</strong>: Restrict an app's secure connection to particular certificates.</li>
+<li><strong>Debug-only overrides</strong>: Safely debug secure connections in an app without added risk to the installed base.</li>
+</ul>
+<p>If an app defines a custom Network Security Configuration, you can obtain its location by searching for <code>android:networkSecurityConfig</code> in the AndroidManifest.xml file.</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;application</span><span class="w"> </span><span class="na">android:networkSecurityConfig=</span><span class="s">&quot;@xml/network_security_config&quot;</span>
+</code></pre></div>
+<p>In this case the file is located at <code>@xml</code> (equivalent to /res/xml) and has the name "network_security_config" (which might vary). You should be able to find it as "res/xml/network_security_config.xml". If a configuration exists, the following event should be visible in the <a href="../0x05b-Basic-Security_Testing/#monitoring-system-logs">system logs</a>:</p>
+<div class="highlight"><pre><span></span><code>D/NetworkSecurityConfig:<span class="w"> </span>Using<span class="w"> </span>Network<span class="w"> </span>Security<span class="w"> </span>Config<span class="w"> </span>from<span class="w"> </span>resource<span class="w"> </span>network_security_config
+</code></pre></div>
+<p>The Network Security Configuration is <a href="https://developer.android.com/training/articles/security-config#FileFormat">XML-based</a> and can be used to configure app-wide and domain-specific settings:</p>
+<ul>
+<li><code>base-config</code> applies to all connections that the app attempts to make.</li>
+<li><code>domain-config</code> overrides <code>base-config</code> for specific domains (it can contain multiple <code>domain</code> entries).</li>
+</ul>
+<p>For example, the following configuration uses the <code>base-config</code> to prevent cleartext traffic for all domains. But it overrides that rule using a <code>domain-config</code>, explicitly allowing cleartext traffic for <code>localhost</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;network-security-config&gt;</span>
+<span class="w">    </span><span class="nt">&lt;base-config</span><span class="w"> </span><span class="na">cleartextTrafficPermitted=</span><span class="s">&quot;false&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;domain-config</span><span class="w"> </span><span class="na">cleartextTrafficPermitted=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">        </span><span class="nt">&lt;domain&gt;</span>localhost<span class="nt">&lt;/domain&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/domain-config&gt;</span>
+<span class="nt">&lt;/network-security-config&gt;</span>
+</code></pre></div>
+<p>Learn more:</p>
+<ul>
+<li><a href="https://www.nowsecure.com/blog/2018/08/15/a-security-analysts-guide-to-network-security-configuration-in-android-p/">"A Security Analyst’s Guide to Network Security Configuration in Android P"</a></li>
+<li><a href="https://developer.android.com/training/articles/security-config">Android Developers - Network Security Configuration</a></li>
+<li><a href="https://developer.android.com/codelabs/android-network-security-config">Android Codelab - Network Security Configuration</a></li>
+</ul>
+<h4 id="default-configurations">Default Configurations<a class="headerlink" href="#default-configurations" title="Permanent link">&para;</a></h4>
+<p>The default configuration for apps targeting Android 9 (API level 28) and higher is as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;base-config</span><span class="w"> </span><span class="na">cleartextTrafficPermitted=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;trust-anchors&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;system&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/trust-anchors&gt;</span>
+<span class="nt">&lt;/base-config&gt;</span>
+</code></pre></div>
+<p>The default configuration for apps targeting Android 7.0 (API level 24) to Android 8.1 (API level 27) is as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;base-config</span><span class="w"> </span><span class="na">cleartextTrafficPermitted=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;trust-anchors&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;system&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/trust-anchors&gt;</span>
+<span class="nt">&lt;/base-config&gt;</span>
+</code></pre></div>
+<p>The default configuration for apps targeting Android 6.0 (API level 23) and lower is as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="nt">&lt;base-config</span><span class="w"> </span><span class="na">cleartextTrafficPermitted=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span><span class="nt">&lt;trust-anchors&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;system&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;user&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/trust-anchors&gt;</span>
+<span class="nt">&lt;/base-config&gt;</span>
+</code></pre></div>
+<h4 id="certificate-pinning">Certificate Pinning<a class="headerlink" href="#certificate-pinning" title="Permanent link">&para;</a></h4>
+<p>The Network Security Configuration can also be used to pin <a href="https://developer.android.com/training/articles/security-config.html#CertificatePinning" title="Certificate Pinning using Network Security Configuration">declarative certificates</a> to specific domains. This is done by providing a <code>&lt;pin-set&gt;</code> in the Network Security Configuration, which is a set of digests (hashes) of the public key (<code>SubjectPublicKeyInfo</code>) of the corresponding X.509 certificate.</p>
+<p>When attempting to establish a connection to a remote endpoint, the system will:</p>
+<ul>
+<li>Get and validate the incoming certificate.</li>
+<li>Extract the public key.</li>
+<li>Calculate a digest over the extracted public key.</li>
+<li>Compare the digest with the set of local pins.</li>
+</ul>
+<p>If at least one of the pinned digests matches, the certificate chain will be considered valid and the connection will proceed.</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;network-security-config&gt;</span>
+<span class="w">    </span><span class="nt">&lt;domain-config&gt;</span>
+<span class="w">        </span>Use<span class="w"> </span>certificate<span class="w"> </span>pinning<span class="w"> </span>for<span class="w"> </span>OWASP<span class="w"> </span>website<span class="w"> </span>access<span class="w"> </span>including<span class="w"> </span>sub<span class="w"> </span>domains
+<span class="w">        </span><span class="nt">&lt;domain</span><span class="w"> </span><span class="na">includeSubdomains=</span><span class="s">&quot;true&quot;</span><span class="nt">&gt;</span>owasp.org<span class="nt">&lt;/domain&gt;</span>
+<span class="w">        </span><span class="nt">&lt;pin-set</span><span class="w"> </span><span class="na">expiration=</span><span class="s">&quot;2018/8/10&quot;</span><span class="nt">&gt;</span>
+<span class="w">            </span><span class="cm">&lt;!-- Hash of the public key (SubjectPublicKeyInfo of the X.509 certificate) of</span>
+<span class="cm">            the Intermediate CA of the OWASP website server certificate --&gt;</span>
+<span class="w">            </span><span class="nt">&lt;pin</span><span class="w"> </span><span class="na">digest=</span><span class="s">&quot;SHA-256&quot;</span><span class="nt">&gt;</span>YLh1dUR9y6Kja30RrAn7JKnbQG/uEtLMkBgFF2Fuihg=<span class="nt">&lt;/pin&gt;</span>
+<span class="w">            </span><span class="cm">&lt;!-- Hash of the public key (SubjectPublicKeyInfo of the X.509 certificate) of</span>
+<span class="cm">            the Root CA of the OWASP website server certificate --&gt;</span>
+<span class="w">            </span><span class="nt">&lt;pin</span><span class="w"> </span><span class="na">digest=</span><span class="s">&quot;SHA-256&quot;</span><span class="nt">&gt;</span>Vjs8r4z+80wjNcr1YKepWQboSIRi63WsWXhIMN+eWys=<span class="nt">&lt;/pin&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/pin-set&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/domain-config&gt;</span>
+<span class="nt">&lt;/network-security-config&gt;</span>
+</code></pre></div>
+<h3 id="security-provider">Security Provider<a class="headerlink" href="#security-provider" title="Permanent link">&para;</a></h3>
+<p>Android relies on a <a href="https://developer.android.com/training/articles/security-gms-provider.html" title="Update your security provider to protect against SSL exploits">security provider</a> to provide SSL/TLS-based connections. The problem with this kind of security provider (one example is <a href="https://www.openssl.org/news/vulnerabilities.html" title="OpenSSL Vulnerabilities">OpenSSL</a>), which comes with the device, is that it often has bugs and/or vulnerabilities.</p>
+<p>To avoid known vulnerabilities, developers need to make sure that the application will install a proper security provider.
+Since July 11, 2016, Google <a href="https://support.google.com/faqs/answer/6376725?hl=en" title="How to address OpenSSL vulnerabilities in your apps">has been rejecting Play Store application submissions</a> (both new applications and updates) that use vulnerable versions of OpenSSL.</p>
+<h2 id="testing-data-encryption-on-the-network-mstg-network-1">Testing Data Encryption on the Network (MSTG-NETWORK-1)<a class="headerlink" href="#testing-data-encryption-on-the-network-mstg-network-1" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis">Static Analysis<a class="headerlink" href="#static-analysis" title="Permanent link">&para;</a></h3>
+<h4 id="testing-network-requests-over-secure-protocols">Testing Network Requests over Secure Protocols<a class="headerlink" href="#testing-network-requests-over-secure-protocols" title="Permanent link">&para;</a></h4>
+<p>First, you should identify all network requests in the source code and ensure that no plain HTTP URLs are used. Make sure that sensitive information is sent over secure channels by using <a href="https://developer.android.com/reference/javax/net/ssl/HttpsURLConnection.html" title="HttpsURLConnection"><code>HttpsURLConnection</code></a> or <a href="https://developer.android.com/reference/javax/net/ssl/SSLSocket.html" title="SSLSocket"><code>SSLSocket</code></a> (for socket-level communication using TLS).</p>
+<h4 id="testing-network-api-usage">Testing Network API Usage<a class="headerlink" href="#testing-network-api-usage" title="Permanent link">&para;</a></h4>
+<p>Next, even when using a low-level API which is supposed to make secure connections (such as <code>SSLSocket</code>), be aware that it has to be securely implemented. For instance, <code>SSLSocket</code> <strong>doesn't</strong> verify the hostname. Use <code>getDefaultHostnameVerifier</code> to verify the hostname. The Android developer documentation includes a <a href="https://developer.android.com/training/articles/security-ssl.html#WarningsSslSocket" title="Warnings About Using SSLSocket Directly">code example</a>.</p>
+<h4 id="testing-for-cleartext-traffic">Testing for Cleartext Traffic<a class="headerlink" href="#testing-for-cleartext-traffic" title="Permanent link">&para;</a></h4>
+<p>Next, you should ensure that the app is not allowing cleartext HTTP traffic. Since Android 9 (API level 28) cleartext HTTP traffic is blocked by default (thanks to the <a href="#default-configurations">default Network Security Configuration</a>) but there are multiple ways in which an application can still send it:</p>
+<ul>
+<li>Setting the <a href="https://developer.android.com/guide/topics/manifest/application-element#usesCleartextTraffic" title="Android documentation - usesCleartextTraffic flag"><code>android:usesCleartextTraffic</code></a> attribute of the <code>&lt;application&gt;</code> tag in the AndroidManifest.xml file. Note that this flag is ignored in case the Network Security Configuration is configured.</li>
+<li>Configuring the Network Security Configuration to enable cleartext traffic by setting the <code>cleartextTrafficPermitted</code> attribute to true on <code>&lt;domain-config&gt;</code> elements.</li>
+<li>Using low-level APIs (e.g. <a href="https://developer.android.com/reference/java/net/Socket" title="Socket class"><code>Socket</code></a>) to set up a custom HTTP connection.</li>
+<li>Using a cross-platform framework (e.g. Flutter, Xamarin, ...), as these typically have their own implementations for HTTP libraries.</li>
+</ul>
+<p>All of the above cases must be carefully analyzed as a whole. For example, even if the app does not permit cleartext traffic in its Android Manifest or Network Security Configuration, it might actually still be sending HTTP traffic. That could be the case if it's using a low-level API (for which Network Security Configuration is ignored) or a badly configured cross-platform framework.</p>
+<p>For more information refer to the article <a href="https://developer.android.com/training/articles/security-ssl.html">"Security with HTTPS and SSL"</a>.</p>
+<h3 id="dynamic-analysis">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis" title="Permanent link">&para;</a></h3>
+<p>Intercept the tested app's incoming and outgoing network traffic and make sure that this traffic is encrypted. You can intercept network traffic in any of the following ways:</p>
+<ul>
+<li>Capture all HTTP(S) and Websocket traffic with an interception proxy like <a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a> or <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp Suite</a> and make sure all requests are made via HTTPS instead of HTTP.</li>
+<li>Interception proxies like Burp and OWASP ZAP will show HTTP(S) traffic only. You can, however, use a Burp plugin such as <a href="https://github.com/summitt/Burp-Non-HTTP-Extension" title="Burp-non-HTTP-Extension">Burp-non-HTTP-Extension</a> or the tool <a href="https://github.com/jrmdev/mitm_relay" title="mitm-relay">mitm-relay</a> to decode and visualize communication via XMPP and other protocols.</li>
+</ul>
+<blockquote>
+<p>Some applications may not work with proxies like Burp and OWASP ZAP because of Certificate Pinning. In such a scenario, please check <a href="#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4">"Testing Custom Certificate Stores and Certificate Pinning"</a>.</p>
+</blockquote>
+<p>For more details refer to:</p>
+<ul>
+<li><a href="../../General/0x04f-Testing-Network-Communication/#intercepting-traffic-on-the-network-layer">"Intercepting Traffic on the Network Layer"</a> from chapter "Mobile App Network Communication"</li>
+<li><a href="../0x05b-Basic-Security_Testing/#setting-up-a-network-testing-environment">"Setting up a Network Testing Environment"</a> from chapter "Android Basic Security Testing"</li>
+</ul>
+<h2 id="testing-the-tls-settings-mstg-network-2">Testing the TLS Settings (MSTG-NETWORK-2)<a class="headerlink" href="#testing-the-tls-settings-mstg-network-2" title="Permanent link">&para;</a></h2>
+<p>Refer to section <a href="../../General/0x04f-Testing-Network-Communication/#verifying-the-tls-settings">"Verifying the TLS Settings"</a> in chapter "Mobile App Network Communication" for details.</p>
+<h2 id="testing-endpoint-identify-verification-mstg-network-3">Testing Endpoint Identify Verification (MSTG-NETWORK-3)<a class="headerlink" href="#testing-endpoint-identify-verification-mstg-network-3" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_1">Static Analysis<a class="headerlink" href="#static-analysis_1" title="Permanent link">&para;</a></h3>
+<p>Using TLS to transport sensitive information over the network is essential for security. However, encrypting communication between a mobile application and its backend API is not trivial. Developers often decide on simpler but less secure solutions (e.g., those that accept any certificate) to facilitate the development process, and sometimes these weak solutions <a href="https://saschafahl.de/static/paper/androidssl2012.pdf" title="Hunting Down Broken SSL in Android Apps">make it into the production version</a>, potentially exposing users to <a href="https://cwe.mitre.org/data/definitions/295.html" title="CWE-295: Improper Certificate Validation">man-in-the-middle attacks</a>.</p>
+<p>Two key issues should be addressed:</p>
+<ul>
+<li>Verify that a certificate comes from a trusted source, i.e. a trusted CA (Certificate Authority).</li>
+<li>Determine whether the endpoint server presents the right certificate.</li>
+</ul>
+<p>Make sure that the hostname and the certificate itself are verified correctly. Examples and common pitfalls are available in the <a href="https://developer.android.com/training/articles/security-ssl.html" title="Android Documentation - SSL">official Android documentation</a>. Search the code for examples of <code>TrustManager</code> and <code>HostnameVerifier</code> usage. In the sections below, you can find examples of the kind of insecure usage that you should look for.</p>
+<blockquote>
+<p>Note that from Android 8.0 (API level 26) onward, there is no support for SSLv3 and <code>HttpsURLConnection</code> will no longer perform a fallback to an insecure TLS/SSL protocol.</p>
+</blockquote>
+<h4 id="verifying-the-target-sdk-version">Verifying the Target SDK Version<a class="headerlink" href="#verifying-the-target-sdk-version" title="Permanent link">&para;</a></h4>
+<p>Applications targeting Android 7.0 (API level 24) or higher will use a <strong>default Network Security Configuration that doesn't trust any user supplied CAs</strong>, reducing the possibility of MITM attacks by luring users to install malicious CAs.</p>
+<p><a href="../0x05b-Basic-Security_Testing/#exploring-the-app-package">Decode the app using apktool</a> and verify that the <code>targetSdkVersion</code> in apktool.yml is equal to or higher than <code>24</code>.</p>
+<div class="highlight"><pre><span></span><code>grep targetSdkVersion UnCrackable-Level3/apktool.yml
+  targetSdkVersion: &#39;28&#39;
+</code></pre></div>
+<p>However, even if <code>targetSdkVersion &gt;=24</code>, the developer can disable default protections by using a custom Network Security Configuration defining a custom trust anchor <strong>forcing the app to trust user supplied CAs</strong>. See <a href="#analyzing-custom-trust-anchors">"Analyzing Custom Trust Anchors"</a>.</p>
+<h4 id="analyzing-custom-trust-anchors">Analyzing Custom Trust Anchors<a class="headerlink" href="#analyzing-custom-trust-anchors" title="Permanent link">&para;</a></h4>
+<p>Search for the <a href="#android-network-security-configuration">Network Security Configuration</a> file and inspect any custom <code>&lt;trust-anchors&gt;</code> defining <code>&lt;certificates src="user"&gt;</code> (which should be avoided).</p>
+<p>You should carefully analyze the <a href="https://developer.android.com/training/articles/security-config#ConfigInheritance">precedence of entries</a>:</p>
+<ul>
+<li>If a value is not set in a <code>&lt;domain-config&gt;</code> entry or in a parent <code>&lt;domain-config&gt;</code>, the configurations in place will be based on the <code>&lt;base-config&gt;</code></li>
+<li>If not defined in this entry, the <a href="#default-configurations">default configurations</a> will be used.</li>
+</ul>
+<p>Take a look at this example of a Network Security Configuration for an app targeting Android 9 (API level 28):</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span>
+<span class="nt">&lt;network-security-config&gt;</span>
+<span class="w">    </span><span class="nt">&lt;domain-config&gt;</span>
+<span class="w">        </span><span class="nt">&lt;domain</span><span class="w"> </span><span class="na">includeSubdomains=</span><span class="s">&quot;false&quot;</span><span class="nt">&gt;</span>owasp.org<span class="nt">&lt;/domain&gt;</span>
+<span class="w">        </span><span class="nt">&lt;trust-anchors&gt;</span>
+<span class="w">            </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;system&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">            </span><span class="nt">&lt;certificates</span><span class="w"> </span><span class="na">src=</span><span class="s">&quot;user&quot;</span><span class="w"> </span><span class="nt">/&gt;</span>
+<span class="w">        </span><span class="nt">&lt;/trust-anchors&gt;</span>
+<span class="w">    </span><span class="nt">&lt;/domain-config&gt;</span>
+<span class="nt">&lt;/network-security-config&gt;</span>
+</code></pre></div>
+<p>Some observations:</p>
+<ul>
+<li>There's no <code>&lt;base-config&gt;</code>, meaning that the <a href="#default-configurations">default configuration</a> for Android 9 (API level 28) or higher will be used for all other connections (only <code>system</code> CA will be trusted in principle).</li>
+<li>However, the <code>&lt;domain-config&gt;</code> overrides the default configuration allowing the app to trust both <code>system</code> and <code>user</code> CAs for the indicated <code>&lt;domain&gt;</code> (owasp.org).</li>
+<li>This doesn't affect subdomains because of <code>includeSubdomains="false"</code>.</li>
+</ul>
+<p>Putting all together we can <em>translate</em> the above Network Security Configuration to: "the app trusts system and user CAs for the owasp.org domain, excluding its subdomains. For any other domains the app will trust the system CAs only".</p>
+<h4 id="verifying-the-server-certificate">Verifying the Server Certificate<a class="headerlink" href="#verifying-the-server-certificate" title="Permanent link">&para;</a></h4>
+<p><code>TrustManager</code> is a means of verifying conditions necessary for establishing a trusted connection in Android. The following conditions should be checked at this point:</p>
+<ul>
+<li>Has the certificate been signed by a trusted CA?</li>
+<li>Has the certificate expired?</li>
+<li>Is the certificate self-signed?</li>
+</ul>
+<p>The following code snippet is sometimes used during development and will accept any certificate, overwriting the functions <code>checkClientTrusted</code>, <code>checkServerTrusted</code>, and <code>getAcceptedIssuers</code>. Such implementations should be avoided, and, if they are necessary, they should be clearly separated from production builds to avoid built-in security flaws.</p>
+<div class="highlight"><pre><span></span><code><span class="n">TrustManager</span><span class="o">[]</span><span class="w"> </span><span class="n">trustAllCerts</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">TrustManager</span><span class="o">[]</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">new</span><span class="w"> </span><span class="n">X509TrustManager</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="nd">@Override</span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="n">X509Certificate</span><span class="o">[]</span><span class="w"> </span><span class="nf">getAcceptedIssuers</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="na">security</span><span class="p">.</span><span class="na">cert</span><span class="p">.</span><span class="na">X509Certificate</span><span class="o">[]</span><span class="w"> </span><span class="p">{};</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nd">@Override</span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">checkClientTrusted</span><span class="p">(</span><span class="n">X509Certificate</span><span class="o">[]</span><span class="w"> </span><span class="n">chain</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">authType</span><span class="p">)</span>
+<span class="w">            </span><span class="kd">throws</span><span class="w"> </span><span class="n">CertificateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="nd">@Override</span>
+<span class="w">        </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">checkServerTrusted</span><span class="p">(</span><span class="n">X509Certificate</span><span class="o">[]</span><span class="w"> </span><span class="n">chain</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">authType</span><span class="p">)</span>
+<span class="w">            </span><span class="kd">throws</span><span class="w"> </span><span class="n">CertificateException</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w"> </span><span class="p">};</span>
+
+<span class="c1">// SSLContext context</span>
+<span class="n">context</span><span class="p">.</span><span class="na">init</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">trustAllCerts</span><span class="p">,</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">SecureRandom</span><span class="p">());</span>
+</code></pre></div>
+<h4 id="webview-server-certificate-verification">WebView Server Certificate Verification<a class="headerlink" href="#webview-server-certificate-verification" title="Permanent link">&para;</a></h4>
+<p>Sometimes applications use a WebView to render the website associated with the application. This is true of HTML/JavaScript-based frameworks such as Apache Cordova, which uses an internal WebView for application interaction. When a WebView is used, the mobile browser performs the server certificate validation. Ignoring any TLS error that occurs when the WebView tries to connect to the remote website is a bad practice.</p>
+<p>The following code will ignore TLS issues, exactly like the WebViewClient custom implementation provided to the WebView:</p>
+<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="w"> </span><span class="n">myWebView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">WebView</span><span class="p">)</span><span class="w"> </span><span class="n">findViewById</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">id</span><span class="p">.</span><span class="na">webview</span><span class="p">);</span>
+<span class="n">myWebView</span><span class="p">.</span><span class="na">setWebViewClient</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">WebViewClient</span><span class="p">(){</span>
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onReceivedSslError</span><span class="p">(</span><span class="n">WebView</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">SslErrorHandler</span><span class="w"> </span><span class="n">handler</span><span class="p">,</span><span class="w"> </span><span class="n">SslError</span><span class="w"> </span><span class="n">error</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//Ignore TLS certificate errors and instruct the WebViewClient to load the website</span>
+<span class="w">        </span><span class="n">handler</span><span class="p">.</span><span class="na">proceed</span><span class="p">();</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<h4 id="apache-cordova-certificate-verification">Apache Cordova Certificate Verification<a class="headerlink" href="#apache-cordova-certificate-verification" title="Permanent link">&para;</a></h4>
+<p>Implementation of the Apache Cordova framework's internal WebView usage will ignore <a href="https://github.com/apache/cordova-android/blob/master/framework/src/org/apache/cordova/engine/SystemWebViewClient.java" title="TLS errors ignoring by Apache Cordova in WebView">TLS errors</a> in the method <code>onReceivedSslError</code> if the flag <code>android:debuggable</code> is enabled in the application manifest. Therefore, make sure that the app is not debuggable. See the test case "Testing If the App is Debuggable".</p>
+<h4 id="hostname-verification">Hostname Verification<a class="headerlink" href="#hostname-verification" title="Permanent link">&para;</a></h4>
+<p>Another security flaw in client-side TLS implementations is the lack of hostname verification. Development environments usually use internal addresses instead of valid domain names, so developers often disable hostname verification (or force an application to allow any hostname) and simply forget to change it when their application goes to production. The following code disables hostname verification:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">final</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="n">HostnameVerifier</span><span class="w"> </span><span class="n">NO_VERIFY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">HostnameVerifier</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">boolean</span><span class="w"> </span><span class="nf">verify</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">hostname</span><span class="p">,</span><span class="w"> </span><span class="n">SSLSession</span><span class="w"> </span><span class="n">session</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="kc">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">};</span>
+</code></pre></div>
+<p>With a built-in <code>HostnameVerifier</code>, accepting any hostname is possible:</p>
+<div class="highlight"><pre><span></span><code><span class="n">HostnameVerifier</span><span class="w"> </span><span class="n">NO_VERIFY</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">org</span><span class="p">.</span><span class="na">apache</span><span class="p">.</span><span class="na">http</span><span class="p">.</span><span class="na">conn</span><span class="p">.</span><span class="na">ssl</span><span class="p">.</span><span class="na">SSLSocketFactory</span>
+<span class="w">                             </span><span class="p">.</span><span class="na">ALLOW_ALL_HOSTNAME_VERIFIER</span><span class="p">;</span>
+</code></pre></div>
+<p>Make sure that your application verifies a hostname before setting a trusted connection.</p>
+<h3 id="dynamic-analysis_1">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_1" title="Permanent link">&para;</a></h3>
+<p>When testing an app targeting Android 7.0 (API level 24) or higher it should be effectively applying the Network Security Configuration and you shouldn't able to see the decrypted HTTPS traffic at first. However, if the app targets API levels below 24, the app will automatically accept the installed user certificates.</p>
+<p>To test improper certificate verification launch a MITM attack using an interception proxy such as Burp. Try the following options:</p>
+<ul>
+<li><strong>Self-signed certificate:</strong></li>
+<li>In Burp, go to the <strong>Proxy</strong> tab and select the <strong>Options</strong> tab.</li>
+<li>Go to the <strong>Proxy Listeners</strong> section, highlight your listener, and click <strong>Edit</strong>.</li>
+<li>Go to the <strong>Certificate</strong> tab, check <strong>Use a self-signed certificate</strong>, and click <strong>Ok</strong>.</li>
+<li>Run your application. If you're able to see HTTPS traffic, your application is accepting self-signed certificates.</li>
+<li><strong>Accepting certificates with an untrusted CA:</strong></li>
+<li>In Burp, go to the <strong>Proxy</strong> tab and select the <strong>Options</strong> tab.</li>
+<li>Go to the <strong>Proxy Listeners</strong> section, highlight your listener, and click <strong>Edit</strong>.</li>
+<li>Go to the <strong>Certificate</strong> tab, check <strong>Generate a CA-signed certificate with a specific hostname</strong>, and type in the backend server's hostname.</li>
+<li>Run your application. If you're able to see HTTPS traffic, your application is accepting certificates with an untrusted CA.</li>
+<li><strong>Accepting incorrect hostnames:</strong></li>
+<li>In Burp, go to the <strong>Proxy</strong> tab and select the <strong>Options</strong> tab.</li>
+<li>Go to the <strong>Proxy Listeners</strong> section, highlight your listener, and click <strong>Edit</strong>.</li>
+<li>Go to the <strong>Certificate</strong> tab, check <strong>Generate a CA-signed certificate with a specific hostname</strong>, and type in an invalid hostname, e.g., example.org.</li>
+<li>Run your application. If you're able to see HTTPS traffic, your application is accepting all hostnames.</li>
+</ul>
+<p>If you're still not able to see any decrypted HTTPS traffic, your application might be implementing <a href="#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4">certificate pinning</a>.</p>
+<h2 id="testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4">Testing Custom Certificate Stores and Certificate Pinning (MSTG-NETWORK-4)<a class="headerlink" href="#testing-custom-certificate-stores-and-certificate-pinning-mstg-network-4" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_2">Static Analysis<a class="headerlink" href="#static-analysis_2" title="Permanent link">&para;</a></h3>
+<h4 id="network-security-configuration">Network Security Configuration<a class="headerlink" href="#network-security-configuration" title="Permanent link">&para;</a></h4>
+<p>Inspect the Network Security Configuration looking for any <code>&lt;pin-set&gt;</code> elements. Check their <code>expiration</code> date, if any. If expired, certificate pinning will be disabled for the affected domains.</p>
+<blockquote>
+<p><strong>Testing Tip</strong>: If a certificate pinning validation check has failed, the following event should be logged in the <a href="../0x05b-Basic-Security_Testing/#monitoring-system-logs">system logs</a>:</p>
+</blockquote>
+<div class="highlight"><pre><span></span><code>I/X509Util:<span class="w"> </span>Failed<span class="w"> </span>to<span class="w"> </span>validate<span class="w"> </span>the<span class="w"> </span>certificate<span class="w"> </span>chain,<span class="w"> </span>error:<span class="w"> </span>Pin<span class="w"> </span>verification<span class="w"> </span>failed
+</code></pre></div>
+<h4 id="trustmanager">TrustManager<a class="headerlink" href="#trustmanager" title="Permanent link">&para;</a></h4>
+<p>Implementing certificate pinning involves three main steps:</p>
+<ul>
+<li>Obtain the certificate of the desired host(s).</li>
+<li>Make sure the certificate is in .bks format.</li>
+<li>Pin the certificate to an instance of the default Apache Httpclient.</li>
+</ul>
+<p>To analyze the correct implementation of certificate pinning, the HTTP client should load the KeyStore:</p>
+<div class="highlight"><pre><span></span><code><span class="n">InputStream</span><span class="w"> </span><span class="n">in</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">resources</span><span class="p">.</span><span class="na">openRawResource</span><span class="p">(</span><span class="n">certificateRawResource</span><span class="p">);</span>
+<span class="n">keyStore</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">KeyStore</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="s">&quot;BKS&quot;</span><span class="p">);</span>
+<span class="n">keyStore</span><span class="p">.</span><span class="na">load</span><span class="p">(</span><span class="n">resourceStream</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">);</span>
+</code></pre></div>
+<p>Once the KeyStore has been loaded, we can use the TrustManager that trusts the CAs in our KeyStore:</p>
+<div class="highlight"><pre><span></span><code><span class="n">String</span><span class="w"> </span><span class="n">tmfAlgorithm</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TrustManagerFactory</span><span class="p">.</span><span class="na">getDefaultAlgorithm</span><span class="p">();</span>
+<span class="n">TrustManagerFactory</span><span class="w"> </span><span class="n">tmf</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TrustManagerFactory</span><span class="p">.</span><span class="na">getInstance</span><span class="p">(</span><span class="n">tmfAlgorithm</span><span class="p">);</span>
+<span class="n">tmf</span><span class="p">.</span><span class="na">init</span><span class="p">(</span><span class="n">keyStore</span><span class="p">);</span>
+<span class="c1">// Create an SSLContext that uses the TrustManager</span>
+<span class="c1">// SSLContext context = SSLContext.getInstance(&quot;TLS&quot;);</span>
+<span class="n">sslContext</span><span class="p">.</span><span class="na">init</span><span class="p">(</span><span class="kc">null</span><span class="p">,</span><span class="w"> </span><span class="n">tmf</span><span class="p">.</span><span class="na">getTrustManagers</span><span class="p">(),</span><span class="w"> </span><span class="kc">null</span><span class="p">);</span>
+</code></pre></div>
+<p>The app's implementation may be different, pinning against the certificate's public key only, the whole certificate, or a whole certificate chain.</p>
+<h4 id="network-libraries-and-webviews">Network Libraries and WebViews<a class="headerlink" href="#network-libraries-and-webviews" title="Permanent link">&para;</a></h4>
+<p>Applications that use third-party networking libraries may utilize the libraries' certificate pinning functionality. For example, <a href="https://github.com/square/okhttp/wiki/HTTPS" title="okhttp library">okhttp</a> can be set up with the <code>CertificatePinner</code> as follows:</p>
+<div class="highlight"><pre><span></span><code><span class="n">OkHttpClient</span><span class="w"> </span><span class="n">client</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">OkHttpClient</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="w">        </span><span class="p">.</span><span class="na">certificatePinner</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">CertificatePinner</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="w">            </span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="s">&quot;example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;sha256/UwQAapahrjCOjYI3oLUx5AQxPBR02Jz6/E2pt0IeLXA=&quot;</span><span class="p">)</span>
+<span class="w">            </span><span class="p">.</span><span class="na">build</span><span class="p">())</span>
+<span class="w">        </span><span class="p">.</span><span class="na">build</span><span class="p">();</span>
+</code></pre></div>
+<p>Applications that use a WebView component may utilize the WebViewClient's event handler for some kind of "certificate pinning" of each request before the target resource is loaded. The following code shows an example verification:</p>
+<div class="highlight"><pre><span></span><code><span class="n">WebView</span><span class="w"> </span><span class="n">myWebView</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">WebView</span><span class="p">)</span><span class="w"> </span><span class="n">findViewById</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="na">id</span><span class="p">.</span><span class="na">webview</span><span class="p">);</span>
+<span class="n">myWebView</span><span class="p">.</span><span class="na">setWebViewClient</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">WebViewClient</span><span class="p">(){</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">expectedIssuerDN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;CN=Let&#39;s Encrypt Authority X3,O=Let&#39;s Encrypt,C=US;&quot;</span><span class="p">;</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onLoadResource</span><span class="p">(</span><span class="n">WebView</span><span class="w"> </span><span class="n">view</span><span class="p">,</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">url</span><span class="p">)</span><span class="w">  </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">//From Android API documentation about &quot;WebView.getCertificate()&quot;:</span>
+<span class="w">        </span><span class="c1">//Gets the SSL certificate for the main top-level page</span>
+<span class="w">        </span><span class="c1">//or null if there is no certificate (the site is not secure).</span>
+<span class="w">        </span><span class="c1">//</span>
+<span class="w">        </span><span class="c1">//Available information on SslCertificate class are &quot;Issuer DN&quot;, &quot;Subject DN&quot; and validity date helpers</span>
+<span class="w">        </span><span class="n">SslCertificate</span><span class="w"> </span><span class="n">serverCert</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">view</span><span class="p">.</span><span class="na">getCertificate</span><span class="p">();</span>
+<span class="w">        </span><span class="k">if</span><span class="p">(</span><span class="n">serverCert</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="kc">null</span><span class="p">){</span>
+<span class="w">            </span><span class="c1">//apply either certificate or public key pinning comparison here</span>
+<span class="w">                </span><span class="c1">//Throw exception to cancel resource loading...</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">});</span>
+</code></pre></div>
+<p>Alternatively, it is better to use an OkHttpClient with configured pins and let it act as a proxy overriding <code>shouldInterceptRequest</code> of the <code>WebViewClient</code>.</p>
+<h4 id="xamarin-applications">Xamarin Applications<a class="headerlink" href="#xamarin-applications" title="Permanent link">&para;</a></h4>
+<p>Applications developed in Xamarin will typically use <code>ServicePointManager</code> to implement pinning.</p>
+<p>Normally a function is created to check the certificate(s) and return the boolean value to the method <code>ServerCertificateValidationCallback</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="na">[Activity(Label = &quot;XamarinPinning&quot;, MainLauncher = true)]</span>
+<span class="w">    </span><span class="k">public</span><span class="w"> </span><span class="k">class</span><span class="w"> </span><span class="nc">MainActivity</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">Activity</span>
+<span class="w">    </span><span class="p">{</span>
+<span class="w">        </span><span class="c1">// SupportedPublicKey - Hexadecimal value of the public key.</span>
+<span class="w">        </span><span class="c1">// Use GetPublicKeyString() method to determine the public key of the certificate we want to pin. Uncomment the debug code in the ValidateServerCertificate function a first time to determine the value to pin.</span>
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">const</span><span class="w"> </span><span class="kt">string</span><span class="w"> </span><span class="n">SupportedPublicKey</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">&quot;3082010A02820101009CD30CF05AE52E47B7725D3783B...&quot;</span><span class="p">;</span><span class="w"> </span><span class="c1">// Shortened for readability</span>
+
+<span class="w">        </span><span class="k">private</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="kt">bool</span><span class="w"> </span><span class="nf">ValidateServerCertificate</span><span class="p">(</span>
+<span class="w">                </span><span class="kt">object</span><span class="w"> </span><span class="n">sender</span><span class="p">,</span>
+<span class="w">                </span><span class="n">X509Certificate</span><span class="w"> </span><span class="n">certificate</span><span class="p">,</span>
+<span class="w">                </span><span class="n">X509Chain</span><span class="w"> </span><span class="n">chain</span><span class="p">,</span>
+<span class="w">                </span><span class="n">SslPolicyErrors</span><span class="w"> </span><span class="n">sslPolicyErrors</span>
+<span class="w">            </span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="c1">//Log.Debug(&quot;Xamarin Pinning&quot;,chain.ChainElements[X].Certificate.GetPublicKeyString());</span>
+<span class="w">            </span><span class="c1">//return true;</span>
+<span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">SupportedPublicKey</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">chain</span><span class="p">.</span><span class="n">ChainElements</span><span class="p">[</span><span class="m">1</span><span class="p">].</span><span class="n">Certificate</span><span class="p">.</span><span class="n">GetPublicKeyString</span><span class="p">();</span>
+<span class="w">        </span><span class="p">}</span>
+
+<span class="w">        </span><span class="k">protected</span><span class="w"> </span><span class="k">override</span><span class="w"> </span><span class="k">void</span><span class="w"> </span><span class="nf">OnCreate</span><span class="p">(</span><span class="n">Bundle</span><span class="w"> </span><span class="n">savedInstanceState</span><span class="p">)</span>
+<span class="w">        </span><span class="p">{</span>
+<span class="w">            </span><span class="n">System</span><span class="p">.</span><span class="n">Net</span><span class="p">.</span><span class="n">ServicePointManager</span><span class="p">.</span><span class="n">ServerCertificateValidationCallback</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="n">ValidateServerCertificate</span><span class="p">;</span>
+<span class="w">            </span><span class="k">base</span><span class="p">.</span><span class="n">OnCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">);</span>
+<span class="w">            </span><span class="n">SetContentView</span><span class="p">(</span><span class="n">Resource</span><span class="p">.</span><span class="n">Layout</span><span class="p">.</span><span class="n">Main</span><span class="p">);</span>
+<span class="w">            </span><span class="n">TesteAsync</span><span class="p">(</span><span class="s">&quot;https://security.claudio.pt&quot;</span><span class="p">);</span>
+
+<span class="w">        </span><span class="p">}</span>
+</code></pre></div>
+<p>In this particular example we are pinning the intermediate CA of the certificate chain. The output of the HTTP response will be available in the system logs.</p>
+<p>Sample Xamarin app with the previous example can be obtained on the <a href="https://github.com/OWASP/owasp-mastg/raw/master/Samples/Android/02_CertificatePinning/certificatePinningXamarin.apk" title="Xamarin app with certificate pinning">MASTG repository</a></p>
+<p>After decompressing the APK file, use a .NET decompiler like dotPeak, ILSpy or dnSpy to decompile the app dlls stored inside the 'Assemblies' folder and confirm the usage of the ServicePointManager.</p>
+<p>Learn more:</p>
+<ul>
+<li>Certificate and Public Key Pinning with Xamarin - <a href="https://thomasbandt.com/certificate-and-public-key-pinning-with-xamarin">https://thomasbandt.com/certificate-and-public-key-pinning-with-xamarin</a></li>
+<li>ServicePointManager - <a href="https://msdn.microsoft.com/en-us/library/system.net.servicepointmanager(v=vs.110).aspx">https://msdn.microsoft.com/en-us/library/system.net.servicepointmanager(v=vs.110).aspx</a></li>
+</ul>
+<h4 id="cordova-applications">Cordova Applications<a class="headerlink" href="#cordova-applications" title="Permanent link">&para;</a></h4>
+<p>Hybrid applications based on Cordova do not support Certificate Pinning natively, so plugins are used to achieve this. The most common one is <a href="https://github.com/EddyVerbruggen/SSLCertificateChecker-PhoneGap-Plugin" title="PhoneGap SSL Certificate Checker plugin">PhoneGap SSL Certificate Checker</a>. The <code>check</code> method is used to confirm the fingerprint and callbacks will determine the next steps.</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="c1">// Endpoint to verify against certificate pinning.</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">server</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;https://www.owasp.org&quot;</span><span class="p">;</span>
+<span class="w">  </span><span class="c1">// SHA256 Fingerprint (Can be obtained via &quot;openssl s_client -connect hostname:443 | openssl x509 -noout -fingerprint -sha256&quot;</span>
+<span class="w">  </span><span class="kd">var</span><span class="w"> </span><span class="nx">fingerprint</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;D8 EF 3C DF 7E F6 44 BA 04 EC D5 97 14 BB 00 4A 7A F5 26 63 53 87 4E 76 67 77 F0 F4 CC ED 67 B9&quot;</span><span class="p">;</span>
+
+<span class="w">  </span><span class="nb">window</span><span class="p">.</span><span class="nx">plugins</span><span class="p">.</span><span class="nx">sslCertificateChecker</span><span class="p">.</span><span class="nx">check</span><span class="p">(</span>
+<span class="w">          </span><span class="nx">successCallback</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">errorCallback</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">server</span><span class="p">,</span>
+<span class="w">          </span><span class="nx">fingerprint</span><span class="p">);</span>
+
+<span class="w">   </span><span class="kd">function</span><span class="w"> </span><span class="nx">successCallback</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="w">     </span><span class="c1">// Message is always: CONNECTION_SECURE.</span>
+<span class="w">     </span><span class="c1">// Now do something with the trusted server.</span>
+<span class="w">   </span><span class="p">}</span>
+
+<span class="w">   </span><span class="kd">function</span><span class="w"> </span><span class="nx">errorCallback</span><span class="p">(</span><span class="nx">message</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="nx">alert</span><span class="p">(</span><span class="nx">message</span><span class="p">);</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="s2">&quot;CONNECTION_NOT_SECURE&quot;</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// There is likely a man in the middle attack going on, be careful!</span>
+<span class="w">     </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">message</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="s2">&quot;CONNECTION_FAILED&quot;</span><span class="p">)</span><span class="w"> </span><span class="o">&gt;-</span><span class="w"> </span><span class="mf">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">       </span><span class="c1">// There was no connection (yet). Internet may be down. Try again (a few times) after a little timeout.</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">   </span><span class="p">}</span>
+</code></pre></div>
+<p>After decompressing the APK file, Cordova/Phonegap files will be located in the /assets/www folder. The 'plugins' folder will give you the visibility of the plugins used. We will need to search for this methods in the JavaScript code of the application to confirm its usage.</p>
+<h3 id="dynamic-analysis_2">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_2" title="Permanent link">&para;</a></h3>
+<p>Follow the instructions from <a href="#testing-endpoint-identify-verification-mstg-network-3">"Testing Endpoint Identify Verification &gt; Dynamic Analysis"</a>. If doing so doesn't lead to traffic being proxied, it may mean that certificate pinning is actually implemented and all security measures are in place. Does the same happen for all domains?</p>
+<p>As a quick smoke test, you can try to bypass certificate pinning using <a href="../../Tools/0x08a-Testing-Tools/#objection">objection</a> as described in <a href="../0x05b-Basic-Security_Testing/#bypassing-certificate-pinning">"Bypassing Certificate Pinning"</a>. Pinning related APIs being hooked by objection should appear in objection's output.</p>
+<p><img alt="objection Android SSL Pinning Bypass" src="Images/Chapters/0x05b/android_ssl_pinning_bypass.png" /></p>
+<p>However, keep in mind that:</p>
+<ul>
+<li>the APIs might not be complete.</li>
+<li>if nothing is hooked, that doesn't necessarily mean that the app doesn't implement pinning.</li>
+</ul>
+<p>In both cases, the app or some of its components might implement custom pinning in a way that is <a href="https://github.com/sensepost/objection/blob/master/agent/src/android/pinning.ts">supported by objection</a>. Please check the static analysis section for specific pinning indicators and more in-depth testing.</p>
+<h2 id="testing-the-security-provider-mstg-network-6">Testing the Security Provider (MSTG-NETWORK-6)<a class="headerlink" href="#testing-the-security-provider-mstg-network-6" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_3">Static Analysis<a class="headerlink" href="#static-analysis_3" title="Permanent link">&para;</a></h3>
+<p>Applications based on the Android SDK should depend on GooglePlayServices. For example, in the gradle build file, you will find <code>compile 'com.google.android.gms:play-services-gcm:x.x.x'</code> in the dependencies block. You need to make sure that the <code>ProviderInstaller</code> class is called with either <code>installIfNeeded</code> or <code>installIfNeededAsync</code>. <code>ProviderInstaller</code> needs to be called by a component of the application as early as possible. Exceptions thrown by these methods should be caught and handled correctly. If the application cannot patch its security provider, it can either inform the API of its less secure state or restrict user actions (because all HTTPS traffic should be deemed riskier in this situation).</p>
+<p>If you have access to the source code, check if the app handle any exceptions related to the security provider updates properly, and if it reports to the backend when the application is working with an unpatched security provider. The Android Developer documentation provides different examples showing <a href="https://developer.android.com/training/articles/security-gms-provider.html" title="Updating Your Security Provider to Protect Against SSL Exploits">how to update the Security Provider to prevent SSL exploits</a>.</p>
+<p>Lastly, make sure that NDK-based applications bind only to a recent and properly patched library that provides SSL/TLS functionality.</p>
+<h3 id="dynamic-analysis_3">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_3" title="Permanent link">&para;</a></h3>
+<p>When you have the source code:</p>
+<ul>
+<li>Run the application in debug mode, then create a breakpoint where the app will first contact the endpoint(s).</li>
+<li>Right click the highlighted code and select <code>Evaluate Expression</code>.</li>
+<li>Type <code>Security.getProviders()</code> and press enter.</li>
+<li>Check the providers and try to find <code>GmsCore_OpenSSL</code>, which should be the new top-listed provider.</li>
+</ul>
+<p>When you do not have the source code:</p>
+<ul>
+<li>Use Xposed to hook into the <code>java.security</code> package, then hook into <code>java.security.Security</code> with the method <code>getProviders</code> (with no arguments). The return value will be an array of <code>Provider</code>.</li>
+<li>Determine whether the first provider is <code>GmsCore_OpenSSL</code>.</li>
+</ul>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-NETWORK-1: "Data is encrypted on the network using TLS. The secure channel is used consistently throughout the app."</li>
+<li>MSTG-NETWORK-2: "The TLS settings are in line with current best practices, or as close as possible if the mobile operating system does not support the recommended standards."</li>
+<li>MSTG-NETWORK-3: "The app verifies the X.509 certificate of the remote endpoint when the secure channel is established. Only certificates signed by a trusted CA are accepted."</li>
+<li>MSTG-NETWORK-4: "The app either uses its own certificate store, or pins the endpoint certificate or public key, and subsequently does not establish connections with endpoints that offer a different certificate or key, even if signed by a trusted CA."</li>
+<li>MSTG-NETWORK-6: "The app only depends on up-to-date connectivity and security libraries."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

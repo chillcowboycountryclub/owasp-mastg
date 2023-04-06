@@ -1,0 +1,3046 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x06i-Testing-Code-Quality-and-Build-Settings/">
+      
+      
+        <link rel="next" href="../../Tools/0x08a-Testing-Tools/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>iOS Anti-Reversing Defenses - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ios-anti-reversing-defenses" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              iOS Anti-Reversing Defenses
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          iOS Anti-Reversing Defenses
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        iOS Anti-Reversing Defenses
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-disclaimer" class="md-nav__link">
+    General Disclaimer
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#jailbreak-detection" class="md-nav__link">
+    Jailbreak Detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Jailbreak Detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#common-jailbreak-detection-checks" class="md-nav__link">
+    Common Jailbreak Detection Checks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#automated-jailbreak-detection-bypass" class="md-nav__link">
+    Automated Jailbreak Detection Bypass
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#manual-jailbreak-detection-bypass" class="md-nav__link">
+    Manual Jailbreak Detection Bypass
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#anti-debugging-detection" class="md-nav__link">
+    Anti-Debugging Detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Anti-Debugging Detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#using-ptrace" class="md-nav__link">
+    Using ptrace
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-sysctl" class="md-nav__link">
+    Using sysctl
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#using-getppid" class="md-nav__link">
+    Using getppid
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-integrity-checks" class="md-nav__link">
+    File Integrity Checks
+  </a>
+  
+    <nav class="md-nav" aria-label="File Integrity Checks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#application-source-code-integrity-checks" class="md-nav__link">
+    Application Source Code Integrity Checks
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#file-storage-integrity-checks" class="md-nav__link">
+    File Storage Integrity Checks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reverse-engineering-tools-detection" class="md-nav__link">
+    Reverse Engineering Tools Detection
+  </a>
+  
+    <nav class="md-nav" aria-label="Reverse Engineering Tools Detection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#frida-detection" class="md-nav__link">
+    Frida Detection
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#emulator-detection" class="md-nav__link">
+    Emulator Detection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#obfuscation" class="md-nav__link">
+    Obfuscation
+  </a>
+  
+    <nav class="md-nav" aria-label="Obfuscation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#name-obfuscation" class="md-nav__link">
+    Name Obfuscation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#instruction-substitution" class="md-nav__link">
+    Instruction Substitution
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#control-flow-flattening" class="md-nav__link">
+    Control Flow Flattening
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dead-code-injection" class="md-nav__link">
+    Dead Code Injection
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#string-encryption" class="md-nav__link">
+    String Encryption
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#recommended-tools" class="md-nav__link">
+    Recommended Tools
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#device-binding" class="md-nav__link">
+    Device Binding
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-jailbreak-detection-mstg-resilience-1" class="md-nav__link">
+    Testing Jailbreak Detection (MSTG-RESILIENCE-1)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-anti-debugging-detection-mstg-resilience-2" class="md-nav__link">
+    Testing Anti-Debugging Detection (MSTG-RESILIENCE-2)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-file-integrity-checks-mstg-resilience-3-and-mstg-resilience-11" class="md-nav__link">
+    Testing File Integrity Checks (MSTG-RESILIENCE-3 and MSTG-RESILIENCE-11)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-reverse-engineering-tools-detection-mstg-resilience-4" class="md-nav__link">
+    Testing Reverse Engineering Tools Detection (MSTG-RESILIENCE-4)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-emulator-detection-mstg-resilience-5" class="md-nav__link">
+    Testing Emulator Detection (MSTG-RESILIENCE-5)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-obfuscation-mstg-resilience-9" class="md-nav__link">
+    Testing Obfuscation (MSTG-RESILIENCE-9)
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-device-binding-mstg-resilience-10" class="md-nav__link">
+    Testing Device Binding (MSTG-RESILIENCE-10)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Device Binding (MSTG-RESILIENCE-10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="ios-anti-reversing-defenses">iOS Anti-Reversing Defenses<a class="headerlink" href="#ios-anti-reversing-defenses" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<p>This chapter covers defense-in-depth measures recommended for apps that process, or give access to, sensitive data or functionality. Research shows that <a href="https://seredynski.com/articles/a-security-review-of-1300-appstore-applications.html" title="A security review of 1,300 AppStore applications - 5 April 2020">many App Store apps often include these measures</a>.</p>
+<p>These measures should be applied as needed, based on an assessment of the risks caused by unauthorized tampering with the app and/or reverse engineering of the code.</p>
+<ul>
+<li>Apps must never use these measures as a replacement for security controls, and are therefore expected to fulfill other baseline security measures such as the rest of the MASVS security controls.</li>
+<li>Apps should combine these measures cleverly instead of using them individually. The goal is to discourage reverse engineers from performing further analysis.</li>
+<li>Integrating some of the controls into your app might increase the complexity of your app and even have an impact on its performance.</li>
+</ul>
+<h3 id="general-disclaimer">General Disclaimer<a class="headerlink" href="#general-disclaimer" title="Permanent link">&para;</a></h3>
+<p>The <strong>lack of any of these measures does not cause a vulnerability</strong> - instead, they are meant to increase the app's resilience against reverse engineering and specific client-side attacks.</p>
+<p>None of these measures can assure a 100% effectiveness, as the reverse engineer will always have full access to the device and will therefore always win (given enough time and resources)!</p>
+<p>For example, preventing debugging is virtually impossible. If the app is publicly available, it can be run on an untrusted device that is under full control of the attacker. A very determined attacker will eventually manage to bypass all the app's anti-debugging controls by patching the app binary or by dynamically modifying the app's behavior at runtime with tools such as Frida.</p>
+<h3 id="jailbreak-detection">Jailbreak Detection<a class="headerlink" href="#jailbreak-detection" title="Permanent link">&para;</a></h3>
+<p>Jailbreak detection mechanisms are added to reverse engineering defense to make running the app on a jailbroken device more difficult. This blocks some of the tools and techniques reverse engineers like to use. Like most other types of defense, jailbreak detection is not very effective by itself, but scattering checks throughout the app's source code can improve the effectiveness of the overall anti-tampering scheme.</p>
+<h4 id="common-jailbreak-detection-checks">Common Jailbreak Detection Checks<a class="headerlink" href="#common-jailbreak-detection-checks" title="Permanent link">&para;</a></h4>
+<p>Here we present three typical jailbreak detection techniques (more information <a href="https://www.trustwave.com/Resources/SpiderLabs-Blog/Jailbreak-Detection-Methods/" title="Jailbreak Detection Methods">in this blog post</a>):</p>
+<p><strong>File-based Checks:</strong></p>
+<p>The app might be checking for files and directories typically associated with jailbreaks, such as:</p>
+<div class="highlight"><pre><span></span><code>/Applications/Cydia.app
+/Applications/FakeCarrier.app
+/Applications/Icy.app
+/Applications/IntelliScreen.app
+/Applications/MxTube.app
+/Applications/RockApp.app
+/Applications/SBSettings.app
+/Applications/WinterBoard.app
+/Applications/blackra1n.app
+/Library/MobileSubstrate/DynamicLibraries/LiveClock.plist
+/Library/MobileSubstrate/DynamicLibraries/Veency.plist
+/Library/MobileSubstrate/MobileSubstrate.dylib
+/System/Library/LaunchDaemons/com.ikey.bbot.plist
+/System/Library/LaunchDaemons/com.saurik.Cydia.Startup.plist
+/bin/bash
+/bin/sh
+/etc/apt
+/etc/ssh/sshd_config
+/private/var/lib/apt
+/private/var/lib/cydia
+/private/var/mobile/Library/SBSettings/Themes
+/private/var/stash
+/private/var/tmp/cydia.log
+/var/tmp/cydia.log
+/usr/bin/sshd
+/usr/libexec/sftp-server
+/usr/libexec/ssh-keysign
+/usr/sbin/sshd
+/var/cache/apt
+/var/lib/apt
+/var/lib/cydia
+/usr/sbin/frida-server
+/usr/bin/cycript
+/usr/local/bin/cycript
+/usr/lib/libcycript.dylib
+/var/log/syslog
+</code></pre></div>
+<p><strong>Checking File Permissions:</strong></p>
+<p>The app might be trying to write to a location that's outside the application's sandbox. For instance, it may attempt to create a file in, for example, the <code>/private</code> directory. If the file is created successfully, the app can assume that the device has been jailbroken.</p>
+<div class="highlight"><pre><span></span><code><span class="k">do</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">pathToFileInRestrictedDirectory</span> <span class="p">=</span> <span class="s">&quot;/private/jailbreak.txt&quot;</span>
+    <span class="k">try</span> <span class="s">&quot;This is a test.&quot;</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">toFile</span><span class="p">:</span> <span class="n">pathToFileInRestrictedDirectory</span><span class="p">,</span> <span class="n">atomically</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span> <span class="n">encoding</span><span class="p">:</span> <span class="nb">String</span><span class="p">.</span><span class="n">Encoding</span><span class="p">.</span><span class="n">utf8</span><span class="p">)</span>
+    <span class="k">try</span> <span class="n">FileManager</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">removeItem</span><span class="p">(</span><span class="n">atPath</span><span class="p">:</span> <span class="n">pathToFileInRestrictedDirectory</span><span class="p">)</span>
+    <span class="c1">// Device is jailbroken</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+    <span class="c1">// Device is not jailbroken</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Checking Protocol Handlers:</strong></p>
+<p>The app might be attempting to call well-known protocol handlers such as <code>cydia://</code> (available by default after installing <a href="../../Tools/0x08a-Testing-Tools/#cydia">Cydia</a>).</p>
+<div class="highlight"><pre><span></span><code><span class="k">if</span> <span class="kd">let</span> <span class="nv">url</span> <span class="p">=</span> <span class="n">URL</span><span class="p">(</span><span class="n">string</span><span class="p">:</span> <span class="s">&quot;cydia://package/com.example.package&quot;</span><span class="p">),</span> <span class="bp">UIApplication</span><span class="p">.</span><span class="n">shared</span><span class="p">.</span><span class="n">canOpenURL</span><span class="p">(</span><span class="n">url</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// Device is jailbroken</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="automated-jailbreak-detection-bypass">Automated Jailbreak Detection Bypass<a class="headerlink" href="#automated-jailbreak-detection-bypass" title="Permanent link">&para;</a></h4>
+<p>The quickest way to bypass common Jailbreak detection mechanisms is <a href="../../Tools/0x08a-Testing-Tools/#objection">objection</a>. You can find the implementation of the jailbreak bypass in the <a href="https://github.com/sensepost/objection/blob/master/agent/src/ios/jailbreak.ts" title="jailbreak.ts">jailbreak.ts script</a>.</p>
+<h4 id="manual-jailbreak-detection-bypass">Manual Jailbreak Detection Bypass<a class="headerlink" href="#manual-jailbreak-detection-bypass" title="Permanent link">&para;</a></h4>
+<p>If the automated bypasses aren't effective you need to get your hands dirty and reverse engineer the app binaries until you find the pieces of code responsible for the detection and either patch them statically or apply runtime hooks to disable them.</p>
+<p><strong>Step 1: Reverse Engineering:</strong></p>
+<p>When you need to reverse engineer a binary looking for jailbreak detection, the most obvious way is to search for known strings, such as "jail" or "jailbreak". Note that this won't be always effective, especially when resilience measures are in place or simply when the the developer has avoided such obvious terms.</p>
+<p>Example: Download the <a href="../../Tools/0x08b-Reference-Apps/#dvia-v2">Damn Vulnerable iOS application</a> (DVIA-v2), unzip it, load the main binary into <a href="../../Tools/0x08a-Testing-Tools/#radare2">radare2</a> and wait for the analysis to complete.</p>
+<div class="highlight"><pre><span></span><code>r2<span class="w"> </span>-A<span class="w"> </span>./DVIA-v2-swift/Payload/DVIA-v2.app/DVIA-v2
+</code></pre></div>
+<p>Now you can list the binary's symbols using the <code>is</code> command and apply a case-insensitive grep (<code>~+</code>) for the string "jail".</p>
+<div class="highlight"><pre><span></span><code><span class="o">[</span>0x1001a9790<span class="o">]</span>&gt;<span class="w"> </span>is~+jail
+...
+<span class="m">2230</span><span class="w">  </span>0x001949a8<span class="w"> </span>0x1001949a8<span class="w"> </span>GLOBAL<span class="w"> </span>FUNC<span class="w"> </span><span class="m">0</span><span class="w">        </span>DVIA_v2.JailbreakDetectionViewController.isJailbroken.allocator__Bool
+<span class="m">7792</span><span class="w">  </span>0x0016d2d8<span class="w"> </span>0x10016d2d8<span class="w"> </span>LOCAL<span class="w">  </span>FUNC<span class="w"> </span><span class="m">0</span><span class="w">        </span>+<span class="o">[</span>JailbreakDetection<span class="w"> </span>isJailbroken<span class="o">]</span>
+...
+</code></pre></div>
+<p>As you can see, there's an instance method with the signature <code>-[JailbreakDetectionVC isJailbroken]</code>.</p>
+<p><strong>Step 2: Dynamic Hooks:</strong></p>
+<p>Now you can use Frida to bypass jailbreak detection by performing the so-called early instrumentation, that is, by replacing function implementation right at startup.</p>
+<p>Use <code>frida-trace</code> on your host computer:</p>
+<div class="highlight"><pre><span></span><code>frida-trace<span class="w"> </span>-U<span class="w"> </span>-f<span class="w"> </span>/Applications/DamnVulnerableIOSApp.app/DamnVulnerableIOSApp<span class="w">  </span>-m<span class="w"> </span><span class="s2">&quot;-[JailbreakDetectionVC isJailbroken]&quot;</span>
+</code></pre></div>
+<p>This will start the app, trace calls to <code>-[JailbreakDetectionVC isJailbroken]</code>, and create a JavaScript hook for each matching element.
+Open <code>./__handlers__/__JailbreakDetectionVC_isJailbroken_.js</code> with your favouritte editor and edit the <code>onLeave</code> callback function. You can simply replace the return value using <code>retval.replace()</code> to always return <code>0</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="nx">onLeave</span><span class="o">:</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">(</span><span class="nx">log</span><span class="p">,</span><span class="w"> </span><span class="nx">retval</span><span class="p">,</span><span class="w"> </span><span class="nx">state</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Function [JailbreakDetectionVC isJailbroken] originally returned:&quot;</span><span class="o">+</span><span class="w"> </span><span class="nx">retval</span><span class="p">);</span>
+<span class="w">    </span><span class="nx">retval</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="mf">0</span><span class="p">);</span><span class="w">  </span>
+<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;Changing the return value to:&quot;</span><span class="o">+</span><span class="nx">retval</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This will provide the following output:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>frida-trace<span class="w"> </span>-U<span class="w"> </span>-f<span class="w"> </span>/Applications/DamnVulnerableIOSApp.app/DamnVulnerableIOSApp<span class="w">  </span>-m<span class="w"> </span><span class="s2">&quot;-[JailbreakDetectionVC isJailbroken]:&quot;</span>
+
+Instrumenting<span class="w"> </span>functions...<span class="w">                                           </span><span class="sb">`</span>...
+-<span class="o">[</span>JailbreakDetectionVC<span class="w"> </span>isJailbroken<span class="o">]</span>:<span class="w"> </span>Loaded<span class="w"> </span>handler<span class="w"> </span>at<span class="w"> </span><span class="s2">&quot;./__handlers__/__JailbreakDetectionVC_isJailbroken_.js&quot;</span>
+Started<span class="w"> </span>tracing<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="k">function</span>.<span class="w"> </span>Press<span class="w"> </span>Ctrl+C<span class="w"> </span>to<span class="w"> </span>stop.
+
+Function<span class="w"> </span><span class="o">[</span>JailbreakDetectionVC<span class="w"> </span>isJailbroken<span class="o">]</span><span class="w"> </span>originally<span class="w"> </span>returned:0x1
+Changing<span class="w"> </span>the<span class="w"> </span><span class="k">return</span><span class="w"> </span>value<span class="w"> </span>to:0x0
+</code></pre></div>
+<h3 id="anti-debugging-detection">Anti-Debugging Detection<a class="headerlink" href="#anti-debugging-detection" title="Permanent link">&para;</a></h3>
+<p>Exploring applications using a debugger is a very powerful technique during reversing. You can not only track variables containing sensitive data and modify the control flow of the application, but also read and modify memory and registers.</p>
+<p>There are several anti-debugging techniques applicable to iOS which can be categorized as preventive or as reactive. When properly distributed throughout the app, these techniques act as a supportive measure to increase the overall resilience.</p>
+<ul>
+<li>Preventive techniques act as a first line of defense to impede the debugger from attaching to the application at all.</li>
+<li>Reactive techniques allow the application to detect the presence of a debugger and have a chance to diverge from normal behavior.</li>
+</ul>
+<h4 id="using-ptrace">Using ptrace<a class="headerlink" href="#using-ptrace" title="Permanent link">&para;</a></h4>
+<p>As seen in chapter "<a href="../0x06c-Reverse-Engineering-and-Tampering/#debugging">Tampering and Reverse Engineering on iOS</a>", the iOS XNU kernel implements a <code>ptrace</code> system call that's lacking most of the functionality required to properly debug a process (e.g. it allows attaching/stepping but not read/write of memory and registers).</p>
+<p>Nevertheless, the iOS implementation of the <code>ptrace</code> syscall contains a nonstandard and very useful feature: preventing the debugging of processes. This feature is implemented as the <code>PT_DENY_ATTACH</code> request, as described in the <a href="https://developer.apple.com/library/archive/documentation/System/Conceptual/ManPages_iPhoneOS/man2/ptrace.2.html" title="PTRACE(2)">official BSD System Calls Manual</a>. In simple words, it ensures that no other debugger can attach to the calling process; if a debugger attempts to attach, the process will terminate. Using <code>PT_DENY_ATTACH</code> is a fairly well-known anti-debugging technique, so you may encounter it often during iOS pentests.</p>
+<blockquote>
+<p>Before diving into the details, it is important to know that <code>ptrace</code> is not part of the public iOS API. Non-public APIs are prohibited, and the App Store may reject apps that include them. Because of this, <code>ptrace</code> is not directly called in the code; it's called when a <code>ptrace</code> function pointer is obtained via <code>dlsym</code>.</p>
+</blockquote>
+<p>The following is an example implementation of the above logic:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#import &lt;dlfcn.h&gt;</span>
+<span class="cp">#import &lt;sys/types.h&gt;</span>
+<span class="cp">#import &lt;stdio.h&gt;</span>
+<span class="k">typedef</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="p">(</span><span class="o">*</span><span class="n">ptrace_ptr_t</span><span class="p">)(</span><span class="kt">int</span><span class="w"> </span><span class="n">_request</span><span class="p">,</span><span class="w"> </span><span class="kt">pid_t</span><span class="w"> </span><span class="n">_pid</span><span class="p">,</span><span class="w"> </span><span class="n">caddr_t</span><span class="w"> </span><span class="n">_addr</span><span class="p">,</span><span class="w"> </span><span class="kt">int</span><span class="w"> </span><span class="n">_data</span><span class="p">);</span>
+<span class="kt">void</span><span class="w"> </span><span class="nf">anti_debug</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">  </span><span class="n">ptrace_ptr_t</span><span class="w"> </span><span class="n">ptrace_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">ptrace_ptr_t</span><span class="p">)</span><span class="n">dlsym</span><span class="p">(</span><span class="n">RTLD_SELF</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;ptrace&quot;</span><span class="p">);</span>
+<span class="w">  </span><span class="n">ptrace_ptr</span><span class="p">(</span><span class="mi">31</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w"> </span><span class="c1">// PTRACE_DENY_ATTACH = 31</span>
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Bypass:</strong> To demonstrate how to bypass this technique we'll use an example of a disassembled binary that implements this approach:</p>
+<p><img src="../../../assets/Images/Chapters/0x06j/ptraceDisassembly.png" width="100%" /></p>
+<p>Let's break down what's happening in the binary. <code>dlsym</code> is called with <code>ptrace</code> as the second argument (register R1). The return value in register R0 is moved to register R6 at offset 0x1908A. At offset 0x19098, the pointer value in register R6 is called using the BLX R6 instruction. To disable the <code>ptrace</code> call, we need to replace the instruction <code>BLX R6</code> (<code>0xB0 0x47</code> in Little Endian) with the <code>NOP</code> (<code>0x00 0xBF</code> in Little Endian) instruction. After patching, the code will be similar to the following:</p>
+<p><img src="../../../assets/Images/Chapters/0x06j/ptracePatched.png" width="100%" /></p>
+<p><a href="http://armconverter.com/" title="Armconverter">Armconverter.com</a> is a handy tool for conversion between bytecode and instruction mnemonics.</p>
+<p>Bypasses for other ptrace-based anti-debugging techniques can be found in <a href="https://alexomara.com/blog/defeating-anti-debug-techniques-macos-ptrace-variants/" title="Defeating Anti-Debug Techniques: macOS ptrace variants">"Defeating Anti-Debug Techniques: macOS ptrace variants" by Alexander O'Mara</a>.</p>
+<h4 id="using-sysctl">Using sysctl<a class="headerlink" href="#using-sysctl" title="Permanent link">&para;</a></h4>
+<p>Another approach to detecting a debugger that's attached to the calling process involves <code>sysctl</code>. According to the Apple documentation, it allows processes to set system information (if having the appropriate privileges) or simply to retrieve system information (such as whether or not the process is being debugged). However, note that just the fact that an app uses <code>sysctl</code> might be an indicator of anti-debugging controls, though this <a href="http://www.cocoawithlove.com/blog/2016/03/08/swift-wrapper-for-sysctl.html" title="Gathering system information in Swift with sysctl">won't be always be the case</a>.</p>
+<p>The <a href="https://developer.apple.com/library/content/qa/qa1361/_index.html" title="How do I determine if I\'m being run under the debugger?">Apple Documentation Archive</a> includes an example which checks the <code>info.kp_proc.p_flag</code> flag returned by the call to <code>sysctl</code> with the appropriate parameters. According to Apple, you <strong>shouldn't use this code</strong> unless <a href="https://developer.apple.com/library/archive/qa/qa1361/_index.html" title="Detecting the Debugger">it's for the debug build of your program</a>.</p>
+<p><strong>Bypass:</strong> One way to bypass this check is by patching the binary. When the code above is compiled, the disassembled version of the second half of the code is similar to the following:</p>
+<p><img src="../../../assets/Images/Chapters/0x06j/sysctlOriginal.png" width="100%" /></p>
+<p>After the instruction at offset 0xC13C, <code>MOVNE R0, #1</code> is patched and changed to <code>MOVNE R0, #0</code> (0x00 0x20 in in bytecode), the patched code is similar to the following:</p>
+<p><img src="../../../assets/Images/Chapters/0x06j/sysctlPatched.png" width="100%" /></p>
+<p>You can also bypass a <code>sysctl</code> check by using the debugger itself and setting a breakpoint at the call to <code>sysctl</code>. This approach is demonstrated in <a href="https://www.coredump.gr/articles/ios-anti-debugging-protections-part-2/" title="iOS Anti-Debugging Protections #2">iOS Anti-Debugging Protections #2</a>.</p>
+<h4 id="using-getppid">Using getppid<a class="headerlink" href="#using-getppid" title="Permanent link">&para;</a></h4>
+<p>Applications on iOS can detect if they have been started by a debugger by checking their parent PID. Normally, an application is started by the <a href="http://newosxbook.com/articles/Ch07.pdf">launchd</a> process, which is the first process running in the <em>user mode</em> and has PID=1. However, if a debugger starts an application, we can observe that <code>getppid</code> returns a PID different than <code>1</code>. This detection technique can be implemented in native code (via syscalls), using Objective-C or Swift as shown here:</p>
+<div class="highlight"><pre><span></span><code>func AmIBeingDebugged() -&gt; Bool {
+    return getppid() != 1
+}
+</code></pre></div>
+<p><strong>Bypass:</strong> Similarly to the other techniques, this has also a trivial bypass (e.g. by patching the binary or by using Frida hooks).</p>
+<h3 id="file-integrity-checks">File Integrity Checks<a class="headerlink" href="#file-integrity-checks" title="Permanent link">&para;</a></h3>
+<p>There are two common approaches to check file integrity: using application source code integrity checks and using file storage integrity checks.</p>
+<h4 id="application-source-code-integrity-checks">Application Source Code Integrity Checks<a class="headerlink" href="#application-source-code-integrity-checks" title="Permanent link">&para;</a></h4>
+<p>In the "<a href="../0x06c-Reverse-Engineering-and-Tampering/#debugging">Tampering and Reverse Engineering on iOS</a>" chapter, we discussed the iOS IPA application signature check. We also saw that determined reverse engineers can bypass this check by re-packaging and re-signing an app using a developer or enterprise certificate. One way to make this harder is to add a custom check that determines whether the signatures still match at runtime.</p>
+<p>Apple takes care of integrity checks with DRM. However, additional controls (such as in the example below) are possible. The <code>mach_header</code> is parsed to calculate the start of the instruction data, which is used to generate the signature. Next, the signature is compared to the given signature. Make sure that the generated signature is stored or coded somewhere else.</p>
+<div class="highlight"><pre><span></span><code><span class="kt">int</span><span class="w"> </span><span class="nf">xyz</span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">dst</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="k">const</span><span class="w"> </span><span class="k">struct</span><span class="w"> </span><span class="nc">mach_header</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">header</span><span class="p">;</span>
+<span class="w">    </span><span class="n">Dl_info</span><span class="w"> </span><span class="n">dlinfo</span><span class="p">;</span>
+
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">dladdr</span><span class="p">(</span><span class="n">xyz</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">dlinfo</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="n">dlinfo</span><span class="p">.</span><span class="n">dli_fbase</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="nb">NULL</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">NSLog</span><span class="p">(</span><span class="err">@</span><span class="s">&quot; Error: Could not resolve symbol xyz&quot;</span><span class="p">);</span>
+<span class="w">        </span><span class="p">[</span><span class="n">NSThread</span><span class="w"> </span><span class="n">exit</span><span class="p">];</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">        </span><span class="n">header</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">dlinfo</span><span class="p">.</span><span class="n">dli_fbase</span><span class="p">;</span><span class="w">  </span><span class="c1">// Pointer on the Mach-O header</span>
+<span class="w">        </span><span class="k">struct</span><span class="w"> </span><span class="nc">load_command</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">load_command</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">header</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span><span class="w"> </span><span class="c1">// First load command</span>
+<span class="w">        </span><span class="c1">// Now iterate through load command</span>
+<span class="w">        </span><span class="c1">//to find __text section of __TEXT segment</span>
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">header</span><span class="o">-&gt;</span><span class="n">ncmds</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">cmd</span><span class="o">-&gt;</span><span class="n">cmd</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">LC_SEGMENT</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                </span><span class="c1">// __TEXT load command is a LC_SEGMENT load command</span>
+<span class="w">                </span><span class="k">struct</span><span class="w"> </span><span class="nc">segment_command</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">segment</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">segment_command</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">cmd</span><span class="p">;</span>
+<span class="w">                </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">segment</span><span class="o">-&gt;</span><span class="n">segname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;__TEXT&quot;</span><span class="p">))</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                    </span><span class="c1">// Stop on __TEXT segment load command and go through sections</span>
+<span class="w">                    </span><span class="c1">// to find __text section</span>
+<span class="w">                    </span><span class="k">struct</span><span class="w"> </span><span class="nc">section</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">section</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">segment</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">section</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="nb">NULL</span><span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">segment</span><span class="o">-&gt;</span><span class="n">nsects</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">                        </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="n">section</span><span class="o">-&gt;</span><span class="n">sectname</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;__text&quot;</span><span class="p">))</span>
+<span class="w">                            </span><span class="k">break</span><span class="p">;</span><span class="w"> </span><span class="c1">//Stop on __text section load command</span>
+<span class="w">                        </span><span class="n">section</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">section</span><span class="w"> </span><span class="o">*</span><span class="p">)(</span><span class="n">section</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">);</span>
+<span class="w">                    </span><span class="p">}</span>
+<span class="w">                    </span><span class="c1">// Get here the __text section address, the __text section size</span>
+<span class="w">                    </span><span class="c1">// and the virtual memory address so we can calculate</span>
+<span class="w">                    </span><span class="c1">// a pointer on the __text section</span>
+<span class="w">                    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">textSectionAddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">section</span><span class="o">-&gt;</span><span class="n">addr</span><span class="p">;</span>
+<span class="w">                    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="n">textSectionSize</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">section</span><span class="o">-&gt;</span><span class="n">size</span><span class="p">;</span>
+<span class="w">                    </span><span class="kt">uint32_t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vmaddr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">segment</span><span class="o">-&gt;</span><span class="n">vmaddr</span><span class="p">;</span>
+<span class="w">                    </span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">textSectionPtr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="p">)((</span><span class="kt">int</span><span class="p">)</span><span class="n">header</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">textSectionAddr</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="n">vmaddr</span><span class="p">);</span>
+<span class="w">                    </span><span class="c1">// Calculate the signature of the data,</span>
+<span class="w">                    </span><span class="c1">// store the result in a string</span>
+<span class="w">                    </span><span class="c1">// and compare to the original one</span>
+<span class="w">                    </span><span class="kt">unsigned</span><span class="w"> </span><span class="kt">char</span><span class="w"> </span><span class="n">digest</span><span class="p">[</span><span class="n">CC_MD5_DIGEST_LENGTH</span><span class="p">];</span>
+<span class="w">                    </span><span class="n">CC_MD5</span><span class="p">(</span><span class="n">textSectionPtr</span><span class="p">,</span><span class="w"> </span><span class="n">textSectionSize</span><span class="p">,</span><span class="w"> </span><span class="n">digest</span><span class="p">);</span><span class="w">     </span><span class="c1">// calculate the signature</span>
+<span class="w">                    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="k">sizeof</span><span class="p">(</span><span class="n">digest</span><span class="p">);</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span><span class="w">             </span><span class="c1">// fill signature</span>
+<span class="w">                        </span><span class="n">sprintf</span><span class="p">(</span><span class="n">dst</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="p">(</span><span class="mi">2</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">i</span><span class="p">),</span><span class="w"> </span><span class="s">&quot;%02x&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">digest</span><span class="p">[</span><span class="n">i</span><span class="p">]);</span>
+
+<span class="w">                    </span><span class="c1">// return strcmp(originalSignature, signature) == 0;    // verify signatures match</span>
+
+<span class="w">                    </span><span class="k">return</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="w">                </span><span class="p">}</span>
+<span class="w">            </span><span class="p">}</span>
+<span class="w">            </span><span class="n">cmd</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="k">struct</span><span class="w"> </span><span class="nc">load_command</span><span class="w"> </span><span class="o">*</span><span class="p">)((</span><span class="kt">uint8_t</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">cmd</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">cmd</span><span class="o">-&gt;</span><span class="n">cmdsize</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre></div>
+<p><strong>Bypass:</strong></p>
+<ol>
+<li>Patch the anti-debugging functionality and disable the unwanted behavior by overwriting the associated code with NOP instructions.</li>
+<li>Patch any stored hash that's used to evaluate the integrity of the code.</li>
+<li>Use Frida to hook file system APIs and return a handle to the original file instead of the modified file.</li>
+</ol>
+<h4 id="file-storage-integrity-checks">File Storage Integrity Checks<a class="headerlink" href="#file-storage-integrity-checks" title="Permanent link">&para;</a></h4>
+<p>Apps might choose to ensure the integrity of the application storage itself, by creating an HMAC or signature over either a given key-value pair or a file stored on the device, e.g. in the Keychain, <code>UserDefaults</code>/<code>NSUserDefaults</code>, or any database.</p>
+<p>For example, an app might contain the following code to generate an HMAC with <code>CommonCrypto</code>:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span><span class="c1">// Allocate a buffer to hold the digest and perform the digest.</span>
+<span class="w">    </span><span class="bp">NSMutableData</span><span class="o">*</span><span class="w"> </span><span class="n">actualData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">getData</span><span class="p">];</span>
+<span class="w">    </span><span class="c1">//get the key from the keychain</span>
+<span class="w">    </span><span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">key</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">getKey</span><span class="p">];</span>
+<span class="w">    </span><span class="bp">NSMutableData</span><span class="o">*</span><span class="w"> </span><span class="n">digestBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableData</span><span class="w"> </span><span class="n">dataWithLength</span><span class="o">:</span><span class="n">CC_SHA256_DIGEST_LENGTH</span><span class="p">];</span>
+<span class="w">    </span><span class="n">CCHmac</span><span class="p">(</span><span class="n">kCCHmacAlgSHA256</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">actualData</span><span class="w"> </span><span class="n">bytes</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">CC_LONG</span><span class="p">)[</span><span class="n">key</span><span class="w"> </span><span class="n">length</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">actualData</span><span class="w"> </span><span class="n">bytes</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">CC_LONG</span><span class="p">)[</span><span class="n">actualData</span><span class="w"> </span><span class="n">length</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">digestBuffer</span><span class="w"> </span><span class="n">mutableBytes</span><span class="p">]);</span>
+<span class="w">    </span><span class="p">[</span><span class="n">actualData</span><span class="w"> </span><span class="n">appendData</span><span class="o">:</span><span class="w"> </span><span class="n">digestBuffer</span><span class="p">];</span>
+</code></pre></div>
+<p>This script performs the following steps:</p>
+<ol>
+<li>Get the data as <code>NSMutableData</code>.</li>
+<li>Get the data key (typically from the Keychain).</li>
+<li>Calculate the hash value.</li>
+<li>Append the hash value to the actual data.</li>
+<li>Store the results of step 4.</li>
+</ol>
+<p>After that, it might be verifying the HMACs by doing the following:</p>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">hmac</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">data</span><span class="w"> </span><span class="n">subdataWithRange</span><span class="o">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">CC_SHA256_DIGEST_LENGTH</span><span class="p">,</span><span class="w"> </span><span class="n">CC_SHA256_DIGEST_LENGTH</span><span class="p">)];</span>
+<span class="w">  </span><span class="bp">NSData</span><span class="o">*</span><span class="w"> </span><span class="n">actualData</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">data</span><span class="w"> </span><span class="n">subdataWithRange</span><span class="o">:</span><span class="n">NSMakeRange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="p">(</span><span class="n">data</span><span class="p">.</span><span class="n">length</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">hmac</span><span class="p">.</span><span class="n">length</span><span class="p">))];</span>
+<span class="w">  </span><span class="bp">NSMutableData</span><span class="o">*</span><span class="w"> </span><span class="n">digestBuffer</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSMutableData</span><span class="w"> </span><span class="n">dataWithLength</span><span class="o">:</span><span class="n">CC_SHA256_DIGEST_LENGTH</span><span class="p">];</span>
+<span class="w">  </span><span class="n">CCHmac</span><span class="p">(</span><span class="n">kCCHmacAlgSHA256</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">actualData</span><span class="w"> </span><span class="n">bytes</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">CC_LONG</span><span class="p">)[</span><span class="n">key</span><span class="w"> </span><span class="n">length</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">actualData</span><span class="w"> </span><span class="n">bytes</span><span class="p">],</span><span class="w"> </span><span class="p">(</span><span class="n">CC_LONG</span><span class="p">)[</span><span class="n">actualData</span><span class="w"> </span><span class="n">length</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">digestBuffer</span><span class="w"> </span><span class="n">mutableBytes</span><span class="p">]);</span>
+<span class="w">  </span><span class="k">return</span><span class="w"> </span><span class="p">[</span><span class="n">hmac</span><span class="w"> </span><span class="n">isEqual</span><span class="o">:</span><span class="w"> </span><span class="n">digestBuffer</span><span class="p">];</span>
+</code></pre></div>
+<ol>
+<li>Extracts the message and the hmacbytes as separate <code>NSData</code>.</li>
+<li>Repeats steps 1-3 of the procedure for generating an HMAC on the <code>NSData</code>.</li>
+<li>Compares the extracted HMAC bytes to the result of step 1.</li>
+</ol>
+<p>Note: if the app also encrypts files, make sure that it encrypts and then calculates the HMAC as described in <a href="https://web.archive.org/web/20210804035343/https://cseweb.ucsd.edu/~mihir/papers/oem.html" title="Authenticated Encryption: Relations among notions and analysis of the generic composition paradigm">Authenticated Encryption</a>.</p>
+<p><strong>Bypass:</strong></p>
+<ol>
+<li>Retrieve the data from the device, as described in the "<a href="#device-binding">Device Binding</a>" section.</li>
+<li>Alter the retrieved data and return it to storage.</li>
+</ol>
+<h3 id="reverse-engineering-tools-detection">Reverse Engineering Tools Detection<a class="headerlink" href="#reverse-engineering-tools-detection" title="Permanent link">&para;</a></h3>
+<p>The presence of tools, frameworks and apps commonly used by reverse engineers may indicate an attempt to reverse engineer the app. Some of these tools can only run on a jailbroken device, while others force the app into debugging mode or depend on starting a background service on the mobile phone. Therefore, there are different ways that an app may implement to detect a reverse engineering attack and react to it, e.g. by terminating itself.</p>
+<p>You can detect popular reverse engineering tools that have been installed in an unmodified form by looking for associated application packages, files, processes, or other tool-specific modifications and artifacts. In the following examples, we'll discuss different ways to detect the Frida instrumentation framework, which is used extensively in this guide and also in the real world. Other tools, such as Cydia Substrate or Cycript, can be detected similarly. Note that injection, hooking and DBI (Dynamic Binary Instrumentation) tools can often be detected implicitly, through runtime integrity checks, which are discussed below.</p>
+<p><strong>Bypass:</strong></p>
+<p>The following steps should guide you when bypassing detection of reverse engineering tools:</p>
+<ol>
+<li>Patch the anti reverse engineering functionality. Disable the unwanted behavior by patching the binary through usage of radare2/Cutter or Ghidra.</li>
+<li>Use Frida or Cydia Substrate to hook file system APIs on the Objective-C/Swift or native layers. Return a handle to the original file, not the modified file.</li>
+</ol>
+<p>Refer to the chapter "<a href="../0x06c-Reverse-Engineering-and-Tampering/">Tampering and Reverse Engineering on iOS</a>" for examples of patching and code injection.</p>
+<h4 id="frida-detection">Frida Detection<a class="headerlink" href="#frida-detection" title="Permanent link">&para;</a></h4>
+<p>Frida runs under the name of frida-server in its default configuration (injected mode) on a jailbroken device. When you explicitly attach to a target app (e.g. via frida-trace or the Frida CLI), Frida injects a frida-agent into the memory of the app. Therefore, you may expect to find it there after attaching to the app (and not before). On Android, verifying this is pretty straightforward as you can simply grep for the string "frida" in the memory maps of the process ID in the <code>proc</code> directory (<code>/proc/&lt;pid&gt;/maps</code>).
+However, on iOS the <code>proc</code> directory is not available, but you can list the loaded dynamic libraries in an app with the function <code>_dyld_image_count</code>.</p>
+<p>Frida may also run in the so-called embedded mode, which also works for non-jailbroken devices. It consists of embedding a <a href="https://www.frida.re/docs/gadget/" title="Frida Gadget">frida-gadget</a> into the IPA and <em>forcing</em> the app to load it as one of its native libraries.</p>
+<p>The application's static content, including its ARM-compiled binary and its external libraries, is stored inside the <code>&lt;Application&gt;.app</code> directory. If you inspect the content of the <code>/var/containers/Bundle/Application/&lt;UUID&gt;/&lt;Application&gt;.app</code> directory, you'll find the embedded frida-gadget as FridaGadget.dylib.</p>
+<div class="highlight"><pre><span></span><code>iPhone:/var/containers/Bundle/Application/AC5DC1FD-3420-42F3-8CB5-E9D77C4B287A/SwiftSecurity.app/Frameworks<span class="w"> </span>root#<span class="w"> </span>ls<span class="w"> </span>-alh
+total<span class="w"> </span>87M
+drwxr-xr-x<span class="w"> </span><span class="m">10</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span><span class="m">320</span><span class="w"> </span>Nov<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">06</span>:08<span class="w"> </span>./
+drwxr-xr-x<span class="w"> </span><span class="m">11</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span><span class="m">352</span><span class="w"> </span>Nov<span class="w"> </span><span class="m">19</span><span class="w"> </span><span class="m">06</span>:08<span class="w"> </span>../
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span>70M<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>FridaGadget.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w"> </span><span class="m">3</span>.8M<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>libswiftCore.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span>71K<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>libswiftCoreFoundation.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w"> </span>136K<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:38<span class="w"> </span>libswiftCoreGraphics.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span>99K<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>libswiftDarwin.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w"> </span>189K<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>libswiftDispatch.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w"> </span><span class="m">1</span>.9M<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:38<span class="w"> </span>libswiftFoundation.dylib
+-rw-r--r--<span class="w">  </span><span class="m">1</span><span class="w"> </span>_installd<span class="w"> </span>_installd<span class="w">  </span>76K<span class="w"> </span>Nov<span class="w"> </span><span class="m">16</span><span class="w"> </span><span class="m">06</span>:37<span class="w"> </span>libswiftObjectiveC.dylib
+</code></pre></div>
+<p>Looking at these <em>traces</em> that Frida <em>leaves behind</em>, you might already imagine that detecting Frida would be a trivial task. And while it is trivial to detect these libraries, it is equally trivial to bypass such a detection. Detection of tools is a cat and mouse game and things can get much more complicated. The following table shortly presents a set of some typical Frida detection methods and a short discussion on their effectiveness.</p>
+<div style="page-break-after: always;">
+</div>
+
+<blockquote>
+<p>Some of the following detection methods are implemented in the <a href="https://github.com/securing/IOSSecuritySuite" title="iOS Security Suite">iOS Security Suite</a>.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Description</th>
+<th>Discussion</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Check The Environment For Related Artifacts</strong></td>
+<td>Artifacts can be packaged files, binaries, libraries, processes, and temporary files. For Frida, this could be the frida-server running in the target (jailbroken) system (the daemon responsible for exposing Frida over TCP) or the frida libraries loaded by the app.</td>
+<td>Inspecting running services is not possible for an iOS app on a non-jailbroken device. The Swift method <a href="https://developer.apple.com/documentation/swift/commandline" title="CommandLine">CommandLine</a> is not available on iOS to query for information about running processes, but there are unofficial ways, such as by using <a href="https://stackoverflow.com/a/56619466" title="How can I run Command Line commands or tasks with Swift in iOS?">NSTask</a>. Nevertheless when using this method, the app will be rejected during the App Store review process. There is no other public API available to query for running processes or execute system commands within an iOS App. Even if it would be possible, bypassing this would be as easy as just renaming the corresponding Frida artifact (frida-server/frida-gadget/frida-agent). Another way to detect Frida, would be to walk through the list of loaded libraries and check for suspicious ones (e.g. those including "frida" in their names), which can be done by using <code>_dyld_get_image_name</code>.</td>
+</tr>
+<tr>
+<td><strong>Checking For Open TCP Ports</strong></td>
+<td>The frida-server process binds to TCP port 27042 by default. Testing whether this port is open is another method of detecting the daemon.</td>
+<td>This method detects frida-server in its default mode, but the listening port can be changed via a command line argument, so bypassing this is very trivial.</td>
+</tr>
+<tr>
+<td><strong>Checking For Ports Responding To D-Bus Auth</strong></td>
+<td><code>frida-server</code> uses the D-Bus protocol to communicate, so you can expect it to respond to D-Bus AUTH. Send a D-Bus AUTH message to every open port and check for an answer, hoping that <code>frida-server</code> will reveal itself.</td>
+<td>This is a fairly robust method of detecting <code>frida-server</code>, but Frida offers alternative modes of operation that don't require frida-server.</td>
+</tr>
+</tbody>
+</table>
+<p>Please remember that this table is far from exhaustive. For example, two other possible detection mechanisms are:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Named_pipe" title="Named Pipes">named pipes</a> (used by frida-server for external communication), or</li>
+<li>detecting <a href="https://en.wikipedia.org/wiki/Trampoline_%28computing%29" title="Trampolines">trampolines</a> (see "<a href="https://www.guardsquare.com/en/blog/iOS-SSL-certificate-pinning-bypassing" title="Prevent bypassing of SSL certificate pinning in iOS applications">Prevent bypassing of SSL certificate pinning in iOS applications</a>" for further explanation and sample code for detection of trampolines in an iOS app)</li>
+</ul>
+<p>Both would <em>help</em> to detect Substrate or Frida's Interceptor but, for example, won't be effective against Frida's Stalker. Remember that the success of each of these detection methods will depend on whether you're using a jailbroken device, the specific version of the jailbreak and method and/or the version of the tool itself. At the end, this is part of the cat and mouse game of protecting data being processed on an uncontrolled environment (the end user's device).</p>
+<h3 id="emulator-detection">Emulator Detection<a class="headerlink" href="#emulator-detection" title="Permanent link">&para;</a></h3>
+<p>The goal of emulator detection is to increase the difficulty of running the app on an emulated device. This forces the reverse engineer to defeat the emulator checks or utilize the physical device, thereby barring the access required for large-scale device analysis.</p>
+<p>As discussed in the section <a href="../0x06b-Basic-Security-Testing/#testing-on-the-ios-simulator" title="Testing on the iOS Simulator">Testing on the iOS Simulator</a> in the basic security testing chapter, the only available simulator is the one that ships with Xcode. Simulator binaries are compiled to x86 code instead of ARM code and apps compiled for a real device (ARM architecture) don't run in the simulator, hence <em>simulation</em> protection was not so much a concern regarding iOS apps in contrast to Android with a wide range of <em>emulation</em> choices available.</p>
+<p>However, since its release, <a href="https://www.corellium.com/">Corellium</a> (commercial tool) has enabled real emulation, <a href="https://www.corellium.com/compare/ios-simulator">setting itself apart from the iOS simulator</a>. In addition to that, being a SaaS solution, Corellium enables large-scale device analysis with the limiting factor just being available funds.</p>
+<p>With Apple Silicon (ARM) hardware widely available, traditional checks for the presence of x86 / x64 architecture might not suffice. One potential detection strategy is to identify features and limitations available for commonly used emulation solutions. For instance, Corellium doesn't support iCloud, cellular services, camera, NFC, Bluetooth, App Store access or GPU hardware emulation (<a href="https://developer.apple.com/documentation/metal/gpu_devices_and_work_submission/getting_the_default_gpu">Metal</a>). Therefore, smartly combining checks involving any of these features could be an indicator for the presence of an emulated environment.</p>
+<p>Pairing these results with the ones from 3rd party frameworks such as <a href="https://github.com/securing/IOSSecuritySuite#emulator-detector-module">iOS Security Suite</a>, <a href="https://www.ibm.com/products/trusteer-mobile-sdk/details">Trusteer</a> or a no-code solution such as <a href="https://www.appdome.com/">Appdome</a> (commercial solution) will provide a good line of defense against attacks utilizing emulators.</p>
+<h3 id="obfuscation">Obfuscation<a class="headerlink" href="#obfuscation" title="Permanent link">&para;</a></h3>
+<p>The chapter <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/#obfuscation">"Mobile App Tampering and Reverse Engineering"</a> introduces several well-known obfuscation techniques that can be used in mobile apps in general.</p>
+<h4 id="name-obfuscation">Name Obfuscation<a class="headerlink" href="#name-obfuscation" title="Permanent link">&para;</a></h4>
+<p>The standard compiler generates binary symbols based on class and function names from the source code. Therefore, if no obfuscation was applied, symbol names remain meaningful and can be easily read straight from the app binary. For instance, a function which detects a jailbreak can be located by searching for relevant keywords (e.g. "jailbreak"). The listing below shows the disassembled function <code>JailbreakDetectionViewController.jailbreakTest4Tapped</code> from the Damn Vulnerable iOS App (<a href="../../Tools/0x08b-Reference-Apps/#dvia-v2">DVIA-v2</a>).</p>
+<div class="highlight"><pre><span></span><code>__T07DVIA_v232JailbreakDetectionViewControllerC20jailbreakTest4TappedyypF:
+stp        x22, x21, [sp, #-0x30]!
+mov        rbp, rsp
+</code></pre></div>
+<p>After the obfuscation we can observe that the symbol’s name is no longer meaningful as shown on the listing below.</p>
+<div class="highlight"><pre><span></span><code>__T07DVIA_v232zNNtWKQptikYUBNBgfFVMjSkvRdhhnbyyFySbyypF:
+stp        x22, x21, [sp, #-0x30]!
+mov        rbp, rsp
+</code></pre></div>
+<p>Nevertheless, this only applies to the names of functions, classes and fields. The actual code remains unmodified, so an attacker can still read the disassembled version of the function and try to understand its purpose (e.g. to retrieve the logic of a security algorithm).</p>
+<h4 id="instruction-substitution">Instruction Substitution<a class="headerlink" href="#instruction-substitution" title="Permanent link">&para;</a></h4>
+<p>This technique replaces standard binary operators like addition or subtraction with more complex representations. For example an addition <code>x = a + b</code> can be represented as <code>x = -(-a) - (-b)</code>. However, using the same replacement representation could be easily reversed, so it is recommended to add multiple substitution techniques for a single case and introduce a random factor. This technique is vulnerable to deobfuscation, but depending on the complexity and depth of the substitutions, applying it can still be time consuming.</p>
+<h4 id="control-flow-flattening">Control Flow Flattening<a class="headerlink" href="#control-flow-flattening" title="Permanent link">&para;</a></h4>
+<p>Control flow flattening replaces original code with a more complex representation. The transformation breaks the body of a function into basic blocks and puts them all inside a single infinite loop with a switch statement that controls the program flow. This makes the program flow significantly harder to follow because it removes the natural conditional constructs that usually make the code easier to read.</p>
+<p><img src="../../../assets/Images/Chapters/0x06j/control-flow-flattening.png" width="600px"></p>
+<p>The image shows how control flow flattening alters code (see "<a href="http://ac.inf.elte.hu/Vol_030_2009/003.pdf">Obfuscating C++ programs via control flow flattening</a>")</p>
+<h4 id="dead-code-injection">Dead Code Injection<a class="headerlink" href="#dead-code-injection" title="Permanent link">&para;</a></h4>
+<p>This technique makes the program's control flow more complex by injecting dead code into the program. Dead code is a stub of code that doesn’t affect the original program’s behaviour but increases the overhead for the reverse engineering process.</p>
+<h4 id="string-encryption">String Encryption<a class="headerlink" href="#string-encryption" title="Permanent link">&para;</a></h4>
+<p>Applications are often compiled with hardcoded keys, licences, tokens and endpoint URLs. By default, all of them are stored in plaintext in the data section of an application’s binary. This technique encrypts these values and injects stubs of code into the program that will decrypt that data before it is used by the program.</p>
+<h4 id="recommended-tools">Recommended Tools<a class="headerlink" href="#recommended-tools" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="../../Tools/0x08a-Testing-Tools/#swiftshield">SwiftShield</a> can be used to perform name obfuscation. It reads the source code of the Xcode project and replaces all names of classes, methods and fields with random values before the compiler is used.</li>
+<li><a href="https://github.com/obfuscator-llvm">obfuscator-llvm</a> operates on the Intermediate Representation (IR) instead of the source code. It can be used for symbol obfuscation, string encryption and control flow flattening. Since it's based on IR, it can hide out significantly more information about the application as compared to SwiftShield.</li>
+</ul>
+<p>Learn more about iOS obfuscation techniques <a href="https://faculty.ist.psu.edu/wu/papers/obf-ii.pdf">here</a>.</p>
+<h3 id="device-binding">Device Binding<a class="headerlink" href="#device-binding" title="Permanent link">&para;</a></h3>
+<p>The purpose of device binding is to impede an attacker who tries to copy an app and its state from device A to device B and continue the execution of the app on device B. After device A has been determined trusted, it may have more privileges than device B. This situation shouldn't change when an app is copied from device A to device B.</p>
+<p><a href="https://developer.apple.com/library/content/releasenotes/General/RN-iOSSDK-7.0/index.html" title="iOS 7 release notes">Since iOS 7.0</a>, hardware identifiers (such as MAC addresses) are off-limits but there are other methods for implementing device binding in iOS:</p>
+<ul>
+<li><strong><code>identifierForVendor</code></strong>: You can use <code>[[UIDevice currentDevice] identifierForVendor]</code> (in Objective-C),  <code>UIDevice.current.identifierForVendor?.uuidString</code> (in Swift3), or <code>UIDevice.currentDevice().identifierForVendor?.UUIDString</code> (in Swift2). The value of <code>identifierForVendor</code> may not be the same if you reinstall the app after other apps from the same vendor are installed and it may change when you update your app bundle's name. Therefore it is best to combine it with something in the Keychain.</li>
+<li><strong>Using the Keychain</strong>: You can store something in the Keychain to identify the application's instance. To make sure that this data is not backed up, use <code>kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly</code> (if you want to secure the data and properly enforce a passcode or Touch ID requirement), <code>kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly</code>, or <code>kSecAttrAccessibleWhenUnlockedThisDeviceOnly</code>.</li>
+<li><strong>Using Google Instance ID</strong>: see the <a href="https://developers.google.com/instance-id/guides/ios-implementation" title="iOS implementation Google Instance ID">implementation for iOS here</a>.</li>
+</ul>
+<p>Any scheme based on these methods will be more secure the moment a passcode and/or Touch ID is enabled, the materials stored in the Keychain or filesystem are protected with protection classes (such as <code>kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly</code> and <code>kSecAttrAccessibleWhenUnlockedThisDeviceOnly</code>), and the <code>SecAccessControlCreateFlags</code> is set either with <code>kSecAccessControlDevicePasscode</code> (for passcodes), <code>kSecAccessControlUserPresence</code> (passcode, Face ID or Touch ID), <code>kSecAccessControlBiometryAny</code> (Face ID or Touch ID) or <code>kSecAccessControlBiometryCurrentSet</code> (Face ID / Touch ID: but current enrolled biometrics only).</p>
+<h2 id="testing-jailbreak-detection-mstg-resilience-1">Testing Jailbreak Detection (MSTG-RESILIENCE-1)<a class="headerlink" href="#testing-jailbreak-detection-mstg-resilience-1" title="Permanent link">&para;</a></h2>
+<p>To test for jailbreak detection install the app on a jailbroken device.</p>
+<p><strong>Launch the app and see what happens:</strong></p>
+<p>If it implements jailbreak detection, you might notice one of the following things:</p>
+<ul>
+<li>The app crashes and closes immediately, without any notification.</li>
+<li>A pop-up window indicates that the app won't run on a jailbroken device.</li>
+</ul>
+<p>Note that crashes might be an indicator of jailbreak detection but the app may be crashing for any other reasons, e.g. it may have a bug. We recommend to test the app on non-jailbroken device first, especially when you're testing preproduction versions.</p>
+<p><strong>Launch the app and try to bypass Jailbreak Detection using an automated tool:</strong></p>
+<p>If it implements jailbreak detection, you might be able to see indicators of that in the output of the tool. See section <a href="#automated-jailbreak-detection-bypass">"Automated Jailbreak Detection Bypass"</a>.</p>
+<p><strong>Reverse Engineer the app:</strong></p>
+<p>The app might be using techniques that are not implemented in the automated tools that you've used. If that's the case you must reverse engineer the app to find proofs. See section <a href="#manual-jailbreak-detection-bypass">"Manual Jailbreak Detection Bypass"</a>.</p>
+<h2 id="testing-anti-debugging-detection-mstg-resilience-2">Testing Anti-Debugging Detection (MSTG-RESILIENCE-2)<a class="headerlink" href="#testing-anti-debugging-detection-mstg-resilience-2" title="Permanent link">&para;</a></h2>
+<p>In order to test for anti-debugging detection you can try to attach a debugger to the app and see what happens.</p>
+<p>The app should respond in some way. For example by:</p>
+<ul>
+<li>Alerting the user and asking for accepting liability.</li>
+<li>Preventing execution by gracefully terminating.</li>
+<li>Securely wiping any sensitive data stored on the device.</li>
+<li>Reporting to a backend server, e.g, for fraud detection.</li>
+</ul>
+<p>Try to hook or reverse engineer the app using the methods from section <a href="#anti-debugging-detection">"Anti-Debugging Detection"</a>.</p>
+<p>Next, work on bypassing the detection and answer the following questions:</p>
+<ul>
+<li>Can the mechanisms be bypassed trivially (e.g., by hooking a single API function)?</li>
+<li>How difficult is identifying the detection code via static and dynamic analysis?</li>
+<li>Did you need to write custom code to disable the defenses? How much time did you need?</li>
+<li>What is your assessment of the difficulty of bypassing the mechanisms?</li>
+</ul>
+<h2 id="testing-file-integrity-checks-mstg-resilience-3-and-mstg-resilience-11">Testing File Integrity Checks (MSTG-RESILIENCE-3 and MSTG-RESILIENCE-11)<a class="headerlink" href="#testing-file-integrity-checks-mstg-resilience-3-and-mstg-resilience-11" title="Permanent link">&para;</a></h2>
+<p><strong>Application Source Code Integrity Checks:</strong></p>
+<p>Run the app on the device in an unmodified state and make sure that everything works. Then apply patches to the executable using optool, re-sign the app as described in the chapter <a href="../0x06c-Reverse-Engineering-and-Tampering/#patching-repackaging-and-re-signing">"iOS Tampering and Reverse Engineering"</a>, and run it.</p>
+<p>The app should respond in some way. For example by:</p>
+<ul>
+<li>Alerting the user and asking for accepting liability.</li>
+<li>Preventing execution by gracefully terminating.</li>
+<li>Securely wiping any sensitive data stored on the device.</li>
+<li>Reporting to a backend server, e.g, for fraud detection.</li>
+</ul>
+<p>Work on bypassing the defenses and answer the following questions:</p>
+<ul>
+<li>Can the mechanisms be bypassed trivially (e.g., by hooking a single API function)?</li>
+<li>How difficult is identifying the detection code via static and dynamic analysis?</li>
+<li>Did you need to write custom code to disable the defenses? How much time did you need?</li>
+<li>What is your assessment of the difficulty of bypassing the mechanisms?</li>
+</ul>
+<p><strong>File Storage Integrity Checks:</strong></p>
+<p>Go to the app data directories as indicated in section <a href="../0x06b-Basic-Security-Testing/#accessing-app-data-directories">"Accessing App Data Directories"</a> and modify some files.</p>
+<p>Next, work on bypassing the defenses and answer the following questions:</p>
+<ul>
+<li>Can the mechanisms be bypassed trivially (e.g., by changing the contents of a file or a key-value pair)?</li>
+<li>How difficult is obtaining the HMAC key or the asymmetric private key?</li>
+<li>Did you need to write custom code to disable the defenses? How much time did you need?</li>
+<li>What is your assessment of the difficulty of bypassing the mechanisms?</li>
+</ul>
+<h2 id="testing-reverse-engineering-tools-detection-mstg-resilience-4">Testing Reverse Engineering Tools Detection (MSTG-RESILIENCE-4)<a class="headerlink" href="#testing-reverse-engineering-tools-detection-mstg-resilience-4" title="Permanent link">&para;</a></h2>
+<p>Launch the app with various reverse engineering tools and frameworks installed on your test device, such as Frida, Cydia Substrate, Cycript or SSL Kill Switch.</p>
+<p>The app should respond in some way to the presence of those tools. For example by:</p>
+<ul>
+<li>Alerting the user and asking for accepting liability.</li>
+<li>Preventing execution by gracefully terminating.</li>
+<li>Securely wiping any sensitive data stored on the device.</li>
+<li>Reporting to a backend server, e.g, for fraud detection.</li>
+</ul>
+<p>Next, work on bypassing the detection of the reverse engineering tools and answer the following questions:</p>
+<ul>
+<li>Can the mechanisms be bypassed trivially (e.g., by hooking a single API function)?</li>
+<li>How difficult is identifying the detection code via static and dynamic analysis?</li>
+<li>Did you need to write custom code to disable the defenses? How much time did you need?</li>
+<li>What is your assessment of the difficulty of bypassing the mechanisms?</li>
+</ul>
+<h2 id="testing-emulator-detection-mstg-resilience-5">Testing Emulator Detection (MSTG-RESILIENCE-5)<a class="headerlink" href="#testing-emulator-detection-mstg-resilience-5" title="Permanent link">&para;</a></h2>
+<p>In order to test for emulator detection you can try to run the app on different emulators as indicated in section <a href="#emulator-detection">"Emulator Detection"</a> and see what happens.</p>
+<p>The app should respond in some way. For example by:</p>
+<ul>
+<li>Alerting the user and asking for accepting liability.</li>
+<li>Preventing execution by gracefully terminating.</li>
+<li>Reporting to a backend server, e.g, for fraud detection.</li>
+</ul>
+<p>You can also reverse engineer the app using ideas for strings and methods from section <a href="#emulator-detection">"Emulator Detection"</a>.</p>
+<p>Next, work on bypassing this detection and answer the following questions:</p>
+<ul>
+<li>Can the mechanisms be bypassed trivially (e.g., by hooking a single API function)?</li>
+<li>How difficult is identifying the detection code via static and dynamic analysis?</li>
+<li>Did you need to write custom code to disable the defenses? How much time did you need?</li>
+<li>What is your assessment of the difficulty of bypassing the mechanisms?</li>
+</ul>
+<h2 id="testing-obfuscation-mstg-resilience-9">Testing Obfuscation (MSTG-RESILIENCE-9)<a class="headerlink" href="#testing-obfuscation-mstg-resilience-9" title="Permanent link">&para;</a></h2>
+<p>Attempt to disassemble the Mach-O in the IPA and any included library files in the "Frameworks" directory (.dylib or .framework files), and perform static analysis. At the very least, the app's core functionality (i.e., the functionality meant to be obfuscated) shouldn't be easily discerned. Verify that:</p>
+<ul>
+<li>meaningful identifiers, such as class names, method names, and variable names, have been discarded.</li>
+<li>string resources and strings in binaries are encrypted.</li>
+<li>code and data related to the protected functionality is encrypted, packed, or otherwise concealed.</li>
+</ul>
+<p>For a more detailed assessment, you need a detailed understanding of the relevant threats and the obfuscation methods used.</p>
+<h2 id="testing-device-binding-mstg-resilience-10">Testing Device Binding (MSTG-RESILIENCE-10)<a class="headerlink" href="#testing-device-binding-mstg-resilience-10" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis">Static Analysis<a class="headerlink" href="#static-analysis" title="Permanent link">&para;</a></h3>
+<p>To test for device binding you can look for:</p>
+<ul>
+<li>MAC addresses: there are several ways to find the MAC address. When you use <code>CTL_NET</code> (a network subsystem) or <code>NET_RT_IFLIST</code> (getting the configured interfaces) or when the mac-address gets formatted, you'll often see formatting code for printing, such as <code>"%x:%x:%x:%x:%x:%x"</code>.</li>
+<li>UDID usage: <code>[[[UIDevice currentDevice] identifierForVendor] UUIDString];</code> and <code>UIDevice.current.identifierForVendor?.uuidString</code> in Swift3.</li>
+<li>Any Keychain- or filesystem-based binding, which isn't protected by <code>SecAccessControlCreateFlags</code> or and doesn't use protection classes, such as <code>kSecAttrAccessibleAlways</code> and <code>kSecAttrAccessibleAlwaysThisDeviceOnly</code>.</li>
+</ul>
+<h3 id="dynamic-analysis">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis" title="Permanent link">&para;</a></h3>
+<p>There are several ways to test the application binding.</p>
+<p><strong>Using A Simulator:</strong></p>
+<p>Take the following steps when you want to verify app-binding in a simulator:</p>
+<ol>
+<li>Run the application on a simulator.</li>
+<li>Make sure you can raise the trust in the application instance (e.g., authenticate in the app).</li>
+<li>Retrieve the data from the Simulator:<ul>
+<li>Because simulators use UUIDs to identify themselves, you can make locating the storage easier by creating a debug point and executing <code>po NSHomeDirectory()</code> on that point, which will reveal the location of the simulator's stored contents. You can also execute <code>find ~/Library/Developer/CoreSimulator/Devices/ | grep &lt;appname&gt;</code> for the suspected plist file.</li>
+<li>Go to the directory indicated by the given command's output.</li>
+<li>Copy all three found folders (Documents, Library, tmp).</li>
+<li>Copy the contents of the Keychain. Since iOS 8, this has been in <code>~/Library/Developer/CoreSimulator/Devices/&lt;Simulator Device ID&gt;/data/Library/Keychains</code>.</li>
+</ul>
+</li>
+<li>Start the application on another simulator and find its data location as described in step 3.</li>
+<li>Stop the application on the second simulator. Overwrite the existing data with the data copied in step 3.</li>
+<li>Can you continue in an authenticated state? If so, then binding may not be working properly.</li>
+</ol>
+<p>We are saying that the binding "may" not be working because not everything is unique in simulators.</p>
+<p><strong>Using Two Jailbroken Devices:</strong></p>
+<p>Take the following steps when you want to verify app-binding with two jailbroken devices:</p>
+<ol>
+<li>Run the app on your jailbroken device.</li>
+<li>Make sure you can raise the trust in the application instance (e.g., authenticate in the app).</li>
+<li>Retrieve the data from the jailbroken device:<ul>
+<li>You can SSH into your device and extract the data (as with a simulator, either use debugging or <code>find /private/var/mobile/Containers/Data/Application/ |grep &lt;name of app&gt;</code>). The directory is in <code>/private/var/mobile/Containers/Data/Application/&lt;Application uuid&gt;</code>.</li>
+<li>SSH into the directory indicated by the given command's output or use SCP (<code>scp &lt;ipaddress&gt;:/&lt;folder_found_in_previous_step&gt; targetfolder</code>) to copy the folders and it's data. You can use an FTP client like Filezilla as well.</li>
+<li>Retrieve the data from the keychain, which is stored in <code>/private/var/Keychains/keychain-2.db</code>, which you can retrieve using <a href="../../Tools/0x08a-Testing-Tools/#keychain-dumper">Keychain-dumper</a>.</li>
+</ul>
+</li>
+<li>Install the application on the second jailbroken device.</li>
+<li>Overwrite the application data extracted during step 3. The Keychain data must be added manually.</li>
+<li>Can you continue in an authenticated state? If so, then binding may not be working properly.</li>
+</ol>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>OWASP Technical Risks of Reverse Engineering and Unauthorized Code Modification - <a href="https://wiki.owasp.org/index.php/Technical_Risks_of_Reverse_Engineering_and_Unauthorized_Code_Modification">https://wiki.owasp.org/index.php/Technical_Risks_of_Reverse_Engineering_and_Unauthorized_Code_Modification</a></li>
+<li>OWASP Architectural Principles That Prevent Code Modification or Reverse Engineering- <a href="https://wiki.owasp.org/index.php/OWASP_Reverse_Engineering_and_Code_Modification_Prevention_Project">https://wiki.owasp.org/index.php/OWASP_Reverse_Engineering_and_Code_Modification_Prevention_Project</a></li>
+<li>[#geist] Dana Geist, Marat Nigmatullin. Jailbreak/Root Detection Evasion Study on iOS and Android - <a href="https://github.com/crazykid95/Backup-Mobile-Security-Report/blob/master/Jailbreak-Root-Detection-Evasion-Study-on-iOS-and-Android.pdf">https://github.com/crazykid95/Backup-Mobile-Security-Report/blob/master/Jailbreak-Root-Detection-Evasion-Study-on-iOS-and-Android.pdf</a></li>
+<li>Jan Seredynski. A security review of 1,300 AppStore applications (5 April 2020) - <a href="https://seredynski.com/articles/a-security-review-of-1300-appstore-applications.html">https://seredynski.com/articles/a-security-review-of-1300-appstore-applications.html</a></li>
+</ul>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-RESILIENCE-1: "The app detects, and responds to, the presence of a rooted or jailbroken device either by alerting the user or terminating the app."</li>
+<li>MSTG-RESILIENCE-2: "The app prevents debugging and/or detects, and responds to, a debugger being attached. All available debugging protocols must be covered."</li>
+<li>MSTG-RESILIENCE-3: "The app detects, and responds to, tampering with executable files and critical data within its own sandbox."</li>
+<li>MSTG-RESILIENCE-4: "The app detects, and responds to, the presence of widely used reverse engineering tools and frameworks on the device."</li>
+<li>MSTG-RESILIENCE-5: "The app detects, and responds to, being run in an emulator."</li>
+<li>MSTG-RESILIENCE-9: "Obfuscation is applied to programmatic defenses, which in turn impede de-obfuscation via dynamic analysis."</li>
+<li>MSTG-RESILIENCE-10: "The app implements a 'device binding' functionality using a device fingerprint derived from multiple properties unique to the device."</li>
+<li>MSTG-RESILIENCE-11: "All executable files and libraries belonging to the app are either encrypted on the file level and/or important code and data segments inside the executables are encrypted or packed. Trivial static analysis does not reveal important code or data."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

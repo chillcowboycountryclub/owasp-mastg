@@ -1,0 +1,2912 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x04e-Testing-Authentication-and-Session-Management/">
+      
+      
+        <link rel="next" href="../0x04g-Testing-Cryptography/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>Mobile App Network Communication - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#mobile-app-network-communication" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Mobile App Network Communication
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Mobile App Network Communication
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Mobile App Network Communication
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#secure-connections" class="md-nav__link">
+    Secure Connections
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#server-trust-evaluation" class="md-nav__link">
+    Server Trust Evaluation
+  </a>
+  
+    <nav class="md-nav" aria-label="Server Trust Evaluation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#about-trust-stores" class="md-nav__link">
+    About Trust Stores
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extending-trust" class="md-nav__link">
+    Extending Trust
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#restricting-trust-identity-pinning" class="md-nav__link">
+    Restricting Trust: Identity Pinning
+  </a>
+  
+    <nav class="md-nav" aria-label="Restricting Trust: Identity Pinning">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#general-guidelines" class="md-nav__link">
+    General Guidelines
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about-pinning-recommendations-in-android-developers" class="md-nav__link">
+    About Pinning Recommendations in Android Developers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#about-pinning-recommendations-in-apple-developers" class="md-nav__link">
+    About Pinning Recommendations in Apple Developers
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#owasp-mastg-recommendation" class="md-nav__link">
+    OWASP MASTG Recommendation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#learn-more" class="md-nav__link">
+    Learn more
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verifying-the-tls-settings" class="md-nav__link">
+    Verifying the TLS Settings
+  </a>
+  
+    <nav class="md-nav" aria-label="Verifying the TLS Settings">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#recommended-tls-settings" class="md-nav__link">
+    Recommended TLS Settings
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cipher-suites-terminology" class="md-nav__link">
+    Cipher Suites Terminology
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intercepting-https-traffic" class="md-nav__link">
+    Intercepting HTTP(S) Traffic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intercepting-non-http-traffic" class="md-nav__link">
+    Intercepting Non-HTTP Traffic
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intercepting-traffic-from-the-app-process" class="md-nav__link">
+    Intercepting Traffic from the App Process
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#intercepting-traffic-on-the-network-layer" class="md-nav__link">
+    Intercepting Traffic on the Network Layer
+  </a>
+  
+    <nav class="md-nav" aria-label="Intercepting Traffic on the Network Layer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#simulating-a-man-in-the-middle-attack-with-bettercap" class="md-nav__link">
+    Simulating a Man-in-the-Middle Attack with bettercap
+  </a>
+  
+    <nav class="md-nav" aria-label="Simulating a Man-in-the-Middle Attack with bettercap">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#network-setup" class="md-nav__link">
+    Network Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mitm-attack" class="md-nav__link">
+    MITM Attack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#simulating-a-man-in-the-middle-attack-with-an-access-point" class="md-nav__link">
+    Simulating a Man-in-the-Middle Attack with an access point
+  </a>
+  
+    <nav class="md-nav" aria-label="Simulating a Man-in-the-Middle Attack with an access point">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#network-setup_1" class="md-nav__link">
+    Network Setup
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#installation" class="md-nav__link">
+    Installation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#configuration" class="md-nav__link">
+    Configuration
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mitm-attack_1" class="md-nav__link">
+    MITM Attack
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#network-analyzer-tool" class="md-nav__link">
+    Network Analyzer Tool
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#setting-a-proxy-through-runtime-instrumentation" class="md-nav__link">
+    Setting a Proxy Through Runtime Instrumentation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#example-dealing-with-xamarin" class="md-nav__link">
+    Example - Dealing with Xamarin
+  </a>
+  
+    <nav class="md-nav" aria-label="Example - Dealing with Xamarin">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ca-certificates" class="md-nav__link">
+    CA Certificates
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intercepting-traffic" class="md-nav__link">
+    Intercepting Traffic
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="mobile-app-network-communication">Mobile App Network Communication<a class="headerlink" href="#mobile-app-network-communication" title="Permanent link">&para;</a></h1>
+<p>Practically every network-connected mobile app uses the Hypertext Transfer Protocol (HTTP) or HTTP over Transport Layer Security (TLS), HTTPS, to send and receive data to and from remote endpoints. Consequently, network-based attacks (such as packet sniffing and man-in-the-middle-attacks) are a problem. In this chapter we discuss potential vulnerabilities, testing techniques, and best practices concerning the network communication between mobile apps and their endpoints.</p>
+<h2 id="secure-connections">Secure Connections<a class="headerlink" href="#secure-connections" title="Permanent link">&para;</a></h2>
+<p>The time has long passed since it was reasonable to use cleartext HTTP alone and it's usually trivial to secure HTTP connections using HTTPS. HTTPS is essentially HTTP layered on top of another protocol known as Transport Layer Security (TLS). And TLS performs a handshake using public key cryptography and, when complete, creates a secure connection.</p>
+<p>An HTTPS connection is considered secure because of three properties:</p>
+<ul>
+<li><strong>Confidentiality:</strong> TLS encrypts data before sending it over the network, which means it can't be read by an intermediary.</li>
+<li><strong>Integrity:</strong> the data can't be altered without detection.</li>
+<li><strong>Authentication:</strong> the client can validate the identity of the server to make sure the connection is established with the correct server.</li>
+</ul>
+<h2 id="server-trust-evaluation">Server Trust Evaluation<a class="headerlink" href="#server-trust-evaluation" title="Permanent link">&para;</a></h2>
+<p>Certificate Authorities (CAs) are an integral part of a secure client server communication and they are predefined in the trust store of each operating system. For instance, on iOS there are more than 200 root certificates installed (see <a href="https://support.apple.com/en-gb/HT204132" title="Lists of available trusted root certificates in iOS">Apple documentation - Available trusted root certificates for Apple operating systems</a>)</p>
+<p>CAs can be added to the trust store, either manually by the user, by an MDM that manages the enterprise device or through malware. The question is then: "can you trust all of those CAs and should your app rely on the default trust store?". After all, there are well-known cases where certificate authorities have been compromised or tricked into issuing certificates to impostors. A detailed timeline of CA breaches and failures can be found at <a href="https://sslmate.com/certspotter/failures" title="Timeline of PKI Security Failures">sslmate.com</a>.</p>
+<p>Both Android and iOS allow the user to install additional CAs or trust anchors.</p>
+<p>An app may want to trust a custom set of CAs instead of the platform default. The most common reasons for this are:</p>
+<ul>
+<li>Connecting to a host with a custom certificate authority (a CA that isn't known or trusted by the system yet), such as a CA that is self-signed or is issued internally within a company.</li>
+<li>Limiting the set of CAs to a specific list of trusted CAs.</li>
+<li>Trusting additional CAs not included in the system.</li>
+</ul>
+<h3 id="about-trust-stores">About Trust Stores<a class="headerlink" href="#about-trust-stores" title="Permanent link">&para;</a></h3>
+<h3 id="extending-trust">Extending Trust<a class="headerlink" href="#extending-trust" title="Permanent link">&para;</a></h3>
+<p>Whenever the app connects to a server whose certificate is self-signed or unknown to the system, the secure connection will fail. This is typically the case for any non public CAs, for instance those issued by an organization such as a government, corporation, or education institution for their own use.</p>
+<p>Both Android and iOS offer means to extend trust, i.e. include additional CAs so that the app trusts the system's built-in ones plus the custom ones.</p>
+<p>However, remember that the device users are always able to include additional CAs. Therefore, depending on the threat model of the app it might be necessary to avoid trusting any certificates added to the user trust store or even go further and only trust a pre-defined specific certificate or set of certificates.</p>
+<p>For many apps, the "default behavior" provided by the mobile platform will be secure enough for their use case (in the rare case that a system-trusted CA is compromised the data handled by the app is not considered sensitive or other security measures are taken which are resilient even to such a CA breach). However, for other apps such as financial or health apps, the risk of a CA breach, even if rare, must be considered.</p>
+<h3 id="restricting-trust-identity-pinning">Restricting Trust: Identity Pinning<a class="headerlink" href="#restricting-trust-identity-pinning" title="Permanent link">&para;</a></h3>
+<p>Some apps might need to further increase their security by restricting the number of CAs that they trust. Typically only the CAs which are used by the developer are explicitly trusted, while disregarding all others. This trust restriction is known as <em>Identity Pinning</em> usually implemented as <em>Certificate Pinning</em> or <em>Public Key Pinning</em>.</p>
+<blockquote>
+<p>In the OWASP MASTG we will be referring to this term as "Identity Pinning", "Certificate Pinning", "Public Key Pinning" or simply "Pinning".</p>
+</blockquote>
+<p>Pinning is the process of associating a remote endpoint with a particular identity, such as a X.509 certificate or public key, instead of accepting any certificate signed by a trusted CA. After pinning the server identity (or a certain set, aka. <em>pinset</em>), the mobile app will subsequently connect to those remote endpoints only if the identity matches. Withdrawing trust from unnecessary CAs reduces the app's attack surface.</p>
+<h4 id="general-guidelines">General Guidelines<a class="headerlink" href="#general-guidelines" title="Permanent link">&para;</a></h4>
+<p>The <a href="https://cheatsheetseries.owasp.org/cheatsheets/Pinning_Cheat_Sheet.html">OWASP Certificate Pinning Cheat Sheet</a> gives essential guidance on:</p>
+<ul>
+<li>when pinning is recommended and which exceptions might apply.</li>
+<li>when to pin: development time (preloading) or upon first encountering (trust on first use).</li>
+<li>what to pin: certificate, public key or hash.</li>
+</ul>
+<p>Both Android and iOS recommendations match the "best case" which is:</p>
+<ul>
+<li>Pin only to remote endpoints where the developer has control.</li>
+<li>at development time via (NSC/ATS)</li>
+<li>pin a hash of the SPKI <code>subjectPublicKeyInfo</code>.</li>
+</ul>
+<p>Pinning has gained a bad reputation since its introduction several years ago. We'd like to clarify a couple of points that are valid at least for mobile application security:</p>
+<ul>
+<li>The bad reputation is due to operational reasons (e.g. implementation/pin management complexity) not lack of security.</li>
+<li>If an app does not implement pinning, this shouldn't be reported as a vulnerability. However, if the app must verify against MASVS-L2 it must be implemented.</li>
+<li>Both Android and iOS make implementing pinning very easy and follow the best practices.</li>
+<li>Pinning protects against a compromised CA or a malicious CA that is installed on the device. In those cases, pinning will prevent the OS from establishing a secure connection from being established with a malicious server. However, if an attacker is in control of the device, they can easily disable any pinning logic and thus still allow the connection to happen. As a result, this will not prevent an attacker from accessing your backend and abusing server-side vulnerabilities.</li>
+<li>Pinning in mobile apps is not the same as HTTP Public Key Pinning (HPKP). The HPKP header is no longer recommended on websites as it can lead to users being locked out of the website without any way to revert the lockout. For mobile apps, this is not an issue, as the app can always be updated via an out-of-band channel (i.e. the app store) in case there are any issues.</li>
+</ul>
+<h4 id="about-pinning-recommendations-in-android-developers">About Pinning Recommendations in Android Developers<a class="headerlink" href="#about-pinning-recommendations-in-android-developers" title="Permanent link">&para;</a></h4>
+<p>The <a href="https://developer.android.com/training/articles/security-ssl#Pinning">Android Developers</a> site includes the following warning:</p>
+<blockquote>
+<p>Caution: Certificate Pinning is not recommended for Android applications due to the high risk of future server configuration changes, such as changing to another Certificate Authority, rendering the application unable to connect to the server without receiving a client software update.</p>
+</blockquote>
+<p>They also include this <a href="https://developer.android.com/training/articles/security-config#CertificatePinning">note</a>:</p>
+<blockquote>
+<p>Note that, when using certificate pinning, you should always include a backup key so that if you are forced to switch to new keys or change CAs (when pinning to a CA certificate or an intermediate of that CA), your app's connectivity is unaffected. Otherwise, you must push out an update to the app to restore connectivity.</p>
+</blockquote>
+<p>The first statement can be mistakenly interpreted as saying that they "do not recommend certificate pinning". The second statement clarifies this: the actual recommendation is that if developers want to implement pinning they have to take the necessary precautions.</p>
+<h4 id="about-pinning-recommendations-in-apple-developers">About Pinning Recommendations in Apple Developers<a class="headerlink" href="#about-pinning-recommendations-in-apple-developers" title="Permanent link">&para;</a></h4>
+<p>Apple recommends <a href="https://developer.apple.com/news/?id=g9ejcf8y">thinking long-term</a> and <a href="https://developer.apple.com/documentation/foundation/url_loading_system/handling_an_authentication_challenge/performing_manual_server_trust_authentication#2956135">creating a proper server authentication strategy</a>.</p>
+<h4 id="owasp-mastg-recommendation">OWASP MASTG Recommendation<a class="headerlink" href="#owasp-mastg-recommendation" title="Permanent link">&para;</a></h4>
+<p>Pinning is a recommended practice, especially for MASVS-L2 apps. However, developers must implement it exclusively for the endpoints under their control and be sure to include backup keys (aka. backup pins) and have a proper app update strategy.</p>
+<h4 id="learn-more">Learn more<a class="headerlink" href="#learn-more" title="Permanent link">&para;</a></h4>
+<ul>
+<li><a href="https://appmattus.medium.com/android-security-ssl-pinning-1db8acb6621e">"Android Security: SSL Pinning"</a></li>
+<li><a href="https://cheatsheetseries.owasp.org/cheatsheets/Pinning_Cheat_Sheet.html">OWASP Certificate Pinning Cheat Sheet</a></li>
+</ul>
+<h2 id="verifying-the-tls-settings">Verifying the TLS Settings<a class="headerlink" href="#verifying-the-tls-settings" title="Permanent link">&para;</a></h2>
+<p>One of the core mobile app functions is sending/receiving data over untrusted networks like the Internet. If the data is not properly protected in transit, an attacker with access to any part of the network infrastructure (e.g., a Wi-Fi access point) may intercept, read, or modify it. This is why plaintext network protocols are rarely advisable.</p>
+<p>The vast majority of apps rely on HTTP for communication with the backend. HTTPS wraps HTTP in an encrypted connection (the acronym HTTPS originally referred to HTTP over Secure Socket Layer (SSL); SSL is the deprecated predecessor of TLS). TLS allows authentication of the backend service and ensures confidentiality and integrity of the network data.</p>
+<h3 id="recommended-tls-settings">Recommended TLS Settings<a class="headerlink" href="#recommended-tls-settings" title="Permanent link">&para;</a></h3>
+<p>Ensuring proper TLS configuration on the server side is also important. The SSL protocol is deprecated and should no longer be used.
+Also TLS v1.0 and TLS v1.1 have <a href="https://portswigger.net/daily-swig/the-end-is-nigh-browser-makers-ditch-support-for-aging-tls-1-0-1-1-protocols" title="Browser-makers ditch support for aging TLS 1.0, 1.1 protocols">known vulnerabilities</a> and their usage is deprecated in all major browsers by 2020.
+TLS v1.2 and TLS v1.3 are considered best practice for secure transmission of data. Starting with Android 10 (API level 29) TLS v1.3 will be enabled by default for faster and secure communication. The <a href="https://developer.android.com/about/versions/10/behavior-changes-all#tls-1.3" title="TLS 1.3 enabled by default">major change with TLS v1.3</a> is that customizing cipher suites is no longer possible and that all of them are enabled when TLS v1.3 is enabled, whereas Zero Round Trip (0-RTT) mode isn't supported.</p>
+<p>When both the client and server are controlled by the same organization and used only for communicating with one another, you can increase security by <a href="https://dev.ssllabs.com/projects/best-practices/" title="Qualys SSL/TLS Deployment Best Practices">hardening the configuration</a>.</p>
+<p>If a mobile application connects to a specific server, its networking stack can be tuned to ensure the highest possible security level for the server's configuration. Lack of support in the underlying operating system may force the mobile application to use a weaker configuration.</p>
+<h3 id="cipher-suites-terminology">Cipher Suites Terminology<a class="headerlink" href="#cipher-suites-terminology" title="Permanent link">&para;</a></h3>
+<p>Cipher suites have the following structure:</p>
+<div class="highlight"><pre><span></span><code>Protocol_KeyExchangeAlgorithm_WITH_BlockCipher_IntegrityCheckAlgorithm
+</code></pre></div>
+<p>This structure includes:</p>
+<ul>
+<li>A <strong>Protocol</strong> used by the cipher</li>
+<li>A <strong>Key Exchange Algorithm</strong> used by the server and the client to authenticate during the TLS handshake</li>
+<li>A <strong>Block Cipher</strong> used to encrypt the message stream</li>
+<li>A <strong>Integrity Check Algorithm</strong> used to authenticate messages</li>
+</ul>
+<p>Example: <code>TLS_RSA_WITH_3DES_EDE_CBC_SHA</code></p>
+<p>In the example above the cipher suites uses:</p>
+<ul>
+<li>TLS as protocol</li>
+<li>RSA Asymmetric encryption for Authentication</li>
+<li>3DES for Symmetric encryption with EDE_CBC mode</li>
+<li>SHA Hash algorithm for integrity</li>
+</ul>
+<p>Note that in TLSv1.3 the Key Exchange Algorithm is not part of the cipher suite, instead it is determined during the TLS handshake.</p>
+<p>In the following listing, we’ll present the different algorithms of each part of the cipher suite.</p>
+<p><strong>Protocols:</strong></p>
+<ul>
+<li><code>SSLv1</code></li>
+<li><code>SSLv2</code> - <a href="https://tools.ietf.org/html/rfc6176" title="RFC 6176">RFC 6176</a></li>
+<li><code>SSLv3</code> - <a href="https://tools.ietf.org/html/rfc6101" title="RFC 6101">RFC 6101</a></li>
+<li><code>TLSv1.0</code> - <a href="https://tools.ietf.org/rfc/rfc2246" title="RFC 2246">RFC 2246</a></li>
+<li><code>TLSv1.1</code> - <a href="https://tools.ietf.org/html/rfc4346" title="RFC 4346">RFC 4346</a></li>
+<li><code>TLSv1.2</code> - <a href="https://tools.ietf.org/html/rfc5246" title="RFC 5246">RFC 5246</a></li>
+<li><code>TLSv1.3</code> - <a href="https://tools.ietf.org/html/rfc8446" title="RFC 8446">RFC 8446</a></li>
+</ul>
+<p><strong>Key Exchange Algorithms:</strong></p>
+<ul>
+<li><code>DSA</code> - <a href="https://tools.ietf.org/html/rfc6979" title="RFC 6979">RFC 6979</a></li>
+<li><code>ECDSA</code> - <a href="https://tools.ietf.org/html/rfc6979" title="RFC 6979">RFC 6979</a></li>
+<li><code>RSA</code> - <a href="https://tools.ietf.org/html/rfc8017" title="RFC 8017">RFC 8017</a></li>
+<li><code>DHE</code> - <a href="https://tools.ietf.org/html/rfc2631" title="RFC 2631">RFC 2631</a>  - <a href="https://tools.ietf.org/html/rfc7919" title="RFC 7919">RFC 7919</a></li>
+<li><code>ECDHE</code> - <a href="https://tools.ietf.org/html/rfc4492" title="RFC 4492">RFC 4492</a></li>
+<li><code>PSK</code> - <a href="https://tools.ietf.org/html/rfc4279" title="RFC 4279">RFC 4279</a></li>
+<li><code>DSS</code> - <a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.186-4.pdf" title="FIPS186-4">FIPS186-4</a></li>
+<li><code>DH_anon</code> - <a href="https://tools.ietf.org/html/rfc2631" title="RFC 2631">RFC 2631</a>  - <a href="https://tools.ietf.org/html/rfc7919" title="RFC 7919">RFC 7919</a></li>
+<li><code>DHE_RSA</code> - <a href="https://tools.ietf.org/html/rfc2631" title="RFC 2631">RFC 2631</a>  - <a href="https://tools.ietf.org/html/rfc7919" title="RFC 7919">RFC 7919</a></li>
+<li><code>DHE_DSS</code> - <a href="https://tools.ietf.org/html/rfc2631" title="RFC 2631">RFC 2631</a>  - <a href="https://tools.ietf.org/html/rfc7919" title="RFC 7919">RFC 7919</a></li>
+<li><code>ECDHE_ECDSA</code> - <a href="https://tools.ietf.org/html/rfc8422" title="RFC 8422">RFC 8422</a></li>
+<li><code>ECDHE_PSK</code>  - <a href="https://tools.ietf.org/html/rfc8422" title="RFC 8422">RFC 8422</a>  - <a href="https://tools.ietf.org/html/rfc5489" title="RFC 5489">RFC 5489</a></li>
+<li><code>ECDHE_RSA</code>  - <a href="https://tools.ietf.org/html/rfc8422" title="RFC 8422">RFC 8422</a></li>
+</ul>
+<p><strong>Block Ciphers:</strong></p>
+<ul>
+<li><code>DES</code>  - <a href="https://tools.ietf.org/html/rfc4772" title="RFC 4772">RFC 4772</a></li>
+<li><code>DES_CBC</code>  - <a href="https://tools.ietf.org/html/rfc1829" title="RFC 1829">RFC 1829</a></li>
+<li><code>3DES</code>  - <a href="https://tools.ietf.org/html/rfc2420" title="RFC 2420">RFC 2420</a></li>
+<li><code>3DES_EDE_CBC</code> - <a href="https://tools.ietf.org/html/rfc2420" title="RFC 2420">RFC 2420</a></li>
+<li><code>AES_128_CBC</code> - <a href="https://tools.ietf.org/html/rfc3268" title="RFC 3268">RFC 3268</a></li>
+<li><code>AES_128_GCM</code>  - <a href="https://tools.ietf.org/html/rfc5288" title="RFC 5288">RFC 5288</a></li>
+<li><code>AES_256_CBC</code> - <a href="https://tools.ietf.org/html/rfc3268" title="RFC 3268">RFC 3268</a></li>
+<li><code>AES_256_GCM</code> - <a href="https://tools.ietf.org/html/rfc5288" title="RFC 5288">RFC 5288</a></li>
+<li><code>RC4_40</code>  - <a href="https://tools.ietf.org/html/rfc7465" title="RFC 7465">RFC 7465</a></li>
+<li><code>RC4_128</code>  - <a href="https://tools.ietf.org/html/rfc7465" title="RFC 7465">RFC 7465</a></li>
+<li><code>CHACHA20_POLY1305</code>  - <a href="https://tools.ietf.org/html/rfc7905" title="RFC 7905">RFC 7905</a>  - <a href="https://tools.ietf.org/html/rfc7539" title="RFC 7539">RFC 7539</a></li>
+</ul>
+<p><strong>Integrity Check Algorithms:</strong></p>
+<ul>
+<li><code>MD5</code>  - <a href="https://tools.ietf.org/html/rfc6151" title="RFC 6151">RFC 6151</a></li>
+<li><code>SHA</code>  - <a href="https://tools.ietf.org/html/rfc6234" title="RFC 6234">RFC 6234</a></li>
+<li><code>SHA256</code>  - <a href="https://tools.ietf.org/html/rfc6234" title="RFC 6234">RFC 6234</a></li>
+<li><code>SHA384</code>  - <a href="https://tools.ietf.org/html/rfc6234" title="RFC 6234">RFC 6234</a></li>
+</ul>
+<p>Note that the efficiency of a cipher suite depends on the efficiency of its algorithms.</p>
+<p>The following resources contain the latest recommended cipher suites to use with TLS:</p>
+<ul>
+<li>IANA recommended cipher suites can be found in <a href="https://www.iana.org/assignments/tls-parameters/tls-parameters.xhtml#tls-parameters-4" title="TLS Cipher Suites">TLS Cipher Suites</a>.</li>
+<li>OWASP recommended cipher suites can be found in the <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/TLS_Cipher_String_Cheat_Sheet.md" title="OWASP TLS Cipher String Cheat Sheet">TLS Cipher String Cheat Sheet</a>.</li>
+</ul>
+<p>Some Android and iOS versions do not support some of the recommended cipher suites, so for compatibility purposes you can check the supported cipher suites for <a href="https://developer.android.com/reference/javax/net/ssl/SSLSocket#cipher-suites" title="Cipher suites">Android</a> and <a href="https://developer.apple.com/documentation/security/1550981-ssl_cipher_suite_values?language=objc" title="SSL Cipher Suite Values">iOS</a> versions and choose the top supported cipher suites.</p>
+<p>If you want to verify whether your server supports the right cipher suites, there are various tools you can use:</p>
+<ul>
+<li>nscurl - see <a href="../../iOS/0x06g-Testing-Network-Communication/">iOS Network Communication</a> for more details.</li>
+<li><a href="https://github.com/drwetter/testssl.sh" title="testssl.sh">testssl.sh</a> which "is a free command line tool which checks a server's service on any port for the support of TLS/SSL ciphers, protocols as well as some cryptographic flaws".</li>
+</ul>
+<p>Finally, verify that the server or termination proxy at which the HTTPS connection terminates is configured according to best practices. See also the <a href="https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Transport_Layer_Protection_Cheat_Sheet.md" title="Transport Layer Protection Cheat Sheet">OWASP Transport Layer Protection cheat sheet</a> and the <a href="https://dev.ssllabs.com/projects/best-practices/" title="Qualys SSL/TLS Deployment Best Practices">Qualys SSL/TLS Deployment Best Practices</a>.</p>
+<h2 id="intercepting-https-traffic">Intercepting HTTP(S) Traffic<a class="headerlink" href="#intercepting-https-traffic" title="Permanent link">&para;</a></h2>
+<p>In many cases, it is most practical to configure a system proxy on the mobile device, so that HTTP(S) traffic is redirected through an <em>interception proxy</em> running on your host computer. By monitoring the requests between the mobile app client and the backend, you can easily map the available server-side APIs and gain insight into the communication protocol. Additionally, you can replay and manipulate requests to test for server-side vulnerabilities.</p>
+<p>Several free and commercial proxy tools are available. Here are some of the most popular:</p>
+<ul>
+<li><a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp Suite</a></li>
+<li><a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a></li>
+</ul>
+<p>To use the interception proxy, you'll need to run it on your host computer and configure the mobile app to route HTTP(S) requests to your proxy. In most cases, it is enough to set a system-wide proxy in the network settings of the mobile device - if the app uses standard HTTP APIs or popular libraries such as <code>okhttp</code>, it will automatically use the system settings.</p>
+<p><img src="../../../assets/Images/Chapters/0x04f/BURP.png" width="100%" /></p>
+<p>Using a proxy breaks SSL certificate verification and the app will usually fail to initiate TLS connections. To work around this issue, you can install your proxy's CA certificate on the device. We'll explain how to do this in the OS-specific "Basic Security Testing" chapters.</p>
+<h2 id="intercepting-non-http-traffic">Intercepting Non-HTTP Traffic<a class="headerlink" href="#intercepting-non-http-traffic" title="Permanent link">&para;</a></h2>
+<p>Interception proxies such as <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp</a> and <a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a> won't show non-HTTP traffic, because they aren't capable of decoding it properly by default. There are, however, Burp plugins available such as:</p>
+<ul>
+<li><a href="https://github.com/summitt/Burp-Non-HTTP-Extension" title="Burp-non-HTTP-Extension">Burp-non-HTTP-Extension</a> and</li>
+<li><a href="https://github.com/jrmdev/mitm_relay" title="Mitm-relay">Mitm-relay</a>.</li>
+</ul>
+<p>These plugins can visualize non-HTTP protocols and you will also be able to intercept and manipulate the traffic.</p>
+<p>Note that this setup can sometimes become very tedious and is not as straightforward as testing HTTP.</p>
+<h2 id="intercepting-traffic-from-the-app-process">Intercepting Traffic from the App Process<a class="headerlink" href="#intercepting-traffic-from-the-app-process" title="Permanent link">&para;</a></h2>
+<p>Depending on your goal while testing the app, sometimes it is enough to monitor the traffic before it reaches the network layer or when the responses are received in the app.</p>
+<p>You don't need to deploy a fully fledged MITM attack if you simply want to know if a certain piece of sensitive data is being transmitted to the network. In this case you wouldn't even have to bypass pinning, if implemented. You just have to hook the right functions, e.g. <code>SSL_write</code> and <code>SSL_read</code> from openssl.</p>
+<p>This would work pretty well for apps using standard API libraries functions and classes, however there might be some downsides:</p>
+<ul>
+<li>the app might implement a custom network stack and you'll have to spend time analyzing the app to find out the APIs that you can use (see section "Searching for OpenSSL traces with signature analysis" in <a href="https://hackmag.com/security/ssl-sniffing/">this blog post</a>).</li>
+<li>it might be very time consuming to craft the right hooking scripts to re-assemble HTTP response pairs (across many method calls and execution threads). You might find <a href="https://github.com/fanxs-t/Android-SSL_read-write-Hook/blob/master/frida-hook.py">ready-made scripts</a> and even for <a href="https://codeshare.frida.re/@owen800q/okhttp3-interceptor/">alternative network stacks</a> but depending on the app and the platform these scripts might need a lot of maintenance and might not <em>always work</em>.</li>
+</ul>
+<p>See some examples:</p>
+<ul>
+<li><a href="https://hackmag.com/security/ssl-sniffing/">"Universal interception. How to bypass SSL Pinning and monitor traffic of any application"</a>, sections "Grabbing payload prior to transmission" and "Grabbing payload prior to encryption"</li>
+<li><a href="https://gaiaslastlaugh.medium.com/frida-as-an-alternative-to-network-tracing-5173cfbd7a0b">"Frida as an Alternative to Network Tracing"</a></li>
+</ul>
+<blockquote>
+<p>This technique is also useful for other types of traffic such as BLE, NFC, etc. where deploying a MITM attack might be very costly and or complex.</p>
+</blockquote>
+<h2 id="intercepting-traffic-on-the-network-layer">Intercepting Traffic on the Network Layer<a class="headerlink" href="#intercepting-traffic-on-the-network-layer" title="Permanent link">&para;</a></h2>
+<p>Dynamic analysis by using an interception proxy can be straight forward if standard libraries are used in the app and all communication is done via HTTP. But there are several cases where this is not working:</p>
+<ul>
+<li>If mobile application development platforms like <a href="https://www.xamarin.com/platform" title="Xamarin">Xamarin</a> are used that ignore the system proxy settings;</li>
+<li>If mobile applications verify if the system proxy is used and refuse to send requests through a proxy;</li>
+<li>If you want to intercept push notifications, like for example GCM/FCM on Android;</li>
+<li>If XMPP or other non-HTTP protocols are used.</li>
+</ul>
+<p>In these cases you need to monitor and analyze the network traffic first in order to decide what to do next. Luckily, there are several options for redirecting and intercepting network communication:</p>
+<ul>
+<li>Route the traffic through the host computer. You can set up host computer as the network gateway, e.g. by using the built-in Internet Sharing facilities of your operating system. You can then use <a href="../../Tools/0x08a-Testing-Tools/#wireshark">Wireshark</a> to sniff any traffic from the mobile device.</li>
+<li>Sometimes you need to execute a MITM attack to force the mobile device to talk to you. For this scenario you should consider <a href="../../Tools/0x08a-Testing-Tools/#bettercap">bettercap</a> or use your own access point to redirect network traffic from the mobile device to your host computer (see below).</li>
+<li>On a rooted device, you can use hooking or code injection to intercept network-related API calls (e.g. HTTP requests) and dump or even manipulate the arguments of these calls. This eliminates the need to inspect the actual network data. We'll talk in more detail about these techniques in the "Reverse Engineering and Tampering" chapters.</li>
+<li>On macOS, you can create a "Remote Virtual Interface" for sniffing all traffic on an iOS device. We'll describe this method in the chapter "Basic Security Testing on iOS".</li>
+</ul>
+<h3 id="simulating-a-man-in-the-middle-attack-with-bettercap">Simulating a Man-in-the-Middle Attack with bettercap<a class="headerlink" href="#simulating-a-man-in-the-middle-attack-with-bettercap" title="Permanent link">&para;</a></h3>
+<h4 id="network-setup">Network Setup<a class="headerlink" href="#network-setup" title="Permanent link">&para;</a></h4>
+<p>To be able to get a man-in-the-middle position your host computer should be in the same wireless network as the mobile phone and the gateway it communicates to. Once this is done you need the IP address of your mobile phone. For a full dynamic analysis of a mobile app, all network traffic should be intercepted.</p>
+<h4 id="mitm-attack">MITM Attack<a class="headerlink" href="#mitm-attack" title="Permanent link">&para;</a></h4>
+<p>Start your preferred network analyzer tool first, then start <a href="../../Tools/0x08a-Testing-Tools/#bettercap">bettercap</a> with the following command and replace the IP address below (X.X.X.X) with the target you want to execute the MITM attack against.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>sudo<span class="w"> </span>bettercap<span class="w"> </span>-eval<span class="w"> </span><span class="s2">&quot;set arp.spoof.targets X.X.X.X; arp.spoof on; set arp.spoof.internal true; set arp.spoof.fullduplex true;&quot;</span>
+bettercap<span class="w"> </span>v2.22<span class="w"> </span><span class="o">(</span>built<span class="w"> </span><span class="k">for</span><span class="w"> </span>darwin<span class="w"> </span>amd64<span class="w"> </span>with<span class="w"> </span>go1.12.1<span class="o">)</span><span class="w"> </span><span class="o">[</span><span class="nb">type</span><span class="w"> </span><span class="s1">&#39;help&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>a<span class="w"> </span>list<span class="w"> </span>of<span class="w"> </span>commands<span class="o">]</span>
+
+<span class="o">[</span><span class="m">19</span>:21:39<span class="o">]</span><span class="w"> </span><span class="o">[</span>sys.log<span class="o">]</span><span class="w"> </span><span class="o">[</span>inf<span class="o">]</span><span class="w"> </span>arp.spoof<span class="w"> </span>enabling<span class="w"> </span>forwarding
+<span class="o">[</span><span class="m">19</span>:21:39<span class="o">]</span><span class="w"> </span><span class="o">[</span>sys.log<span class="o">]</span><span class="w"> </span><span class="o">[</span>inf<span class="o">]</span><span class="w"> </span>arp.spoof<span class="w"> </span>arp<span class="w"> </span>spoofer<span class="w"> </span>started,<span class="w"> </span>probing<span class="w"> </span><span class="m">1</span><span class="w"> </span>targets.
+</code></pre></div>
+<p>bettercap will then automatically send the packets to the network gateway in the (wireless) network and you are able to sniff the traffic. Beginning of 2019 support for <a href="https://github.com/bettercap/bettercap/issues/426" title="Full Duplex ARP Spoofing">full duplex ARP spoofing</a> was added to bettercap.</p>
+<p>On the mobile phone start the browser and navigate to <code>http://example.com</code>, you should see output like the following when you are using Wireshark.</p>
+<p><img src="../../../assets/Images/Chapters/0x04f/bettercap.png" width="100%" /></p>
+<p>If that's the case, you are now able to see the complete network traffic that is sent and received by the mobile phone. This includes also DNS, DHCP and any other form of communication and can therefore be quite "noisy". You should therefore know how to use <a href="https://wiki.wireshark.org/DisplayFilters" title="DisplayFilters">DisplayFilters in Wireshark</a> or know <a href="https://danielmiessler.com/study/tcpdump/#gs.OVQjKbk" title="A tcpdump Tutorial and Primer with Examples">how to filter in tcpdump</a> to focus only on the relevant traffic for you.</p>
+<blockquote>
+<p>Man-in-the-middle attacks work against any device and operating system as the attack is executed on OSI Layer 2 through ARP Spoofing. When you are MITM you might not be able to see clear text data, as the data in transit might be encrypted by using TLS, but it will give you valuable information about the hosts involved, the protocols used and the ports the app is communicating with.</p>
+</blockquote>
+<h3 id="simulating-a-man-in-the-middle-attack-with-an-access-point">Simulating a Man-in-the-Middle Attack with an access point<a class="headerlink" href="#simulating-a-man-in-the-middle-attack-with-an-access-point" title="Permanent link">&para;</a></h3>
+<h4 id="network-setup_1">Network Setup<a class="headerlink" href="#network-setup_1" title="Permanent link">&para;</a></h4>
+<p>A simple way to simulate a man-in-the-middle (MITM) attack is to configure a network where all packets between the devices in scope and the target network are going through your host computer. In a mobile penetration test, this can be achieved by using an access point the mobile devices and your host computer are connected to. Your host computer is then becoming a router and an access point.</p>
+<p>Following scenarios are possible:</p>
+<ul>
+<li>Use your host computer's built-in WiFi card as an access point and use your wired connection to connect to the target network.</li>
+<li>Use an external USB WiFi card as an access point and use your host computer's built-in WiFi to connect to the target network (can be vice-versa).</li>
+<li>Use a separate access point and redirect the traffic to your host computer.</li>
+</ul>
+<p>The scenario with an external USB WiFi card require that the card has the capability to create an access point. Additionally, you need to install some tools and/or configure the network to enforce a man-in-the-middle position (see below). You can verify if your WiFi card has AP capabilities by using the command <code>iwconfig</code> on Kali Linux:</p>
+<div class="highlight"><pre><span></span><code>iw<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>AP
+</code></pre></div>
+<p>The scenario with a separate access point requires access to the configuration of the AP and you should check first if the AP supports either:</p>
+<ul>
+<li>port forwarding or</li>
+<li>has a span or mirror port.</li>
+</ul>
+<p>In both cases the AP needs to be configured to point to your host computer's IP. Your host computer must be connected to the AP (via wired connection or WiFi) and you need to have connection to the target network (can be the same connection as to the AP). Some additional configuration may be required on your host computer to route traffic to the target network.</p>
+<blockquote>
+<p>If the separate access point belongs to the customer, all changes and configurations should be clarified prior to the engagement and a backup should be created, before making any changes.</p>
+</blockquote>
+<p><img src="../../../assets/Images/Chapters/0x04f/architecture_MITM_AP.png" width="100%" /></p>
+<h4 id="installation">Installation<a class="headerlink" href="#installation" title="Permanent link">&para;</a></h4>
+<p>The following procedure is setting up a man-in-the-middle position using an access point and an additional network interface:</p>
+<p>Create a WiFi network either through a separate access point or through an external USB WiFi card or through the built-in card of your host computer.</p>
+<p>This can be done by using the built-in utilities on macOS. You can use <a href="https://support.apple.com/en-ke/guide/mac-help/mchlp1540/mac" title="Share the internet connection on Mac with other network users">share the internet connection on Mac with other network users</a>.</p>
+<p>For all major Linux and Unix operating systems you need tools such as:</p>
+<ul>
+<li>hostapd</li>
+<li>dnsmasq</li>
+<li>iptables</li>
+<li>wpa_supplicant</li>
+<li>airmon-ng</li>
+</ul>
+<p>For Kali Linux you can install these tools with <code>apt-get</code>:</p>
+<div class="highlight"><pre><span></span><code>apt-get<span class="w"> </span>update
+apt-get<span class="w"> </span>install<span class="w"> </span>hostapd<span class="w"> </span>dnsmasq<span class="w"> </span>aircrack-ng
+</code></pre></div>
+<blockquote>
+<p>iptables and wpa_supplicant are installed by default on Kali Linux.</p>
+</blockquote>
+<p>In case of a separate access point, route the traffic to your host computer. In case of an external USB WiFi card or built-in WiFi card the traffic is already available on your host computer.</p>
+<p>Route the incoming traffic coming from the WiFi to the additional network interface where the traffic can reach the target network. Additional network interface can be wired connection or other WiFi card, depending on your setup.</p>
+<h4 id="configuration">Configuration<a class="headerlink" href="#configuration" title="Permanent link">&para;</a></h4>
+<p>We focus on the configuration files for Kali Linux. Following values need to be defined:</p>
+<ul>
+<li>wlan1 - id of the AP network interface (with AP capabilities),</li>
+<li>wlan0 - id of the target network interface (this can be wired interface or other WiFi card)</li>
+<li>10.0.0.0/24 - IP addresses and mask of AP network</li>
+</ul>
+<p>The following configuration files need to be changed and adjusted accordingly:</p>
+<ul>
+<li>
+<p>hostapd.conf</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># Name of the WiFi interface we use</span>
+<span class="nv">interface</span><span class="o">=</span>wlan1
+<span class="c1"># Use the nl80211 driver</span>
+<span class="nv">driver</span><span class="o">=</span>nl80211
+<span class="nv">hw_mode</span><span class="o">=</span>g
+<span class="nv">channel</span><span class="o">=</span><span class="m">6</span>
+<span class="nv">wmm_enabled</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">macaddr_acl</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">auth_algs</span><span class="o">=</span><span class="m">1</span>
+<span class="nv">ignore_broadcast_ssid</span><span class="o">=</span><span class="m">0</span>
+<span class="nv">wpa</span><span class="o">=</span><span class="m">2</span>
+<span class="nv">wpa_key_mgmt</span><span class="o">=</span>WPA-PSK
+<span class="nv">rsn_pairwise</span><span class="o">=</span>CCMP
+<span class="c1"># Name of the AP network</span>
+<span class="nv">ssid</span><span class="o">=</span>STM-AP
+<span class="c1"># Password of the AP network</span>
+<span class="nv">wpa_passphrase</span><span class="o">=</span>password
+</code></pre></div>
+</li>
+<li>
+<p>wpa_supplicant.conf</p>
+<div class="highlight"><pre><span></span><code><span class="nv">network</span><span class="o">={</span>
+<span class="w">    </span><span class="nv">ssid</span><span class="o">=</span><span class="s2">&quot;NAME_OF_THE_TARGET_NETWORK&quot;</span>
+<span class="w">    </span><span class="nv">psk</span><span class="o">=</span><span class="s2">&quot;PASSWORD_OF_THE_TARGET_NETWORK&quot;</span>
+<span class="o">}</span>
+</code></pre></div>
+</li>
+<li>
+<p>dnsmasq.conf</p>
+<div class="highlight"><pre><span></span><code><span class="nv">interface</span><span class="o">=</span>wlan1
+dhcp-range<span class="o">=</span><span class="m">10</span>.0.0.10,10.0.0.250,12h
+dhcp-option<span class="o">=</span><span class="m">3</span>,10.0.0.1
+dhcp-option<span class="o">=</span><span class="m">6</span>,10.0.0.1
+<span class="nv">server</span><span class="o">=</span><span class="m">8</span>.8.8.8
+log-queries
+log-dhcp
+listen-address<span class="o">=</span><span class="m">127</span>.0.0.1
+</code></pre></div>
+</li>
+</ul>
+<h4 id="mitm-attack_1">MITM Attack<a class="headerlink" href="#mitm-attack_1" title="Permanent link">&para;</a></h4>
+<p>To be able to get a man-in-the-middle position you need to run the above configuration. This can be done by using the following commands on Kali Linux:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># check if other process is not using WiFi interfaces</span>
+$<span class="w"> </span>airmon-ng<span class="w"> </span>check<span class="w"> </span><span class="nb">kill</span>
+<span class="c1"># configure IP address of the AP network interface</span>
+$<span class="w"> </span>ifconfig<span class="w"> </span>wlan1<span class="w"> </span><span class="m">10</span>.0.0.1<span class="w"> </span>up
+<span class="c1"># start access point</span>
+$<span class="w"> </span>hostapd<span class="w"> </span>hostapd.conf
+<span class="c1"># connect the target network interface</span>
+$<span class="w"> </span>wpa_supplicant<span class="w"> </span>-B<span class="w"> </span>-i<span class="w"> </span>wlan0<span class="w"> </span>-c<span class="w"> </span>wpa_supplicant.conf
+<span class="c1"># run DNS server</span>
+$<span class="w"> </span>dnsmasq<span class="w"> </span>-C<span class="w"> </span>dnsmasq.conf<span class="w"> </span>-d
+<span class="c1"># enable routing</span>
+$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="m">1</span><span class="w"> </span>&gt;<span class="w"> </span>/proc/sys/net/ipv4/ip_forward
+<span class="c1"># iptables will NAT connections from AP network interface to the target network interface</span>
+$<span class="w"> </span>iptables<span class="w"> </span>--flush
+$<span class="w"> </span>iptables<span class="w"> </span>--table<span class="w"> </span>nat<span class="w"> </span>--append<span class="w"> </span>POSTROUTING<span class="w"> </span>--out-interface<span class="w"> </span>wlan0<span class="w"> </span>-j<span class="w"> </span>MASQUERADE
+$<span class="w"> </span>iptables<span class="w"> </span>--append<span class="w"> </span>FORWARD<span class="w"> </span>--in-interface<span class="w"> </span>wlan1<span class="w"> </span>-j<span class="w"> </span>ACCEPT
+$<span class="w"> </span>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-A<span class="w"> </span>POSTROUTING<span class="w"> </span>-j<span class="w"> </span>MASQUERADE
+</code></pre></div>
+<p>Now you can connect your mobile devices to the access point.</p>
+<h3 id="network-analyzer-tool">Network Analyzer Tool<a class="headerlink" href="#network-analyzer-tool" title="Permanent link">&para;</a></h3>
+<p>Install a tool that allows you to monitor and analyze the network traffic that will be redirected to your host computer. The two most common network monitoring (or capturing) tools are:</p>
+<ul>
+<li><a href="https://www.wireshark.org" title="Wireshark">Wireshark</a> (CLI pendant: <a href="https://www.wireshark.org/docs/man-pages/tshark.html" title="TShark">TShark</a>)</li>
+<li><a href="https://www.tcpdump.org/tcpdump_man.html" title="tcpdump">tcpdump</a></li>
+</ul>
+<p>Wireshark offers a GUI and is more straightforward if you are not used to the command line. If you are looking for a command line tool you should either use TShark or tcpdump. All of these tools are available for all major Linux and Unix operating systems and should be part of their respective package installation mechanisms.</p>
+<h3 id="setting-a-proxy-through-runtime-instrumentation">Setting a Proxy Through Runtime Instrumentation<a class="headerlink" href="#setting-a-proxy-through-runtime-instrumentation" title="Permanent link">&para;</a></h3>
+<p>On a rooted or jailbroken device, you can also use runtime hooking to set a new proxy or redirect network traffic. This can be achieved with hooking tools like <a href="https://github.com/ac-pm/Inspeckage" title="Inspeckage">Inspeckage</a> or code injection frameworks like <a href="https://www.frida.re" title="Frida">Frida</a> and <a href="http://www.cycript.org" title="cycript">cycript</a>. You'll find more information about runtime instrumentation in the "Reverse Engineering and Tampering" chapters of this guide.</p>
+<h3 id="example-dealing-with-xamarin">Example - Dealing with Xamarin<a class="headerlink" href="#example-dealing-with-xamarin" title="Permanent link">&para;</a></h3>
+<p>As an example, we will now redirect all requests from a Xamarin app to an interception proxy.</p>
+<p>Xamarin is a mobile application development platform that is capable of producing <a href="https://docs.microsoft.com/en-us/xamarin/android/get-started/" title="Getting Started with Android">native Android</a> and <a href="https://docs.microsoft.com/en-us/xamarin/ios/get-started/" title="Getting Started with iOS">iOS apps</a> by using Visual Studio and C# as programming language.</p>
+<p>When testing a Xamarin app and when you are trying to set the system proxy in the Wi-Fi settings you won't be able to see any HTTP requests in your interception proxy, as the apps created by Xamarin do not use the local proxy settings of your phone. There are three ways to resolve this:</p>
+<ul>
+<li>
+<p>1st way: Add a <a href="https://developer.xamarin.com/api/type/System.Net.WebProxy/" title="System.Net.WebProxy Class">default proxy to the app</a>, by adding the following code in the <code>OnCreate</code> or <code>Main</code> method and re-create the app:</p>
+<div class="highlight"><pre><span></span><code><span class="n">WebRequest</span><span class="p">.</span><span class="n">DefaultWebProxy</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">WebProxy</span><span class="p">(</span><span class="s">&quot;192.168.11.1&quot;</span><span class="p">,</span><span class="w"> </span><span class="m">8080</span><span class="p">);</span>
+</code></pre></div>
+</li>
+<li>
+<p>2nd way: Use bettercap in order to get a man-in-the-middle position (MITM), see the section above about how to setup a MITM attack. When being MITM you only need to redirect port 443 to your interception proxy running on localhost. This can be done by using the command <code>rdr</code> on macOS:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span>
+<span class="s2">rdr pass inet proto tcp from any to any port 443 -&gt; 127.0.0.1 port 8080</span>
+<span class="s2">&quot;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>pfctl<span class="w"> </span>-ef<span class="w"> </span>-
+</code></pre></div>
+<p>For Linux systems you can use <code>iptables</code>:</p>
+<div class="highlight"><pre><span></span><code>sudo<span class="w"> </span>iptables<span class="w"> </span>-t<span class="w"> </span>nat<span class="w"> </span>-A<span class="w"> </span>PREROUTING<span class="w"> </span>-p<span class="w"> </span>tcp<span class="w"> </span>--dport<span class="w"> </span><span class="m">443</span><span class="w"> </span>-j<span class="w"> </span>DNAT<span class="w"> </span>--to-destination<span class="w"> </span><span class="m">127</span>.0.0.1:8080
+</code></pre></div>
+<p>As last step, you need to set the option 'Support invisible proxy' in the listener settings of <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp Suite</a>.</p>
+</li>
+<li>
+<p>3rd way: Instead of bettercap an alternative is tweaking the <code>/etc/hosts</code> on the mobile phone. Add an entry into <code>/etc/hosts</code> for the target domain and point it to the IP address of your intercepting proxy. This creates a similar situation of being MITM as with bettercap and you need to redirect port 443 to the port which is used by your interception proxy. The redirection can be applied as mentioned above. Additionally, you need to redirect traffic from your interception proxy to the original location and port.</p>
+</li>
+</ul>
+<blockquote>
+<p>When redirecting traffic you should create narrow rules to the domains and IPs in scope, to minimize noise and out-of-scope traffic.</p>
+</blockquote>
+<p>The interception proxy need to listen to the port specified in the port forwarding rule above, which is 8080.</p>
+<p>When a Xamarin app is configured to use a proxy (e.g. by using <code>WebRequest.DefaultWebProxy</code>) you need to specify where traffic should go next, after redirecting the traffic to your intercepting proxy. You need to redirect the traffic to the original location. The following procedure is setting up a redirection in <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp</a> to the original location:</p>
+<ol>
+<li>Go to <strong>Proxy</strong> tab and click on <strong>Options</strong></li>
+<li>Select and edit your listener from the list of proxy listeners.</li>
+<li>
+<p>Go to <strong>Request handling</strong> tab and set:</p>
+<ul>
+<li>Redirect to host: provide original traffic location.</li>
+<li>Redirect to port: provide original port location.</li>
+<li>Set 'Force use of SSL' (when HTTPS is used) and set 'Support invisible proxy'.</li>
+</ul>
+</li>
+</ol>
+<p><img src="../../../assets/Images/Chapters/0x04f/burp_xamarin.png" width="100%" /></p>
+<h4 id="ca-certificates">CA Certificates<a class="headerlink" href="#ca-certificates" title="Permanent link">&para;</a></h4>
+<p>If not already done, install the CA certificates in your mobile device which will allow us to intercept HTTPS requests:</p>
+<ul>
+<li><a href="https://support.portswigger.net/customer/portal/articles/1841102-installing-burp-s-ca-certificate-in-an-android-device" title="Installing Burp\'s CA Certificate in an Android Device">Install the CA certificate of your interception proxy into your Android phone</a>
+    &gt; Note that starting with Android 7.0 (API level 24) the OS no longer trusts a user supplied CA certificate unless specified in the app. Bypassing this security measure will be addressed in the "Basic Security Testing" chapters.</li>
+<li><a href="https://support.portswigger.net/customer/portal/articles/1841108-configuring-an-ios-device-to-work-with-burp" title="Configuring an iOS Device to Work With Burp">Install the CA certificate of your interception proxy into your iOS phone</a></li>
+</ul>
+<h4 id="intercepting-traffic">Intercepting Traffic<a class="headerlink" href="#intercepting-traffic" title="Permanent link">&para;</a></h4>
+<p>Start using the app and trigger its functions. You should see HTTP messages showing up in your interception proxy.</p>
+<blockquote>
+<p>When using bettercap you need to activate "Support invisible proxying" in Proxy Tab / Options / Edit Interface</p>
+</blockquote>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-NETWORK-1: "Data is encrypted on the network using TLS. The secure channel is used consistently throughout the app."</li>
+<li>MSTG-NETWORK-2: "The TLS settings are in line with current best practices, or as close as possible if the mobile operating system does not support the recommended standards."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

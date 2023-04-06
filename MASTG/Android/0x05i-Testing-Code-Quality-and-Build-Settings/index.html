@@ -1,0 +1,2919 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x05h-Testing-Platform-Interaction/">
+      
+      
+        <link rel="next" href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>Android Code Quality and Build Settings - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#android-code-quality-and-build-settings" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Android Code Quality and Build Settings
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Android Code Quality and Build Settings
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        Android Code Quality and Build Settings
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#app-signing" class="md-nav__link">
+    App Signing
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#third-party-libraries" class="md-nav__link">
+    Third-Party Libraries
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-corruption-bugs" class="md-nav__link">
+    Memory Corruption Bugs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#binary-protection-mechanisms" class="md-nav__link">
+    Binary Protection Mechanisms
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debuggable-apps" class="md-nav__link">
+    Debuggable Apps
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-symbols" class="md-nav__link">
+    Debugging Symbols
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#debugging-code-and-error-logging" class="md-nav__link">
+    Debugging Code and Error Logging
+  </a>
+  
+    <nav class="md-nav" aria-label="Debugging Code and Error Logging">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#strictmode" class="md-nav__link">
+    StrictMode
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#exception-handling" class="md-nav__link">
+    Exception Handling
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#making-sure-that-the-app-is-properly-signed-mstg-code-1" class="md-nav__link">
+    Making Sure that the App is Properly Signed (MSTG-CODE-1)
+  </a>
+  
+    <nav class="md-nav" aria-label="Making Sure that the App is Properly Signed (MSTG-CODE-1)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-whether-the-app-is-debuggable-mstg-code-2" class="md-nav__link">
+    Testing whether the App is Debuggable (MSTG-CODE-2)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing whether the App is Debuggable (MSTG-CODE-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_1" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_1" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-for-debugging-symbols-mstg-code-3" class="md-nav__link">
+    Testing for Debugging Symbols (MSTG-CODE-3)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing for Debugging Symbols (MSTG-CODE-3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_2" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_2" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-for-debugging-code-and-verbose-error-logging-mstg-code-4" class="md-nav__link">
+    Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_3" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_3" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-for-weaknesses-in-third-party-libraries-mstg-code-5" class="md-nav__link">
+    Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_4" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_4" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-exception-handling-mstg-code-6" class="md-nav__link">
+    Testing Exception Handling (MSTG-CODE-6)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Exception Handling (MSTG-CODE-6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_5" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_5" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#memory-corruption-bugs-mstg-code-8" class="md-nav__link">
+    Memory Corruption Bugs (MSTG-CODE-8)
+  </a>
+  
+    <nav class="md-nav" aria-label="Memory Corruption Bugs (MSTG-CODE-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_6" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_6" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#make-sure-that-free-security-features-are-activated-mstg-code-9" class="md-nav__link">
+    Make Sure That Free Security Features Are Activated (MSTG-CODE-9)
+  </a>
+  
+    <nav class="md-nav" aria-label="Make Sure That Free Security Features Are Activated (MSTG-CODE-9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_7" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="android-code-quality-and-build-settings">Android Code Quality and Build Settings<a class="headerlink" href="#android-code-quality-and-build-settings" title="Permanent link">&para;</a></h1>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h3 id="app-signing">App Signing<a class="headerlink" href="#app-signing" title="Permanent link">&para;</a></h3>
+<p>Android requires all APKs to be digitally signed with a certificate before they are installed or run. The digital signature is used to verify the owner's identity for application updates. This process can prevent an app from being tampered with or modified to include malicious code.</p>
+<p>When an APK is signed, a public-key certificate is attached to it. This certificate uniquely associates the APK with the developer and the developer's private key. When an app is being built in debug mode, the Android SDK signs the app with a debug key created specifically for debugging purposes. An app signed with a debug key is not meant to be distributed and won't be accepted in most app stores, including the Google Play Store.</p>
+<p>The <a href="https://developer.android.com/studio/publish/app-signing.html" title="Android Application Signing">final release build</a> of an app must be signed with a valid release key. In Android Studio, the app can be signed manually or via creation of a signing configuration that's assigned to the release build type.</p>
+<p>Prior Android 9 (API level 28) all app updates on Android need to be signed with the same certificate, so a <a href="https://developer.android.com/studio/publish/app-signing#considerations" title="Android Signing Considerations">validity period of 25 years or more is recommended</a>. Apps published on Google Play must be signed with a key that that has a validity period ending after October 22th, 2033.</p>
+<p>Three APK signing schemes are available:</p>
+<ul>
+<li>JAR signing (v1 scheme),</li>
+<li>APK Signature Scheme v2 (v2 scheme),</li>
+<li>APK Signature Scheme v3 (v3 scheme).</li>
+</ul>
+<p>The v2 signature, which is supported by Android 7.0 (API level 24) and above, offers improved security and performance compared to v1 scheme.
+The V3 signature, which is supported by Android 9 (API level 28) and above, gives apps the ability to change their signing keys as part of an APK update. This functionality assures compatibility and apps continuous availability by allowing both the new and the old keys to be used. Note that it is only available via apksigner at the time of writing.</p>
+<p>For each signing scheme the release builds should always be signed via all its previous schemes as well.</p>
+<h3 id="third-party-libraries">Third-Party Libraries<a class="headerlink" href="#third-party-libraries" title="Permanent link">&para;</a></h3>
+<p>Android apps often make use of third party libraries. These third party libraries accelerate development as the developer has to write less code in order to solve a problem. There are two categories of libraries:</p>
+<ul>
+<li>Libraries that are not (or should not) be packed within the actual production application, such as <code>Mockito</code> used for testing and libraries like <code>JavaAssist</code> used to compile certain other libraries.</li>
+<li>Libraries that are packed within the actual production application, such as <code>Okhttp3</code>.</li>
+</ul>
+<p>These libraries can lead to unwanted side-effects:</p>
+<ul>
+<li>A library can contain a vulnerability, which will make the application vulnerable. A good example are the versions of <code>OKHTTP</code> prior to 2.7.5 in which TLS chain pollution was possible to bypass SSL pinning.</li>
+<li>A library can no longer be maintained or hardly be used, which is why no vulnerabilities are reported and/or fixed. This can lead to having bad and/or vulnerable code in your application through the library.</li>
+<li>A library can use a license, such as LGPL2.1, which requires the application author to provide access to the source code for those who use the application and request insight in its sources. In fact the application should then be allowed to be redistributed with modifications to its sourcecode. This can endanger the intellectual property (IP) of the application.</li>
+</ul>
+<p>Please note that this issue can hold on multiple levels: When you use webviews with JavaScript running in the webview, the JavaScript libraries can have these issues as well. The same holds for plugins/libraries for Cordova, React-native and Xamarin apps.</p>
+<h3 id="memory-corruption-bugs">Memory Corruption Bugs<a class="headerlink" href="#memory-corruption-bugs" title="Permanent link">&para;</a></h3>
+<p>Android applications run on a VM where most of the memory corruption issues have been taken care off. This does not mean that there are no memory corruption bugs. Take <a href="https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2018-9522" title="CVE in StatsLogEventWrapper">CVE-2018-9522</a> for instance, which is related to serialization issues using Parcels. Next, in native code, we still see the same issues as we explained in the general memory corruption section. Last, we see memory bugs in supporting services, such as with the Stagefright attack as shown <a href="https://www.blackhat.com/docs/us-15/materials/us-15-Drake-Stagefright-Scary-Code-In-The-Heart-Of-Android.pdf" title="Stagefright">at BlackHat</a>.</p>
+<p>Memory leaks are often an issue as well. This can happen for instance when a reference to the <code>Context</code> object is passed around to non-<code>Activity</code> classes, or when you pass references to <code>Activity</code> classes to your helper classes.</p>
+<h3 id="binary-protection-mechanisms">Binary Protection Mechanisms<a class="headerlink" href="#binary-protection-mechanisms" title="Permanent link">&para;</a></h3>
+<p>Detecting the presence of <a href="../../General/0x04h-Testing-Code-Quality/#binary-protection-mechanisms">binary protection mechanisms</a> heavily depend on the language used for developing the application.</p>
+<p>In general all binaries should be tested, which includes both the main app executable as well as all libraries/dependencies. However, on Android we will focus on native libraries since the main executables are considered safe as we will see next.</p>
+<p>Android optimizes its Dalvik bytecode from the app DEX files (e.g. classes.dex) and generates a new file containing the native code, usually with an .odex, .oat extension. This <a href="../0x05b-Basic-Security_Testing/#compiled-app-binary">Android compiled binary</a> is wrapped using the <a href="https://refspecs.linuxfoundation.org/elf/gabi4+/contents.html">ELF format</a> which is the format used by Linux and Android to package assembly code.</p>
+<p>The app's <a href="../0x05b-Basic-Security_Testing/#native-libraries">NDK native libraries</a> also <a href="https://developer.android.com/ndk/guides/abis">use the ELF format</a>.</p>
+<ul>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#position-independent-code"><strong>PIE (Position Independent Executable)</strong></a>:</li>
+<li>Since Android 7.0 (API level 24), PIC compilation is <a href="https://source.android.com/devices/tech/dalvik/configure">enabled by default</a> for the main executables.</li>
+<li>With Android 5.0 (API level 21), support for non-PIE enabled native libraries was <a href="https://source.android.com/security/enhancements/enhancements50">dropped</a> and since then, PIE is <a href="https://cs.android.com/android/platform/superproject/+/master:bionic/linker/linker_main.cpp;l=430">enforced by the linker</a>.</li>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#memory-management"><strong>Memory management</strong></a>:</li>
+<li>Garbage Collection will simply run for the main binaries and there's nothing to be checked on the binaries themselves.</li>
+<li>Garbage Collection does not apply to Android native libraries. The developer is responsible for doing proper <a href="../../General/0x04h-Testing-Code-Quality/#manual-memory-management">manual memory management</a>. See <a href="#memory-corruption-bugs-mstg-code-8">"Memory Corruption Bugs (MSTG-CODE-8)"</a>.</li>
+<li><a href="../../General/0x04h-Testing-Code-Quality/#stack-smashing-protection"><strong>Stack Smashing Protection</strong></a>:</li>
+<li>Android apps get compiled to Dalvik bytecode which is considered memory safe (at least for mitigating buffer overflows). Other frameworks such as Flutter will not compile using stack canaries because of the way their language, in this case Dart, mitigates buffer overflows.</li>
+<li>It must be enabled for Android native libraries but it might be difficult to fully determine it.<ul>
+<li>NDK libraries should have it enabled since the compiler does it by default.</li>
+<li>Other custom C/C++ libraries might not have it enabled.</li>
+</ul>
+</li>
+</ul>
+<p>Learn more:</p>
+<ul>
+<li><a href="https://lief-project.github.io/doc/latest/tutorials/10_android_formats.html">Android executable formats</a></li>
+<li><a href="https://source.android.com/devices/tech/dalvik/configure#how_art_works">Android runtime (ART)</a></li>
+<li><a href="https://developer.android.com/ndk/guides">Android NDK</a></li>
+<li><a href="https://android.googlesource.com/platform/bionic/+/master/android-changes-for-ndk-developers.md">Android linker changes for NDK developers</a></li>
+</ul>
+<h3 id="debuggable-apps">Debuggable Apps<a class="headerlink" href="#debuggable-apps" title="Permanent link">&para;</a></h3>
+<p>Debugging is an essential process for developers to identify and fix errors or bugs in their Android app. By using a debugger, developers can select the device to debug their app on and set breakpoints in their Java, Kotlin, and C/C++ code. This allows them to analyze variables and evaluate expressions at runtime, which helps them to identify the root cause of many issues. By debugging their app, developers can improve the functionality and user experience of their app, ensuring that it runs smoothly without any errors or crashes.</p>
+<p>Every debugger-enabled process runs an extra thread for handling JDWP protocol packets. This thread is started only for apps that have the <code>android:debuggable="true"</code> attribute in the <a href="https://developer.android.com/guide/topics/manifest/application-element.html" title="Application element"><code>Application</code> element</a> within the Android Manifest.</p>
+<h3 id="debugging-symbols">Debugging Symbols<a class="headerlink" href="#debugging-symbols" title="Permanent link">&para;</a></h3>
+<p>Generally, you should provide compiled code with as little explanation as possible. Some metadata, such as debugging information, line numbers, and descriptive function or method names, make the binary or bytecode easier for the reverse engineer to understand, but these aren't needed in a release build and can therefore be safely omitted without impacting the app's functionality.</p>
+<p>To inspect native binaries, use a standard tool like <code>nm</code> or <code>objdump</code> to examine the symbol table. A release build should generally not contain any debugging symbols. If the goal is to obfuscate the library, removing unnecessary dynamic symbols is also recommended.</p>
+<h3 id="debugging-code-and-error-logging">Debugging Code and Error Logging<a class="headerlink" href="#debugging-code-and-error-logging" title="Permanent link">&para;</a></h3>
+<h4 id="strictmode">StrictMode<a class="headerlink" href="#strictmode" title="Permanent link">&para;</a></h4>
+<p>StrictMode is a developer tool for detecting violations, e.g. accidental disk or network access on the application's main thread. It can also be used to check for good coding practices, such as implementing performant code.</p>
+<p>Here is <a href="https://developer.android.com/reference/android/os/StrictMode.html" title="StrictMode Class">an example of <code>StrictMode</code></a> with policies enabled for disk and network access to the main thread:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">onCreate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">     </span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">DEVELOPER_MODE</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">         </span><span class="n">StrictMode</span><span class="p">.</span><span class="na">setThreadPolicy</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">StrictMode</span><span class="p">.</span><span class="na">ThreadPolicy</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">detectDiskReads</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">detectDiskWrites</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">detectNetwork</span><span class="p">()</span><span class="w">   </span><span class="c1">// or .detectAll() for all detectable problems</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">penaltyLog</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">build</span><span class="p">());</span>
+<span class="w">         </span><span class="n">StrictMode</span><span class="p">.</span><span class="na">setVmPolicy</span><span class="p">(</span><span class="k">new</span><span class="w"> </span><span class="n">StrictMode</span><span class="p">.</span><span class="na">VmPolicy</span><span class="p">.</span><span class="na">Builder</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">detectLeakedSqlLiteObjects</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">detectLeakedClosableObjects</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">penaltyLog</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">penaltyDeath</span><span class="p">()</span>
+<span class="w">                 </span><span class="p">.</span><span class="na">build</span><span class="p">());</span>
+<span class="w">     </span><span class="p">}</span>
+<span class="w">     </span><span class="kd">super</span><span class="p">.</span><span class="na">onCreate</span><span class="p">();</span>
+<span class="w"> </span><span class="p">}</span>
+</code></pre></div>
+<p>Inserting the policy in the <code>if</code> statement with the <code>DEVELOPER_MODE</code> condition is recommended. To disable <code>StrictMode</code>, <code>DEVELOPER_MODE</code> must be disabled for the release build.</p>
+<h3 id="exception-handling">Exception Handling<a class="headerlink" href="#exception-handling" title="Permanent link">&para;</a></h3>
+<p>Exceptions occur when an application gets into an abnormal or error state. Both Java and C++ may throw exceptions. Testing exception handling is about ensuring that the app will handle an exception and transition to a safe state without exposing sensitive information via the UI or the app's logging mechanisms.</p>
+<h2 id="making-sure-that-the-app-is-properly-signed-mstg-code-1">Making Sure that the App is Properly Signed (MSTG-CODE-1)<a class="headerlink" href="#making-sure-that-the-app-is-properly-signed-mstg-code-1" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis">Static Analysis<a class="headerlink" href="#static-analysis" title="Permanent link">&para;</a></h3>
+<p>Make sure that the release build has been signed via both the v1 and v2 schemes for Android 7.0 (API level 24) and above and via all the three schemes for Android 9 (API level 28) and above, and that the code-signing certificate in the APK belongs to the developer.</p>
+<p>APK signatures can be verified with the <code>apksigner</code> tool. It is located at <code>[SDK-Path]/build-tools/[version]</code>.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>apksigner<span class="w"> </span>verify<span class="w"> </span>--verbose<span class="w"> </span>Desktop/example.apk
+Verifies
+Verified<span class="w"> </span>using<span class="w"> </span>v1<span class="w"> </span>scheme<span class="w"> </span><span class="o">(</span>JAR<span class="w"> </span>signing<span class="o">)</span>:<span class="w"> </span><span class="nb">true</span>
+Verified<span class="w"> </span>using<span class="w"> </span>v2<span class="w"> </span>scheme<span class="w"> </span><span class="o">(</span>APK<span class="w"> </span>Signature<span class="w"> </span>Scheme<span class="w"> </span>v2<span class="o">)</span>:<span class="w"> </span><span class="nb">true</span>
+Verified<span class="w"> </span>using<span class="w"> </span>v3<span class="w"> </span>scheme<span class="w"> </span><span class="o">(</span>APK<span class="w"> </span>Signature<span class="w"> </span>Scheme<span class="w"> </span>v3<span class="o">)</span>:<span class="w"> </span><span class="nb">true</span>
+Number<span class="w"> </span>of<span class="w"> </span>signers:<span class="w"> </span><span class="m">1</span>
+</code></pre></div>
+<p>The contents of the signing certificate can be examined with <code>jarsigner</code>. Note that the Common Name (CN) attribute is set to "Android Debug" in the debug certificate.</p>
+<p>The output for an APK signed with a debug certificate is shown below:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>jarsigner<span class="w"> </span>-verify<span class="w"> </span>-verbose<span class="w"> </span>-certs<span class="w"> </span>example.apk
+
+sm<span class="w">     </span><span class="m">11116</span><span class="w"> </span>Fri<span class="w"> </span>Nov<span class="w"> </span><span class="m">11</span><span class="w"> </span><span class="m">12</span>:07:48<span class="w"> </span>ICT<span class="w"> </span><span class="m">2016</span><span class="w"> </span>AndroidManifest.xml
+
+<span class="w">      </span>X.509,<span class="w"> </span><span class="nv">CN</span><span class="o">=</span>Android<span class="w"> </span>Debug,<span class="w"> </span><span class="nv">O</span><span class="o">=</span>Android,<span class="w"> </span><span class="nv">C</span><span class="o">=</span>US
+<span class="w">      </span><span class="o">[</span>certificate<span class="w"> </span>is<span class="w"> </span>valid<span class="w"> </span>from<span class="w"> </span><span class="m">3</span>/24/16<span class="w"> </span><span class="m">9</span>:18<span class="w"> </span>AM<span class="w"> </span>to<span class="w"> </span><span class="m">8</span>/10/43<span class="w"> </span><span class="m">9</span>:18<span class="w"> </span>AM<span class="o">]</span>
+<span class="w">      </span><span class="o">[</span>CertPath<span class="w"> </span>not<span class="w"> </span>validated:<span class="w"> </span>Path<span class="w"> </span>doesn<span class="se">\&#39;</span>t<span class="w"> </span>chain<span class="w"> </span>with<span class="w"> </span>any<span class="w"> </span>of<span class="w"> </span>the<span class="w"> </span>trust<span class="w"> </span>anchors<span class="o">]</span>
+<span class="o">(</span>...<span class="o">)</span>
+</code></pre></div>
+<p>Ignore the "CertPath not validated" error. This error occurs with Java SDK 7 and above. Instead of <code>jarsigner</code>, you can rely on the <code>apksigner</code> to verify the certificate chain.</p>
+<p>The signing configuration can be managed through Android Studio or the <code>signingConfig</code> block in <code>build.gradle</code>. To activate both the v1 and v2 schemes, the following values must be set:</p>
+<div class="highlight"><pre><span></span><code>v1SigningEnabled true
+v2SigningEnabled true
+</code></pre></div>
+<p>Several best practices for <a href="https://developer.android.com/tools/publishing/preparing.html#publishing-configure" title="Best Practices for configuring an Android App for Release">configuring the app for release</a> are available in the official Android developer documentation.</p>
+<p>Last but not least: make sure that the application is never deployed with your internal testing certificates.</p>
+<h3 id="dynamic-analysis">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis" title="Permanent link">&para;</a></h3>
+<p>Static analysis should be used to verify the APK signature.</p>
+<h2 id="testing-whether-the-app-is-debuggable-mstg-code-2">Testing whether the App is Debuggable (MSTG-CODE-2)<a class="headerlink" href="#testing-whether-the-app-is-debuggable-mstg-code-2" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_1">Static Analysis<a class="headerlink" href="#static-analysis_1" title="Permanent link">&para;</a></h3>
+<p>Check <code>AndroidManifest.xml</code> to determine whether the <code>android:debuggable</code> attribute has been set and to find the attribute's value:</p>
+<div class="highlight"><pre><span></span><code><span class="w">    </span>...
+<span class="w">    </span><span class="nt">&lt;application</span><span class="w"> </span><span class="na">android:allowBackup=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">android:debuggable=</span><span class="s">&quot;true&quot;</span><span class="w"> </span><span class="na">android:icon=</span><span class="s">&quot;@drawable/ic_launcher&quot;</span><span class="w"> </span><span class="na">android:label=</span><span class="s">&quot;@string/app_name&quot;</span><span class="w"> </span><span class="na">android:theme=</span><span class="s">&quot;@style/AppTheme&quot;</span><span class="nt">&gt;</span>
+<span class="w">    </span>...
+</code></pre></div>
+<p>You can use <code>aapt</code> tool from the Android SDK with the following command line to quickly check if the <code>android:debuggable="true"</code> directive is present:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># If the command print 1 then the directive is present</span>
+<span class="c1"># The regex search for this line: android:debuggable(0x0101000f)=(type 0x12)0xffffffff</span>
+$<span class="w"> </span>aapt<span class="w"> </span>d<span class="w"> </span>xmltree<span class="w"> </span>sieve.apk<span class="w"> </span>AndroidManifest.xml<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-Ec<span class="w"> </span><span class="s2">&quot;android:debuggable\(0x[0-9a-f]+\)=\(type\s0x[0-9a-f]+\)0xffffffff&quot;</span>
+<span class="m">1</span>
+</code></pre></div>
+<p>For a release build, this attribute should always be set to <code>"false"</code> (the default value).</p>
+<h3 id="dynamic-analysis_1">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_1" title="Permanent link">&para;</a></h3>
+<p><code>adb</code> can be used to determine whether an application is debuggable.</p>
+<p>Use the following command:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># If the command print a number superior to zero then the application have the debug flag</span>
+<span class="c1"># The regex search for these lines:</span>
+<span class="c1"># flags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]</span>
+<span class="c1"># pkgFlags=[ DEBUGGABLE HAS_CODE ALLOW_CLEAR_USER_DATA ALLOW_BACKUP ]</span>
+$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>dumpsys<span class="w"> </span>package<span class="w"> </span>com.mwr.example.sieve<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;DEBUGGABLE&quot;</span>
+<span class="m">2</span>
+$<span class="w"> </span>adb<span class="w"> </span>shell<span class="w"> </span>dumpsys<span class="w"> </span>package<span class="w"> </span>com.nondebuggableapp<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;DEBUGGABLE&quot;</span>
+<span class="m">0</span>
+</code></pre></div>
+<p>If an application is debuggable, executing application commands is trivial. In the <code>adb</code> shell, execute <code>run-as</code> by appending the package name and application command to the binary name:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>run-as<span class="w"> </span>com.vulnerable.app<span class="w"> </span>id
+<span class="nv">uid</span><span class="o">=</span><span class="m">10084</span><span class="o">(</span>u0_a84<span class="o">)</span><span class="w"> </span><span class="nv">gid</span><span class="o">=</span><span class="m">10084</span><span class="o">(</span>u0_a84<span class="o">)</span><span class="w"> </span><span class="nv">groups</span><span class="o">=</span><span class="m">10083</span><span class="o">(</span>u0_a83<span class="o">)</span>,1004<span class="o">(</span>input<span class="o">)</span>,1007<span class="o">(</span>log<span class="o">)</span>,1011<span class="o">(</span>adb<span class="o">)</span>,1015<span class="o">(</span>sdcard_rw<span class="o">)</span>,1028<span class="o">(</span>sdcard_r<span class="o">)</span>,3001<span class="o">(</span>net_bt_admin<span class="o">)</span>,3002<span class="o">(</span>net_bt<span class="o">)</span>,3003<span class="o">(</span>inet<span class="o">)</span>,3006<span class="o">(</span>net_bw_stats<span class="o">)</span><span class="w"> </span><span class="nv">context</span><span class="o">=</span>u:r:untrusted_app:s0:c512,c768
+</code></pre></div>
+<p><a href="https://developer.android.com/tools/debugging/debugging-studio.html" title="Debugging with Android Studio">Android Studio</a> can also be used to debug an application and verify debugging activation for an app.</p>
+<p>Another method for determining whether an application is debuggable is attaching <code>jdb</code> to the running process. If this is successful, debugging will be activated.</p>
+<p>The following procedure can be used to start a debug session with <code>jdb</code>:</p>
+<ol>
+<li>
+<p>Using <code>adb</code> and <code>jdwp</code>, identify the PID of the active application that you want to debug:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>adb<span class="w"> </span>jdwp
+<span class="m">2355</span>
+<span class="m">16346</span><span class="w">  </span>&lt;<span class="o">==</span><span class="w"> </span>last<span class="w"> </span>launched,<span class="w"> </span>corresponds<span class="w"> </span>to<span class="w"> </span>our<span class="w"> </span>application
+</code></pre></div>
+</li>
+<li>
+<p>Create a communication channel by using <code>adb</code> between the application process (with the PID) and your host computer by using a specific local port:</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># adb forward tcp:[LOCAL_PORT] jdwp:[APPLICATION_PID]</span>
+$<span class="w"> </span>adb<span class="w"> </span>forward<span class="w"> </span>tcp:55555<span class="w"> </span>jdwp:16346
+</code></pre></div>
+</li>
+<li>
+<p>Using <code>jdb</code>, attach the debugger to the local communication channel port and start a debug session:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>jdb<span class="w"> </span>-connect<span class="w"> </span>com.sun.jdi.SocketAttach:hostname<span class="o">=</span>localhost,port<span class="o">=</span><span class="m">55555</span>
+Set<span class="w"> </span>uncaught<span class="w"> </span>java.lang.Throwable
+Set<span class="w"> </span>deferred<span class="w"> </span>uncaught<span class="w"> </span>java.lang.Throwable
+Initializing<span class="w"> </span>jdb<span class="w"> </span>...
+&gt;<span class="w"> </span><span class="nb">help</span>
+</code></pre></div>
+</li>
+</ol>
+<p>A few notes about debugging:</p>
+<ul>
+<li>The tool <a href="https://github.com/skylot/jadx" title="JADX"><code>JADX</code></a> can be used to identify interesting locations for breakpoint insertion.</li>
+<li>Usage of basic commands for jdb can be found at <a href="https://www.tutorialspoint.com/jdb/jdb_basic_commands.htm" title="jdb basic commands">Tutorialspoint</a>.</li>
+<li>If you get an error telling that "the connection to the debugger has been closed" while <code>jdb</code> is being bound to the local communication channel port, kill all adb sessions and start a single new session.</li>
+</ul>
+<h2 id="testing-for-debugging-symbols-mstg-code-3">Testing for Debugging Symbols (MSTG-CODE-3)<a class="headerlink" href="#testing-for-debugging-symbols-mstg-code-3" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_2">Static Analysis<a class="headerlink" href="#static-analysis_2" title="Permanent link">&para;</a></h3>
+<p>Symbols are usually stripped during the build process, so you need the compiled bytecode and libraries to make sure that unnecessary metadata has been discarded.</p>
+<p>First, find the <code>nm</code> binary in your Android NDK and export it (or create an alias).</p>
+<div class="highlight"><pre><span></span><code><span class="nb">export</span><span class="w"> </span><span class="nv">NM</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">$ANDROID_NDK_DIR</span>/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-nm
+</code></pre></div>
+<p>To display debug symbols:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$NM</span><span class="w"> </span>-a<span class="w"> </span>libfoo.so
+/tmp/toolchains/arm-linux-androideabi-4.9/prebuilt/darwin-x86_64/bin/arm-linux-androideabi-nm:<span class="w"> </span>libfoo.so:<span class="w"> </span>no<span class="w"> </span>symbols
+</code></pre></div>
+<p>To display dynamic symbols:</p>
+<div class="highlight"><pre><span></span><code><span class="nv">$NM</span><span class="w"> </span>-D<span class="w"> </span>libfoo.so
+</code></pre></div>
+<p>Alternatively, open the file in your favorite disassembler and check the symbol tables manually.</p>
+<p>Dynamic symbols can be stripped via the <code>visibility</code> compiler flag. Adding this flag causes gcc to discard the function names while preserving the names of functions declared as <code>JNIEXPORT</code>.</p>
+<p>Make sure that the following has been added to build.gradle:</p>
+<div class="highlight"><pre><span></span><code>externalNativeBuild {
+    cmake {
+        cppFlags &quot;-fvisibility=hidden&quot;
+    }
+}
+</code></pre></div>
+<h3 id="dynamic-analysis_2">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_2" title="Permanent link">&para;</a></h3>
+<p>Static analysis should be used to verify debugging symbols.</p>
+<h2 id="testing-for-debugging-code-and-verbose-error-logging-mstg-code-4">Testing for Debugging Code and Verbose Error Logging (MSTG-CODE-4)<a class="headerlink" href="#testing-for-debugging-code-and-verbose-error-logging-mstg-code-4" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_3">Static Analysis<a class="headerlink" href="#static-analysis_3" title="Permanent link">&para;</a></h3>
+<p>To determine whether <code>StrictMode</code> is enabled, you can look for the <code>StrictMode.setThreadPolicy</code> or <code>StrictMode.setVmPolicy</code> methods. Most likely, they will be in the <code>onCreate</code> method.</p>
+<p>The <a href="https://javabeat.net/strictmode-android-1/" title="What is StrictMode in Android?">detection methods for the thread policy</a> are</p>
+<div class="highlight"><pre><span></span><code><span class="n">detectDiskWrites</span><span class="p">()</span>
+<span class="n">detectDiskReads</span><span class="p">()</span>
+<span class="n">detectNetwork</span><span class="p">()</span>
+</code></pre></div>
+<p>The <a href="https://javabeat.net/strictmode-android-1/" title="What is StrictMode in Android?">penalties for thread policy violation</a> are</p>
+<div class="highlight"><pre><span></span><code><span class="n">penaltyLog</span><span class="p">()</span><span class="w"> </span><span class="c1">// Logs a message to LogCat</span>
+<span class="n">penaltyDeath</span><span class="p">()</span><span class="w"> </span><span class="c1">// Crashes application, runs at the end of all enabled penalties</span>
+<span class="n">penaltyDialog</span><span class="p">()</span><span class="w"> </span><span class="c1">// Shows a dialog</span>
+</code></pre></div>
+<p>Have a look at the <a href="https://code.tutsplus.com/tutorials/android-best-practices-strictmode--mobile-7581" title="Android Best Practices: StrictMode">best practices</a> for using StrictMode.</p>
+<h3 id="dynamic-analysis_3">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_3" title="Permanent link">&para;</a></h3>
+<p>There are several ways of detecting <code>StrictMode</code>; the best choice depends on how the policies' roles are implemented. They include</p>
+<ul>
+<li>Logcat,</li>
+<li>a warning dialog,</li>
+<li>application crash.</li>
+</ul>
+<h2 id="checking-for-weaknesses-in-third-party-libraries-mstg-code-5">Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)<a class="headerlink" href="#checking-for-weaknesses-in-third-party-libraries-mstg-code-5" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_4">Static Analysis<a class="headerlink" href="#static-analysis_4" title="Permanent link">&para;</a></h3>
+<p>Detecting vulnerabilities in third party dependencies can be done by means of the OWASP Dependency checker. This is best done by using a gradle plugin, such as <a href="https://github.com/jeremylong/dependency-check-gradle" title="dependency-check-gradle"><code>dependency-check-gradle</code></a>.
+In order to use the plugin, the following steps need to be applied:
+Install the plugin from the Maven central repository by adding the following script to your build.gradle:</p>
+<div class="highlight"><pre><span></span><code>buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath &#39;org.owasp:dependency-check-gradle:3.2.0&#39;
+    }
+}
+
+apply plugin: &#39;org.owasp.dependencycheck&#39;
+</code></pre></div>
+<p>Once gradle has invoked the plugin, you can create a report by running:</p>
+<div class="highlight"><pre><span></span><code>gradle<span class="w"> </span>assemble
+gradle<span class="w"> </span>dependencyCheckAnalyze<span class="w"> </span>--info
+</code></pre></div>
+<p>The report will be in <code>build/reports</code> unless otherwise configured. Use the report in order to analyze the vulnerabilities found. See remediation on what to do given the vulnerabilities found with the libraries.</p>
+<p>Please be advised that the plugin requires to download a vulnerability feed. Consult the documentation in case issues arise with the plugin.</p>
+<p>Alternatively there are commercial tools which might have a better coverage of the dependencies found for the libraries being used, such as <a href="https://www.sonatype.com/nexus/iqserver" title="Nexus IQ">Sonatype Nexus IQ</a>, <a href="https://www.sourceclear.com/" title="Sourceclear">Sourceclear</a>, <a href="https://snyk.io/" title="Snyk">Snyk</a> or <a href="https://www.blackducksoftware.com/" title="Blackduck">Blackduck</a>. The actual result of using either the OWASP Dependency Checker or another tool varies on the type of (NDK related or SDK related) libraries.</p>
+<p>Lastly, please note that for hybrid applications, one will have to check the JavaScript dependencies with RetireJS. Similarly for Xamarin, one will have to check the C# dependencies.</p>
+<p>When a library is found to contain vulnerabilities, then the following reasoning applies:</p>
+<ul>
+<li>Is the library packaged with the application? Then check whether the library has a version in which the vulnerability is patched. If not, check whether the vulnerability actually affects the application. If that is the case or might be the case in the future, then look for an alternative which provides similar functionality, but without the vulnerabilities.</li>
+<li>Is the library not packaged with the application? See if there is a patched version in which the vulnerability is fixed. If this is not the case, check if the implications of the vulnerability for the build-process. Could the vulnerability impede a build or weaken the security of the build-pipeline? Then try looking for an alternative in which the vulnerability is fixed.</li>
+</ul>
+<p>When the sources are not available, one can decompile the app and check the JAR files. When Dexguard or <a href="../../Tools/0x08a-Testing-Tools/#proguard">ProGuard</a> are applied properly, then version information about the library is often obfuscated and therefore gone. Otherwise you can still find the information very often in the comments of the Java files of given libraries. Tools such as MobSF can help in analyzing the possible libraries packed with the application. If you can retrieve the version of the library, either via comments, or via specific methods used in certain versions, you can look them up for CVEs by hand.</p>
+<p>If the application is a high-risk application, you will end up vetting the library manually. In that case, there are specific requirements for native code, which you can find in the chapter "<a href="../../General/0x04h-Testing-Code-Quality/">Testing Code Quality</a>". Next to that, it is good to vet whether all best practices for software engineering are applied.</p>
+<h3 id="dynamic-analysis_4">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_4" title="Permanent link">&para;</a></h3>
+<p>The dynamic analysis of this section comprises validating whether the copyrights of the licenses have been adhered to. This often means that the application should have an <code>about</code> or <code>EULA</code> section in which the copy-right statements are noted as required by the license of the third party library.</p>
+<h2 id="testing-exception-handling-mstg-code-6">Testing Exception Handling (MSTG-CODE-6)<a class="headerlink" href="#testing-exception-handling-mstg-code-6" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_5">Static Analysis<a class="headerlink" href="#static-analysis_5" title="Permanent link">&para;</a></h3>
+<p>Review the source code to understand the application and identify how it handles different types of errors (IPC communications, remote services invocation, etc.). Here are some examples of things to check at this stage:</p>
+<ul>
+<li>Make sure that the application uses a well-designed and unified scheme to <a href="https://wiki.sei.cmu.edu/confluence/pages/viewpage.action?pageId=88487665" title="Exceptional Behavior (ERR)">handle exceptions</a>.</li>
+<li>Plan for standard <code>RuntimeException</code>s (e.g.<code>NullPointerException</code>, <code>IndexOutOfBoundsException</code>, <code>ActivityNotFoundException</code>, <code>CancellationException</code>, <code>SQLException</code>) by creating proper null checks, bound checks, and the like. An <a href="https://developer.android.com/reference/java/lang/RuntimeException.html" title="Runtime Exception Class">overview of the available subclasses of <code>RuntimeException</code></a> can be found in the Android developer documentation. A child of <code>RuntimeException</code> should be thrown intentionally, and the intent should be handled by the calling method.</li>
+<li>Make sure that for every non-runtime <code>Throwable</code> there's a proper catch handler, which ends up handling the actual exception properly.</li>
+<li>When an exception is thrown, make sure that the application has centralized handlers for exceptions that cause similar behavior. This can be a static class. For exceptions specific to the method, provide specific catch blocks.</li>
+<li>Make sure that the application doesn't expose sensitive information while handling exceptions in its UI or log-statements. Ensure that exceptions are still verbose enough to explain the issue to the user.</li>
+<li>Make sure that all confidential information handled by high-risk applications is always wiped during execution of the <code>finally</code> blocks.</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kt">byte</span><span class="o">[]</span><span class="w"> </span><span class="n">secret</span><span class="p">;</span>
+<span class="k">try</span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//use secret</span>
+<span class="p">}</span><span class="w"> </span><span class="k">catch</span><span class="w"> </span><span class="p">(</span><span class="n">SPECIFICEXCEPTIONCLASS</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">SPECIFICEXCEPTIONCLASS2</span><span class="w"> </span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">// handle any issues</span>
+<span class="p">}</span><span class="w"> </span><span class="k">finally</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="c1">//clean the secret.</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Adding a general exception handler for uncaught exceptions is a best practice for resetting the application's state when a crash is imminent:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span><span class="w"> </span><span class="kd">class</span> <span class="nc">MemoryCleanerOnCrash</span><span class="w"> </span><span class="kd">implements</span><span class="w"> </span><span class="n">Thread</span><span class="p">.</span><span class="na">UncaughtExceptionHandler</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">MemoryCleanerOnCrash</span><span class="w"> </span><span class="n">S_INSTANCE</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">MemoryCleanerOnCrash</span><span class="p">();</span>
+<span class="w">    </span><span class="kd">private</span><span class="w"> </span><span class="kd">final</span><span class="w"> </span><span class="n">List</span><span class="o">&lt;</span><span class="n">Thread</span><span class="p">.</span><span class="na">UncaughtExceptionHandler</span><span class="o">&gt;</span><span class="w"> </span><span class="n">mHandlers</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">ArrayList</span><span class="o">&lt;&gt;</span><span class="p">();</span>
+
+<span class="w">    </span><span class="c1">//initialize the handler and set it as the default exception handler</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kd">static</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">S_INSTANCE</span><span class="p">.</span><span class="na">mHandlers</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">getDefaultUncaughtExceptionHandler</span><span class="p">());</span>
+<span class="w">        </span><span class="n">Thread</span><span class="p">.</span><span class="na">setDefaultUncaughtExceptionHandler</span><span class="p">(</span><span class="n">S_INSTANCE</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">     </span><span class="c1">//make sure that you can still add exception handlers on top of it (required for ACRA for instance)</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">subscribeCrashHandler</span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">UncaughtExceptionHandler</span><span class="w"> </span><span class="n">handler</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="n">mHandlers</span><span class="p">.</span><span class="na">add</span><span class="p">(</span><span class="n">handler</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+
+<span class="w">    </span><span class="nd">@Override</span>
+<span class="w">    </span><span class="kd">public</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">uncaughtException</span><span class="p">(</span><span class="n">Thread</span><span class="w"> </span><span class="n">thread</span><span class="p">,</span><span class="w"> </span><span class="n">Throwable</span><span class="w"> </span><span class="n">ex</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+
+<span class="w">            </span><span class="c1">//handle the cleanup here</span>
+<span class="w">            </span><span class="c1">//....</span>
+<span class="w">            </span><span class="c1">//and then show a message to the user if possible given the context</span>
+
+<span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">Thread</span><span class="p">.</span><span class="na">UncaughtExceptionHandler</span><span class="w"> </span><span class="n">handler</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="n">mHandlers</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">            </span><span class="n">handler</span><span class="p">.</span><span class="na">uncaughtException</span><span class="p">(</span><span class="n">thread</span><span class="p">,</span><span class="w"> </span><span class="n">ex</span><span class="p">);</span>
+<span class="w">        </span><span class="p">}</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Now the handler's initializer must be called in your custom <code>Application</code> class (e.g., the class that extends <code>Application</code>):</p>
+<div class="highlight"><pre><span></span><code><span class="nd">@Override</span>
+<span class="kd">protected</span><span class="w"> </span><span class="kt">void</span><span class="w"> </span><span class="nf">attachBaseContext</span><span class="p">(</span><span class="n">Context</span><span class="w"> </span><span class="n">base</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="kd">super</span><span class="p">.</span><span class="na">attachBaseContext</span><span class="p">(</span><span class="n">base</span><span class="p">);</span>
+<span class="w">    </span><span class="n">MemoryCleanerOnCrash</span><span class="p">.</span><span class="na">init</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="dynamic-analysis_5">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_5" title="Permanent link">&para;</a></h3>
+<p>There are several ways to do dynamic analysis:</p>
+<ul>
+<li>Use Xposed to hook into methods and either call them with unexpected values or overwrite existing variables with unexpected values (e.g., null values).</li>
+<li>Type unexpected values into the Android application's UI fields.</li>
+<li>Interact with the application using its intents, its public providers, and unexpected values.</li>
+<li>Tamper with the network communication and/or the files stored by the application.</li>
+</ul>
+<p>The application should never crash; it should</p>
+<ul>
+<li>recover from the error or transition into a state in which it can inform the user of its inability to continue,</li>
+<li>if necessary, tell the user to take appropriate action (The message should not leak sensitive information.),</li>
+<li>not provide any information in logging mechanisms used by the application.</li>
+</ul>
+<h2 id="memory-corruption-bugs-mstg-code-8">Memory Corruption Bugs (MSTG-CODE-8)<a class="headerlink" href="#memory-corruption-bugs-mstg-code-8" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_6">Static Analysis<a class="headerlink" href="#static-analysis_6" title="Permanent link">&para;</a></h3>
+<p>There are various items to look for:</p>
+<ul>
+<li>Are there native code parts? If so: check for the given issues in the general memory corruption section. Native code can easily be spotted given JNI-wrappers, .CPP/.H/.C files, NDK or other native frameworks.</li>
+<li>Is there Java code or Kotlin code? Look for Serialization/deserialization issues, such as described in <a href="https://securitylab.github.com/research/android-deserialization-vulnerabilities" title="android deserialization">A brief history of Android deserialization vulnerabilities</a>.</li>
+</ul>
+<p>Note that there can be Memory leaks in Java/Kotlin code as well. Look for various items, such as: BroadcastReceivers which are not unregistered, static references to <code>Activity</code> or <code>View</code> classes, Singleton classes that have references to <code>Context</code>, Inner Class references, Anonymous Class references, AsyncTask references, Handler references, Threading done wrong, TimerTask references. For more details, please check:</p>
+<ul>
+<li><a href="https://android.jlelse.eu/9-ways-to-avoid-memory-leaks-in-android-b6d81648e35e" title="9 ways to avoid memory leaks in Android">9 ways to avoid memory leaks in Android</a></li>
+<li><a href="https://android.jlelse.eu/memory-leak-patterns-in-android-4741a7fcb570" title="Memory Leak Patterns in Android">Memory Leak Patterns in Android</a>.</li>
+</ul>
+<h3 id="dynamic-analysis_6">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_6" title="Permanent link">&para;</a></h3>
+<p>There are various steps to take:</p>
+<ul>
+<li>In case of native code: use Valgrind or Mempatrol to analyze the memory usage and memory calls made by the code.</li>
+<li>In case of Java/Kotlin code, try to recompile the app and use it with <a href="https://github.com/square/leakcanary" title="Leakcanary">Squares leak canary</a>.</li>
+<li>Check with the <a href="https://developer.android.com/studio/profile/memory-profiler" title="Memory profiler">Memory Profiler from Android Studio</a> for leakage.</li>
+<li>Check with the <a href="https://github.com/modzero/modjoda" title="Android Java Deserialization Vulnerability Tester">Android Java Deserialization Vulnerability Tester</a>, for serialization vulnerabilities.</li>
+</ul>
+<h2 id="make-sure-that-free-security-features-are-activated-mstg-code-9">Make Sure That Free Security Features Are Activated (MSTG-CODE-9)<a class="headerlink" href="#make-sure-that-free-security-features-are-activated-mstg-code-9" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_7">Static Analysis<a class="headerlink" href="#static-analysis_7" title="Permanent link">&para;</a></h3>
+<p>Test the app native libraries to determine if they have the PIE and stack smashing protections enabled.</p>
+<p>You can use <a href="../../Tools/0x08a-Testing-Tools/#radare2">radare2's rabin2</a> to get the binary information. We'll use the <a href="../../Tools/0x08b-Reference-Apps/#android-uncrackable-l4">UnCrackable App for Android Level 4</a> v1.0 APK as an example.</p>
+<p>All native libraries must have <code>canary</code> and <code>pic</code> both set to <code>true</code>.</p>
+<p>That's the case for <code>libnative-lib.so</code>:</p>
+<div class="highlight"><pre><span></span><code>rabin2<span class="w"> </span>-I<span class="w"> </span>lib/x86_64/libnative-lib.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;canary|pic&quot;</span>
+canary<span class="w">   </span><span class="nb">true</span>
+pic<span class="w">      </span><span class="nb">true</span>
+</code></pre></div>
+<p>But not for <code>libtool-checker.so</code>:</p>
+<div class="highlight"><pre><span></span><code>rabin2<span class="w"> </span>-I<span class="w"> </span>lib/x86_64/libtool-checker.so<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;canary|pic&quot;</span>
+canary<span class="w">   </span><span class="nb">false</span>
+pic<span class="w">      </span><span class="nb">true</span>
+</code></pre></div>
+<p>In this example, <code>libtool-checker.so</code> must be recompiled with stack smashing protection support.</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-CODE-1: "The app is signed and provisioned with a valid certificate, of which the private key is properly protected."</li>
+<li>MSTG-CODE-2: "The app has been built in release mode, with settings appropriate for a release build (e.g. non-debuggable)."</li>
+<li>MSTG-CODE-3: "Debugging symbols have been removed from native binaries."</li>
+<li>MSTG-CODE-4: "Debugging code and developer assistance code (e.g. test code, backdoors, hidden settings) have been removed. The app does not log verbose errors or debugging messages."</li>
+<li>MSTG-CODE-5: "All third party components used by the mobile app, such as libraries and frameworks, are identified, and checked for known vulnerabilities."</li>
+<li>MSTG-CODE-6: "The app catches and handles possible exceptions."</li>
+<li>MSTG-CODE-7: "Error handling logic in security controls denies access by default."</li>
+<li>MSTG-CODE-8: "In unmanaged code, memory is allocated, freed and used securely."</li>
+<li>MSTG-CODE-9: "Free security features offered by the toolchain, such as byte-code minification, stack protection, PIE support and automatic reference counting, are activated."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

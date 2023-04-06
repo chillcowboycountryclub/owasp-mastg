@@ -1,0 +1,2925 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../crackmes/iOS/">
+      
+      
+        <link rel="next" href="../talks/">
+      
+      <link rel="icon" href="../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>🗞 News - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#news" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              &#128478; News
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href=".." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MASTG/" class="md-tabs__link">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+    
+  
+
+
+  <li class="md-tabs__item">
+    <a href="./" class="md-tabs__link md-tabs__link--active">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Android/0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06d-Testing-Data-Storage/" class="md-nav__link">
+        iOS Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/iOS/0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASTG/References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          &#128478; News
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        &#128478; News
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#april-1st-2023-masvs-v200-release" class="md-nav__link">
+    April 1st, 2023: MASVS v2.0.0 Release
+  </a>
+  
+    <nav class="md-nav" aria-label="April 1st, 2023: MASVS v2.0.0 Release">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#why-are-there-no-levels-in-the-new-masvs-controls" class="md-nav__link">
+    Why are there no levels in the new MASVS controls?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#transition-phase" class="md-nav__link">
+    Transition Phase
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#special-thanks" class="md-nav__link">
+    Special Thanks
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#august-23rd-2022-project-rebranding-to-owasp-mas" class="md-nav__link">
+    August 23rd, 2022: Project Rebranding to OWASP MAS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#february-7th-2022-nist-800-218-recommendations-for-mitigating-the-risk-of-software-vulnerabilities" class="md-nav__link">
+    February 7th, 2022: NIST 800-218 - Recommendations for Mitigating the Risk of Software Vulnerabilities
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#november-17th-2021-from-slack-to-github-discussions" class="md-nav__link">
+    November 17th, 2021: From Slack to GitHub Discussions
+  </a>
+  
+    <nav class="md-nav" aria-label="November 17th, 2021: From Slack to GitHub Discussions">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#removing-obstacles" class="md-nav__link">
+    Removing obstacles
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#separation" class="md-nav__link">
+    Separation
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#insights" class="md-nav__link">
+    Insights
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#roadmap" class="md-nav__link">
+    Roadmap
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#be-sure-to-subscribe" class="md-nav__link">
+    Be sure to subscribe
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#may-23rd-2020-new-build-system-and-release-upcoming" class="md-nav__link">
+    May 23rd 2020: New build system and release upcoming!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#april-10th-2020-stayhome-and-share-your-knowledge" class="md-nav__link">
+    April 10th 2020: #StayHome and share your knowledge!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#march-17th-2020-international-release-of-masvs-12" class="md-nav__link">
+    March 17th, 2020: International release of MASVS 1.2
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-4th-2019-pre-release-of-masvs-12" class="md-nav__link">
+    October 4th, 2019: Pre-release of MASVS 1.2!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-2nd-2019-mstg-playground-release" class="md-nav__link">
+    October 2nd, 2019: MSTG Playground Release!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-2nd-2019-mstg-project-joins-hacktoberfest" class="md-nav__link">
+    October 2nd, 2019: MSTG Project joins Hacktoberfest!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-17th-2019-xamarin-experiment" class="md-nav__link">
+    September 17th, 2019: Xamarin experiment!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-6th-2019-flutter-experiment" class="md-nav__link">
+    September 6th, 2019: Flutter experiment!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-6th-2019-react-native-experiment" class="md-nav__link">
+    September 6th, 2019: React native experiment!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#august-29th-2019-carlos-holguera-joins-the-leader-team" class="md-nav__link">
+    August 29th, 2019: Carlos Holguera joins the leader team
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#august-4th-2019-oss-release" class="md-nav__link">
+    August 4th, 2019: OSS Release!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#august-2nd-2019-project-promoted-to-flagship-status" class="md-nav__link">
+    August 2nd, 2019: Project promoted to Flagship status!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#june-5th-2019-new-release-of-the-masvs" class="md-nav__link">
+    June 5th, 2019: New release of the MASVS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#may-21nd-2019-new-release-of-the-mstg" class="md-nav__link">
+    May 21nd, 2019: New release of the MSTG
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#may-7th-2019-new-release-of-the-mstg" class="md-nav__link">
+    May 7th, 2019: New release of the MSTG
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#april-15th-2019-book-version-project-promotion-preparation-for-the-summit" class="md-nav__link">
+    April 15th, 2019: Book version, project promotion &amp; preparation for the summit
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-15th-2019-release-of-improved-checklist" class="md-nav__link">
+    January 15th, 2019: Release of improved checklist
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-3rd-2019-multilanguage-release-112-of-the-masvs" class="md-nav__link">
+    January 3rd, 2019: Multilanguage Release 1.1.2 of the MASVS
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#november-39th-2018-release-110-of-the-mstg" class="md-nav__link">
+    November 39th, 2018: Release 1.1.0 of the MSTG
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-28th-2018-call-for-company-references" class="md-nav__link">
+    October 28th, 2018: Call for Company references
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-28th-2018-the-masvs-is-getting-more-translations" class="md-nav__link">
+    October 28th, 2018: The MASVS is getting more translations
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-18th-2018-the-mstg-is-now-officially-an-owasp-lab-project" class="md-nav__link">
+    October 18th, 2018: The MSTG is now officially an OWASP Lab Project!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#october-13th-2018-mstg-102-released-twitter-account" class="md-nav__link">
+    October 13th, 2018: MSTG 1.0.2 released &amp; Twitter account!
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-21th-2018-masvs-automation-started" class="md-nav__link">
+    September 21th, 2018: MASVS automation started
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-16th-2018-mstg-101-released" class="md-nav__link">
+    September 16th, 2018: MSTG 1.0.1 released
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-1st-2018-mobile-security-testing-guide-mentioned-in-nist-sp-163r1" class="md-nav__link">
+    September 1st, 2018: Mobile Security Testing Guide mentioned in NIST SP-163r1
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#augustus-2nd-2018-mobile-app-security-verification-standard-releases" class="md-nav__link">
+    Augustus 2nd, 2018: Mobile App Security Verification Standard Releases
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#june-16th-2018-jeroen-willemsen-joins-as-project-lead" class="md-nav__link">
+    June 16th, 2018: Jeroen Willemsen joins as project lead
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#june-15th-2018-mobile-security-testing-guide-release-10" class="md-nav__link">
+    June 15th, 2018: Mobile Security Testing Guide - Release 1.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-13th-2018-mobile-app-security-verification-standard-release-10" class="md-nav__link">
+    January 13th, 2018: Mobile App Security Verification Standard Release 1.0
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#september-14th-2017-mobile-app-security-verification-standard-update" class="md-nav__link">
+    September 14th, 2017: Mobile App Security Verification Standard Update
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#july-5th-2017-sponsorship-packages-announced" class="md-nav__link">
+    July 5th, 2017: Sponsorship Packages Announced
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#june-17th-2017-the-owasp-mobile-security-testing-guide-summit-preview" class="md-nav__link">
+    June 17th, 2017: The OWASP Mobile Security Testing Guide - Summit Preview
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#mobile-security-testing-workshop-on-the-owasp-summit-2017" class="md-nav__link">
+    Mobile Security Testing Workshop on the OWASP Summit 2017
+  </a>
+  
+    <nav class="md-nav" aria-label="Mobile Security Testing Workshop on the OWASP Summit 2017">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-to-join" class="md-nav__link">
+    How to Join
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#april-5th-2017-mobile-app-security-verification-standard-update" class="md-nav__link">
+    April 5th, 2017: Mobile App Security Verification Standard Update
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-31st-2017-mobile-app-security-verification-standard-v092-available-for-download" class="md-nav__link">
+    January 31st, 2017: Mobile App Security Verification Standard v0.9.2 Available For Download
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-28th-2017-mobile-crackmes-and-reversing-tutorials" class="md-nav__link">
+    January 28th, 2017: Mobile Crackmes and Reversing Tutorials
+  </a>
+  
+    <nav class="md-nav" aria-label="January 28th, 2017: Mobile Crackmes and Reversing Tutorials">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#we-need-more-authors-and-contributors" class="md-nav__link">
+    We Need More Authors and Contributors!
+  </a>
+  
+    <nav class="md-nav" aria-label="We Need More Authors and Contributors!">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-you-can-do" class="md-nav__link">
+    What You Can Do
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#how-to-join_1" class="md-nav__link">
+    How To Join
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#january-22nd-2017-mobile-testing-guide-toc-available" class="md-nav__link">
+    January 22nd, 2017: Mobile Testing Guide TOC Available
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#december-4th-2016-call-for-authors-the-ultimate-open-source-mobile-app-reverse-engineering-guide" class="md-nav__link">
+    December 4th, 2016: Call For Authors: The Ultimate Open-Source Mobile App Reverse Engineering Guide
+  </a>
+  
+    <nav class="md-nav" aria-label="December 4th, 2016: Call For Authors: The Ultimate Open-Source Mobile App Reverse Engineering Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-is-in-for-me" class="md-nav__link">
+    What is in for me?
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#where-do-i-sign-up" class="md-nav__link">
+    Where do I sign up?
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="news">&#128478; News<a class="headerlink" href="#news" title="Permanent link">&para;</a></h1>
+<div class="admonition tip">
+<p class="admonition-title">Tip: Follow us on Twitter!</p>
+<p>Follow <a href="https://twitter.com/OWASP_MAS"><span class="twemoji"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 4.21a4.22 4.22 0 0 1-1.93.07 4.28 4.28 0 0 0 4 2.98 8.521 8.521 0 0 1-5.33 1.84c-.34 0-.68-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23Z"/></svg></span> @OWASP_MAS</a> to get the latest updates instantly.</p>
+</div>
+<h2 id="april-1st-2023-masvs-v200-release">April 1st, 2023: MASVS v2.0.0 Release<a class="headerlink" href="#april-1st-2023-masvs-v200-release" title="Permanent link">&para;</a></h2>
+<!-- Release notes generated using configuration in .github/release.yml at v2.0.0 -->
+
+<p><img width="1570" alt="masvs_v2_release" src="https://user-images.githubusercontent.com/29175115/229280824-ada98710-5d01-49fb-8a39-9304a5cf9231.png"></p>
+<p>We are thrilled to announce the release of the new version of the <a href="https://github.com/OWASP/owasp-masvs/releases/tag/v2.0.0">OWASP Mobile Application Security Verification Standard (MASVS) v2.0.0</a>. With this update, we have set out to achieve several key objectives to ensure that MASVS remains a leading industry standard for mobile application security.</p>
+<ul>
+<li><strong>Keep Abstraction</strong>: we have worked hard to maintain the level of abstraction that has made MASVS so valuable in the past. We leave the details to the MASTG.</li>
+<li><strong>Simplify</strong>: we have simplified the MASVS by removing redundancies and overlaps in the security controls. This will make it easier for users to understand the standard and implement it effectively in their own projects.</li>
+<li><strong>Bring Clarity</strong>: we have worked hard to use standard terminology wherever possible, drawing on established sources such as NIST-SP 800-175B and NIST OSCAL, as well as well-known and used sources such as CWEs, Android Developer Docs, and Apple Docs.</li>
+<li><strong>Narrow Scope</strong>: we have narrowed the scope of MASVS to rely more heavily on other industry standards such as the OWASP ASVS, OWASP SAMM and NIST.SP.800-218 SSDF v1.1. This will ensure that MASVS remains relevant and up-to-date in a rapidly evolving landscape of mobile application security.</li>
+</ul>
+<p>We believe that these changes will make the OWASP MASVS v2.0.0 an even more valuable resource for developers and security practitioners alike, and we are excited to see how the industry embraces these updates.</p>
+<p>The MASVS v2.0.0 was presented at the OWASP AppSec Dublin 2023, you can watch the presentation <a href="https://www.youtube.com/watch?v=GxcabVcCEiQ"> ▶️ here</a>.</p>
+<h3 id="why-are-there-no-levels-in-the-new-masvs-controls">Why are there no levels in the new MASVS controls?<a class="headerlink" href="#why-are-there-no-levels-in-the-new-masvs-controls" title="Permanent link">&para;</a></h3>
+<p>The Levels you already know (L1, L2 and R) will be fully reviewed and backed up with a corrected and well-documented threat model.</p>
+<p><strong>Enter MAS Profiles:</strong> We are moving the levels to the MASTG tests so that we can evaluate different situations for the same control (e.g., in MASVS-STORAGE-1, it's OK to store data unencrypted in app internal storage for L1, but L2 requires data encryption). This can lead to different tests depending on the security profile of the application.</p>
+<h3 id="transition-phase">Transition Phase<a class="headerlink" href="#transition-phase" title="Permanent link">&para;</a></h3>
+<p>The MASTG, in its current version v1.5.0, currently still supports the MASVS v1.5.0. Bringing the MASTG to v2.0.0 to be fully compatible with MASVS v2.0.0 will take some time. That's why we need to introduce a "transition phase". We're currently mapping all new proposed test cases to the new profiles (at least L1 and L2), so even if the MASTG refactoring is not complete, you'll know what to test for, and you'll be able to find most of the tests already in the MASTG.</p>
+<ul>
+<li>Map the current MASTG tests to the new MASVS v2.0.0.</li>
+<li>Assign profiles to the proposed MASTG atomic tests (at least L1, L2 and R).</li>
+</ul>
+<h3 id="special-thanks">Special Thanks<a class="headerlink" href="#special-thanks" title="Permanent link">&para;</a></h3>
+<p>We thank everyone that has participated in the MASVS Refactoring. You can access all Discussion and documents for the refactoring <a href="https://github.com/OWASP/owasp-masvs/discussions/categories/big-masvs-refactoring">here</a>.</p>
+<p>You'll notice that we have one <strong>new author in the MASVS: Jeroen Beckers</strong></p>
+<blockquote>
+<p>Jeroen is a mobile security lead responsible for quality assurance on mobile security projects and for R&amp;D on all things mobile. Ever since his master's thesis on Android security, Jeroen has been interested in mobile devices and their (in)security. He loves sharing his knowledge with other people, as is demonstrated by his many talks &amp; trainings at colleges, universities, clients and conferences.</p>
+</blockquote>
+<p>💙 Special thanks to our <a href="https://mas.owasp.org/MASTG/Intro/0x02c-Acknowledgements/#mas-advocates">MAS Advocate</a>, <a href="https://www.nowsecure.com/">NowSecure</a>, who has once again demonstrated their commitment to the project by continuously supporting it with time/dedicated resources as well as feedback, data and content contributions.</p>
+<p><center>
+<img style="width: 60%; border-radius: 5px" src="https://user-images.githubusercontent.com/29175115/229281279-d739fa75-b3da-467d-91a0-82be88c688bf.png"/>
+</center></p>
+<h2 id="august-23rd-2022-project-rebranding-to-owasp-mas">August 23rd, 2022: Project Rebranding to OWASP MAS<a class="headerlink" href="#august-23rd-2022-project-rebranding-to-owasp-mas" title="Permanent link">&para;</a></h2>
+<p>Until now our project was called the "OWASP Mobile Security Testing Guide (MSTG)" project. Unfortunately, this was a source of confusion since we happen to have a resource with the same name, the OWASP MSTG. Not only that, that name doesn't reflect the full scope and reach of our project. Have you ever wondered why the MSTG is called MSTG and not MASTG? Both documents are about Mobile Application Security and we'd like to make that clear.</p>
+<p>Today we are rebranding our project to “OWASP Mobile App Security (MAS)”. The OWASP MAS project includes:</p>
+<ul>
+<li>OWASP MASVS -&gt; MAS Verification Standard</li>
+<li>OWASP MASTG -&gt; MAS Testing Guide</li>
+<li>OWASP MAS Checklists</li>
+<li>OWASP MAS Crackmes (incl. Hacking playground)</li>
+</ul>
+<p><center>
+<img style="width: 80%; border-radius: 5px" src="../assets/news/mas-rebranding.png"/>
+</center></p>
+<p>We see MAS reflecting all the consistency, structure and transparency that we’re bringing with our 2.0 versions.</p>
+<p><strong>The rebranding will happen gradually so expect changes to be rolled out over the upcoming days/weeks.</strong></p>
+<h2 id="february-7th-2022-nist-800-218-recommendations-for-mitigating-the-risk-of-software-vulnerabilities">February 7th, 2022: NIST 800-218 - Recommendations for Mitigating the Risk of Software Vulnerabilities<a class="headerlink" href="#february-7th-2022-nist-800-218-recommendations-for-mitigating-the-risk-of-software-vulnerabilities" title="Permanent link">&para;</a></h2>
+<p>We're happy to share the new NIST 800-218 (Feb 2022) mapping to the latest MASVS v1.4.2 (Jan 2022) especially MASVS-ARCH and MASVS-CODE:</p>
+<blockquote>
+<p>"Secure Software Development Framework (SSDF) v1.1: Recommendations for Mitigating the Risk of Software Vulnerabilities"</p>
+</blockquote>
+<p><center>
+<img style="width: 80%; border-radius: 5px" src="https://user-images.githubusercontent.com/29175115/152760895-36549d83-11f4-45a7-a78e-072047ac4985.png"/></p>
+<p><a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf">https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-218.pdf</a></p>
+<p></center></p>
+<h2 id="november-17th-2021-from-slack-to-github-discussions">November 17th, 2021: From Slack to GitHub Discussions<a class="headerlink" href="#november-17th-2021-from-slack-to-github-discussions" title="Permanent link">&para;</a></h2>
+<p>Hello everyone,</p>
+<p>times change, our project evolves and being able to hear you and discuss with you all is key for the OWASP MSTG project.</p>
+<p><code>TL;DR: we deprecate Slack in favor of GitHub Discussions as our primary communication channel.</code></p>
+<p>https://github.com/OWASP/owasp-mastg/discussions/
+https://github.com/OWASP/owasp-masvs/discussions/</p>
+<h3 id="removing-obstacles">Removing obstacles<a class="headerlink" href="#removing-obstacles" title="Permanent link">&para;</a></h3>
+<p>Until now we've driven all discussion on the MSTG Slack channel, to participate you had to get Slack, find the invite link (hope that it's still valid, else report it), go to our channel and post your question. It could really be a hurdle some times and some questions might be missed, there was also no way to up-vote them or keep track.</p>
+<p>All our contributors do have a GitHub account (or should! now you have a reason :) ). So, <strong>from today on we move to GitHub discussions and deprecate Slack as the primary communication channel</strong>. You can still reach us there for private messages though and we will try to <a href="https://github.com/github/feedback/discussions/2844">relay the discussions to Slack ASAP</a>, but just as notifications (no Q&amp;A over there).</p>
+<blockquote>
+<p>Discussions provides a place to bring all those conversations together right next to your code. Whether it’s asking questions, sharing announcements, or featuring important information, it’s all in one place and easily accessible to contributors and community members alike.</p>
+</blockquote>
+<h3 id="separation">Separation<a class="headerlink" href="#separation" title="Permanent link">&para;</a></h3>
+<p>We want to separation regarding actionable things to do (issues) and ideas/proposals (now "Ideas" Discussion). Having it all in GitHub makes it sooo much easier for us to manage, reference, etc. </p>
+<blockquote>
+<p>Think of it this way: Discussions are for talking and GitHub Issues are for doing. This helps minimize distractions, keep teams on track, and address topics and questions clearly in a dedicated forum. Plus, you can move seamlessly between the two as well by converting an issue to a discussion and vice versa with a simple click.</p>
+</blockquote>
+<h3 id="insights">Insights<a class="headerlink" href="#insights" title="Permanent link">&para;</a></h3>
+<p>Soon we will be able to see insights regarding the discussions. You guessed it, we'll take that into account and acknowledge your contribution to the discussions as we do with the content itself. More details on this once we can test the feature.</p>
+<h3 id="roadmap">Roadmap<a class="headerlink" href="#roadmap" title="Permanent link">&para;</a></h3>
+<ul>
+<li>[X] Deprecate Slack</li>
+<li>[X] Relay Discussions to Slack</li>
+<li>[X] Discussion contribution acknowledgement info</li>
+</ul>
+<h3 id="be-sure-to-subscribe">Be sure to subscribe<a class="headerlink" href="#be-sure-to-subscribe" title="Permanent link">&para;</a></h3>
+<p><img src="https://user-images.githubusercontent.com/29175115/142167295-0124fbe8-d98c-4ea3-ab7a-0d4eaa482e90.png" width="400" />
+or:
+<img src="https://user-images.githubusercontent.com/29175115/142167464-aae0badc-d662-4c51-a8dd-61da9545e32d.png" width="400" /></p>
+<p><em>For this announcement we partially mapped this nice GitHub article to our project (recommended read): https://github.blog/2021-11-10-7-unique-software-collaboration-features-in-github-discussions/</em></p>
+<h2 id="may-23rd-2020-new-build-system-and-release-upcoming">May 23rd 2020: New build system and release upcoming!<a class="headerlink" href="#may-23rd-2020-new-build-system-and-release-upcoming" title="Permanent link">&para;</a></h2>
+<p>As already shared during the virtual Dutch Chapter meetup: we are going to release a new version of the MSTG soon. We have been quite busy with moving it to the new build system first as the document got too large for our old tooling. This is a great incentive as well to think of how we can make the guide more focused so that the size does not matter ;-)</p>
+<p>More news on the new release will follow soon...</p>
+<h2 id="april-10th-2020-stayhome-and-share-your-knowledge">April 10th 2020: #StayHome and share your knowledge!<a class="headerlink" href="#april-10th-2020-stayhome-and-share-your-knowledge" title="Permanent link">&para;</a></h2>
+<p>Hi everybody,</p>
+<p>we are all in more or less restrictive lock-down situations, but the guideline is always #StayHome. This is definitely a challenging time for you, but also us. But luckily it was also never easier to collaborate and share, through so many different tools and platforms.</p>
+<p>The OWASP Mobile Security Testing Guide (MSTG) project team wants to encourage people to #StayHome and also use this time to share your knowledge with the community. So if you want to either share your knowledge in mobile security or are just keen in doing some research in this area, we have many open issues where we are still looking for volunteers.</p>
+<p>If you can close 5 issues that we marked with the tag #StayHome we will sent you in return a hard copy of the <a href="https://www.lulu.com/shop/jeroen-willemsen-and-sven-schleier-and-bernhard-müller-and-carlos-holguera/owasp-mobile-security-testing-guide/paperback/product-1kw4dp4k.html">OWASP MSTG</a>! We are giving away a total of 5 books on a first come first serve basis.</p>
+<p>If you are interested, do the following:</p>
+<ol>
+<li>
+<p>Go through the open issues in our Github repo with the tag <a href="https://github.com/OWASP/owasp-mastg/issues?q=is%3Aissue+is%3Aopen+label%3AStayHome">#StayHome</a>.</p>
+</li>
+<li>
+<p>Make a comment on the issue that you would like to take care of, which will be assigned on a first come first serve basis. For any clarifications you can ping either Carlos or Sven in OWASP Slack. If you don't have an account yet, please check here on how to register.</p>
+</li>
+<li>
+<p>Work on the issue and create a Pull Request (PR). If you are new to Git(hub), check out our <a href="https://mas.owasp.org/contributing">contribution guide</a> for further details.</p>
+</li>
+<li>
+<p>We will review the PR and merge once all comments are addressed/resolved.</p>
+</li>
+<li>
+<p>Start at 1. :-)</p>
+</li>
+</ol>
+<p>We would love to have you as a contributor. Feel free to share the mail or like our tweet</p>
+<p>Stay safe, take care and #StayHome!</p>
+<p>Sven, Jeroen and Carlos</p>
+<h2 id="march-17th-2020-international-release-of-masvs-12">March 17th, 2020: International release of MASVS 1.2<a class="headerlink" href="#march-17th-2020-international-release-of-masvs-12" title="Permanent link">&para;</a></h2>
+<p>A new version of the OWASP Mobile Application Security Standard (MASVS) was released! The MASVS establishes baseline security requirements for mobile apps and summarizes them in one standard. With this new release we achieved a significant alignment and coverage with existing mobile security documents from ENISA, older NIST documents, OWASP Mobile top 10, and others. The new version 1.2 is available in Github Releases: <a href="https://github.com/OWASP/owasp-masvs/releases/tag/v1.2">https://github.com/OWASP/owasp-masvs/releases/tag/v1.2</a>. For more details please look into our Release Notes for Version 1.2 and Version 1.2-RC <a href="https://github.com/OWASP/owasp-mastg/releases/tag/v1.2">https://github.com/OWASP/owasp-mastg/releases/tag/v1.2</a>.</p>
+<p>Thanks to the great support of our community we have now 9 different languages available in total for the MASVS and would like to thank all of our translators for their great work and support throughout:</p>
+<ul>
+<li>Chinese (traditional) - Peter Chi, Lex Chien, Henry Hu and Leo Wang</li>
+<li>Chinese (simplified) - Bob Peng, Harold Zang and Jack S</li>
+<li>English - Jeroen Willemsen, Sven Schleier, Carlos Holguera and Jeroen Beckers</li>
+<li>French - Romuald Szkudlarek, Abderrahmane Aftahi and Christian Dong (Review)</li>
+<li>German - Rocco Gränitz and Sven Schleier</li>
+<li>Japanese - Koki Takeyama and Riotaro Okada (Review)</li>
+<li>Korean - Youngjae Jeon, Jeongwon Cho, Jiyou Han and Jiyeon Sung</li>
+<li>Russian - Eugen Martynov, Gall Maxim, Chelnokov Vladislav (Review), Oprya Egor (Review) and Tereshin Dmitry (Review)</li>
+<li>Spanish - Martin Marsicano and Carlos Holguera</li>
+</ul>
+<p>The MASVS and its translations are available in PDF, Mobile, ePub, docx and you can also read it via Gitbook. See here for details: <a href="https://github.com/OWASP/owasp-masvs/releases">https://github.com/OWASP/owasp-masvs/releases</a></p>
+<p>The project team (Sven Schleier, Jeroen Willemsen and Carlos Holguera) would like to thank all the contributors, translators and those who build the improved automation around it and all their hard work and support in the last few months! New releases will be much faster thanks to our GitHub actions and Docker containers. Next to that, we are happy to add Korean and Chinese Simplified to our ever growing list of translations! We will finalize the document generation system and then apply the same build system to the Mobile Security Testing Guide (MSTG) in order to speed up the release process and release more frequently.</p>
+<h2 id="october-4th-2019-pre-release-of-masvs-12">October 4th, 2019: Pre-release of MASVS 1.2!<a class="headerlink" href="#october-4th-2019-pre-release-of-masvs-12" title="Permanent link">&para;</a></h2>
+<p>We have a pre-release of MASVS Version 1.2. This will be the reference document for further translations.</p>
+<h2 id="october-2nd-2019-mstg-playground-release">October 2nd, 2019: MSTG Playground Release!<a class="headerlink" href="#october-2nd-2019-mstg-playground-release" title="Permanent link">&para;</a></h2>
+<p>Want more training apps? We hear you! We just released the MSTG-Android-Java &amp; MSTG-Android-Kotlin for Android and the MSTG-JWT app for iOS. Come and check it out at <a href="https://github.com/OWASP/MSTG-Hacking-Playground/releases">the release page</a>! With special thanks to Sven Schleier (@sushi2k), Wen Bin Kong (@kongwenbin), Nikhil Soni (@nikhil), and Ryan Teoh (@ryantzj).</p>
+<h2 id="october-2nd-2019-mstg-project-joins-hacktoberfest">October 2nd, 2019: MSTG Project joins Hacktoberfest!<a class="headerlink" href="#october-2nd-2019-mstg-project-joins-hacktoberfest" title="Permanent link">&para;</a></h2>
+<p>We are joining the #hacktoberfest October 2-31. Check out our issues <a href="https://github.com/OWASP/owasp-mastg/labels/Hacktoberfest">at Github</a>. Register at <a href="https://hacktoberfest.digitalocean.com">https://hacktoberfest.digitalocean.com</a>.</p>
+<h2 id="september-17th-2019-xamarin-experiment">September 17th, 2019: Xamarin experiment!<a class="headerlink" href="#september-17th-2019-xamarin-experiment" title="Permanent link">&para;</a></h2>
+<p>We have launched a react-native experiment based on our compliance checklist. Want to teach others how to validate React Native apps against the MASVS? Check this <a href="https://drive.google.com/open?id=1UL1yLRREJwXfe0HlrcX-IuvPYQM7lTtG">Google sheet</a>!</p>
+<h2 id="september-6th-2019-flutter-experiment">September 6th, 2019: Flutter experiment!<a class="headerlink" href="#september-6th-2019-flutter-experiment" title="Permanent link">&para;</a></h2>
+<p>We have launched a react-native experiment based on our compliance checklist. Want to teach others how to validate React Native apps against the MASVS? Check this <a href="https://drive.google.com/open?id=1wHK3VI1cU1xmYrCu9yb5OHKUEeLIPSkC">Google sheet</a>!</p>
+<h2 id="september-6th-2019-react-native-experiment">September 6th, 2019: React native experiment!<a class="headerlink" href="#september-6th-2019-react-native-experiment" title="Permanent link">&para;</a></h2>
+<p>We have launched a react-native experiment based on our compliance checklist. Want to teach others how to validate React Native apps against the MASVS? Check this <a href="https://drive.google.com/open?id=1P5FZ_Bup5eSPOmkePZA8cIpKGOKvngkN">Google sheet</a>!</p>
+<h2 id="august-29th-2019-carlos-holguera-joins-the-leader-team">August 29th, 2019: Carlos Holguera joins the leader team<a class="headerlink" href="#august-29th-2019-carlos-holguera-joins-the-leader-team" title="Permanent link">&para;</a></h2>
+<p>We are happy to announce that Carlos Holguera joins us as an official MSTG Author and co-leader! With a team of 3 we hope to march further as that would make our lives easier given that all of this hard work is done by volunteers!</p>
+<h2 id="august-4th-2019-oss-release">August 4th, 2019: OSS Release!<a class="headerlink" href="#august-4th-2019-oss-release" title="Permanent link">&para;</a></h2>
+<p>After a lot of work, we finally have a new release of the MSTG! Want to know more? Head over to the Github <a href="https://github.com/OWASP/owasp-mastg/releases">release page</a>.</p>
+<h2 id="august-2nd-2019-project-promoted-to-flagship-status">August 2nd, 2019: Project promoted to Flagship status!<a class="headerlink" href="#august-2nd-2019-project-promoted-to-flagship-status" title="Permanent link">&para;</a></h2>
+<p>We have been awarded Flagship status! We are very grateful and excited about this! We could not have done this without our team of awesome volunteers that have committed to the project, wrote issues, and supported us in many other ways. A special thanks goes out to OWASP and especially Harold Blankenship for facilitating us to function as a project and for leading the project review at OWASP Appsec Tel-Aviv! Thank you!</p>
+<h2 id="june-5th-2019-new-release-of-the-masvs">June 5th, 2019: New release of the MASVS<a class="headerlink" href="#june-5th-2019-new-release-of-the-masvs" title="Permanent link">&para;</a></h2>
+<p>As the summit is progressing, so are we! We have just released a new version of the MASVS (1.1.4). Want to know more? Head over to the Github <a href="https://github.com/OWASP/owasp-masvs/releases">release page</a>!</p>
+<h2 id="may-21nd-2019-new-release-of-the-mstg">May 21nd, 2019: New release of the MSTG<a class="headerlink" href="#may-21nd-2019-new-release-of-the-mstg" title="Permanent link">&para;</a></h2>
+<p>As part of the preparations for the Open Security Summit, we have released a new version of the MSTG. Want to know more? Head over to the Github <a href="https://github.com/OWASP/owasp-mastg/releases">release page</a>!</p>
+<h2 id="may-7th-2019-new-release-of-the-mstg">May 7th, 2019: New release of the MSTG<a class="headerlink" href="#may-7th-2019-new-release-of-the-mstg" title="Permanent link">&para;</a></h2>
+<p>After many changes, we decided it was time to create a new release in order to improve the book version! Want to know more? Head over to the Github <a href="https://github.com/OWASP/owasp-mastg/releases">release page</a>.</p>
+<h2 id="april-15th-2019-book-version-project-promotion-preparation-for-the-summit">April 15th, 2019: Book version, project promotion &amp; preparation for the summit<a class="headerlink" href="#april-15th-2019-book-version-project-promotion-preparation-for-the-summit" title="Permanent link">&para;</a></h2>
+<p>Given that most news is already shared via OWASP Slack over the last quarter, we still see that it is good to share a summary of all of the good things outside of Slack using this news section. In this update we have a lot to share! While we started off this year with an improved version of the MASVS and MSTG, things have not been quiet: there has been a huge development in master of the MSTG and many issues have been raised and fixed. In the meantime, we have worked on an actual print of the book! While an early version is available through Hulu (no link supplied, google and buy at your own risk), we are working on making a better version of that book. In the mean time we have filed for a project promotion to Flagship! Next a lot more cool things happened: with the now official publication of <a href="https://csrc.nist.gov/news/2019/nist-publishes-sp-800-163-rev-1">NIST Special Publication (SP) 800-163 Revision 1</a>, the MASVS and MSTG are getting more mainstream ;-). The MASVS &amp; MSTG are mentioned in various other upcoming programs/standards/recommendations as well, which is really a recognition of the hard work put in by the community. We are proud to be part of such a great project! Next, we are preparing to join the Open Security Summit again! Already three people will be on site, and at least one remote, but we would love to work with more people at the project again! Want to know more? Please get in touch via Slack and join the <a href="https://owasp.slack.com/archives/C1M6ZVC6S">#project-mobile-app-security</a> channel or follow us on <a href="https://twitter.com/OWASP_MAS">Twitter</a>.</p>
+<h2 id="january-15th-2019-release-of-improved-checklist">January 15th, 2019: Release of improved checklist<a class="headerlink" href="#january-15th-2019-release-of-improved-checklist" title="Permanent link">&para;</a></h2>
+<p>We released a new version of the checklist! This version has adaptable references so that it can be used with newer versions of the MSTG as well. This version is currently available in French and English and we hope to add the Russian, Japanese, German and Spanish version soon! Want to know more? Take a look at <a href="https://github.com/OWASP/owasp-mastg/releases/tag/1.1-excel">our release page</a>!. We would like to thank our volunteers for their effort to deliver these easy to use checklists!</p>
+<h2 id="january-3rd-2019-multilanguage-release-112-of-the-masvs">January 3rd, 2019: Multilanguage Release 1.1.2 of the MASVS<a class="headerlink" href="#january-3rd-2019-multilanguage-release-112-of-the-masvs" title="Permanent link">&para;</a></h2>
+<p>We released the 1.1.2 version of the OWASP MASVS! This is the first version in Chinese, English, French, German, Japanese, Russian, and Spanish! Exactly: we just added French, German, Japanese and Chinese! Obviously this would not be possible without all the volunteers that helped us with translations, feedback, updating, and automating the release process! We are grateful for the awesome team that pulled this off! Want to see the result? Take a look at <a href="https://github.com/OWASP/owasp-masvs/releases/tag/1.1.2">our release page</a>!</p>
+<h2 id="november-39th-2018-release-110-of-the-mstg">November 39th, 2018: Release 1.1.0 of the MSTG<a class="headerlink" href="#november-39th-2018-release-110-of-the-mstg" title="Permanent link">&para;</a></h2>
+<p>We released the 1.1.0 version of the OWASP MSTG! Now all requirements of the MASVS have at least one covering testcase. We would like to thank all of our contributors for their hard work! Want to check it out? <a href="https://github.com/OWASP/owasp-masvs/releases">Check the releases</a>!.</p>
+<h2 id="october-28th-2018-call-for-company-references">October 28th, 2018: Call for Company references<a class="headerlink" href="#october-28th-2018-call-for-company-references" title="Permanent link">&para;</a></h2>
+<p>We are looking for company references that are using or have used the OWASP-MSTG and/or MASVS. If you have done so and are ok with being mentioned: please email to sven.schleier@owasp.org.</p>
+<h2 id="october-28th-2018-the-masvs-is-getting-more-translations">October 28th, 2018: The MASVS is getting more translations<a class="headerlink" href="#october-28th-2018-the-masvs-is-getting-more-translations" title="Permanent link">&para;</a></h2>
+<p>Thanks to Romuald, Koki and many others, new translations of the MASVS are popping up. We now have a Japanese translation added and the French, German and Persian translations are in development. Each of them will be released the moment our release-automation of the MASVS is completed. Until then: feel free to checkout the sources!</p>
+<h2 id="october-18th-2018-the-mstg-is-now-officially-an-owasp-lab-project">October 18th, 2018: The MSTG is now officially an OWASP Lab Project!<a class="headerlink" href="#october-18th-2018-the-mstg-is-now-officially-an-owasp-lab-project" title="Permanent link">&para;</a></h2>
+<p>During AppSec US 2018 in San Jose the Mobile Security Testing Guide was reviewed by several volunteers to assess the maturity of the project. As a result our request for project graduation to lab status was granted. The reviews can be found <a href="https://docs.google.com/a/owasp.org/document/d/1WiHln8igTE5noquodwWCo_VuRmvnpQtEhGV6z-P37EU/edit?usp=drive_web">here</a>.</p>
+<p>Thanks to Harold Blankenship for organising the project review event during AppSec US and for pushing things forward for all the OWASP projects and of course to all people that took the effort to review our project!</p>
+<h2 id="october-13th-2018-mstg-102-released-twitter-account">October 13th, 2018: MSTG 1.0.2 released &amp; Twitter account!<a class="headerlink" href="#october-13th-2018-mstg-102-released-twitter-account" title="Permanent link">&para;</a></h2>
+<p>While working hard towards the 1.1.0 milestone of the MSTG, we released the 1.0.2 version. From now onward we have better PDF, Epub and Mobi files! We hope to port this to the MASVS after the Github release. We now have an official Twitter account: <a href="https://twitter.com/OWASP_MAS">@OWASP_MAS</a>!</p>
+<h2 id="september-21th-2018-masvs-automation-started">September 21th, 2018: MASVS automation started<a class="headerlink" href="#september-21th-2018-masvs-automation-started" title="Permanent link">&para;</a></h2>
+<p>Now that the document generation process for the MSTG has been optimized enough for milestone 1.1.0 (and we reached #1000 in Github of issues and Pull requests), we have started to improve the MASVS releasing mechanism. This will be further improved after Appsec USA and the release of 1.1.0 of the MSTG.</p>
+<h2 id="september-16th-2018-mstg-101-released">September 16th, 2018: MSTG 1.0.1 released<a class="headerlink" href="#september-16th-2018-mstg-101-released" title="Permanent link">&para;</a></h2>
+<p>The Mobile Security Testing Guide version 1.0.1 has been released using our automated release system (based on tagging). See the <a href="https://github.com/OWASP/owasp-mastg/releases/tag/1.0.1">Release Notes</a> for all the changes. We now have added pdf support and improved our .docx quiet a lot. We will further improve the release process for the pdf and epubs after milestone 1.1.0.</p>
+<h2 id="september-1st-2018-mobile-security-testing-guide-mentioned-in-nist-sp-163r1">September 1st, 2018: Mobile Security Testing Guide mentioned in NIST SP-163r1<a class="headerlink" href="#september-1st-2018-mobile-security-testing-guide-mentioned-in-nist-sp-163r1" title="Permanent link">&para;</a></h2>
+<p>The Mobile Security Testing Guide is now reference in <a href="https://nvlpubs.nist.gov/nistpubs/SpecialPublications/NIST.SP.800-163r1.pdf">NIST SP 800-163 Revision 1</a>.</p>
+<h2 id="augustus-2nd-2018-mobile-app-security-verification-standard-releases">Augustus 2nd, 2018: Mobile App Security Verification Standard Releases<a class="headerlink" href="#augustus-2nd-2018-mobile-app-security-verification-standard-releases" title="Permanent link">&para;</a></h2>
+<p>A lot has happened &amp; we are happy to announce that version 1.1 of the MASVS got released! Not just in English, but in Spanish and Russian as well. Want to know more? <a href="https://github.com/OWASP/owasp-masvs/releases">check the releases</a>!. We would like to thank our Russian and Spanish speaking volunteers that have put quite some effort in translating the document! Lastly, we would like to announce that not all minor version releases will be in this news-section, unless something really important changed. Do you want to have the latest version of the MASVS? Just check Github!</p>
+<h2 id="june-16th-2018-jeroen-willemsen-joins-as-project-lead">June 16th, 2018: Jeroen Willemsen joins as project lead<a class="headerlink" href="#june-16th-2018-jeroen-willemsen-joins-as-project-lead" title="Permanent link">&para;</a></h2>
+<p>Jeroen Willemsen has joined as a project leader for the OMTG project.</p>
+<h2 id="june-15th-2018-mobile-security-testing-guide-release-10">June 15th, 2018: Mobile Security Testing Guide - Release 1.0<a class="headerlink" href="#june-15th-2018-mobile-security-testing-guide-release-10" title="Permanent link">&para;</a></h2>
+<p>The Mobile Security Testing Guide is <a href="https://github.com/OWASP/owasp-mastg#reading-the-mobile-security-testing-guide">now available for download in various formats</a>. This is the first release of the MSTG and is a great community effort. We want to thank <a href="https://github.com/OWASP/owasp-mastg/graphs/contributors">all contributors</a> through this great journey. Thank you!</p>
+<h2 id="january-13th-2018-mobile-app-security-verification-standard-release-10">January 13th, 2018: Mobile App Security Verification Standard Release 1.0<a class="headerlink" href="#january-13th-2018-mobile-app-security-verification-standard-release-10" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/OWASP/owasp-masvs/releases/download/1.0/OWASP_Mobile_AppSec_Verification_Standard_v1.0.pdf">Version 1.0</a> of the MASVS is now <a href="https://github.com/OWASP/owasp-masvs/releases/download/1.0/OWASP_Mobile_AppSec_Verification_Standard_v1.0.pdf">available for download</a>. This release contains several bug fixes and modifications to security requirements and is our first release.</p>
+<h2 id="september-14th-2017-mobile-app-security-verification-standard-update">September 14th, 2017: Mobile App Security Verification Standard Update<a class="headerlink" href="#september-14th-2017-mobile-app-security-verification-standard-update" title="Permanent link">&para;</a></h2>
+<p>Version 0.9.4 of the MASVS is now <a href="https://github.com/OWASP/owasp-masvs/releases/tag/0.9.4">available for download</a>. This release contains several bug fixes and modifications to security requirements.</p>
+<h2 id="july-5th-2017-sponsorship-packages-announced">July 5th, 2017: Sponsorship Packages Announced<a class="headerlink" href="#july-5th-2017-sponsorship-packages-announced" title="Permanent link">&para;</a></h2>
+<p>We are happy to announce that a limited amount of sponsorship packages will be made available shortly through our crowdfunding campaign. With these packages, we offer companies opportunities to create brand awareness and maximize visibility in the mobile security space. 100% of the funds raised go directly into the project budget and will be used to fund production of the final release.</p>
+<h2 id="june-17th-2017-the-owasp-mobile-security-testing-guide-summit-preview">June 17th, 2017: The OWASP Mobile Security Testing Guide - Summit Preview<a class="headerlink" href="#june-17th-2017-the-owasp-mobile-security-testing-guide-summit-preview" title="Permanent link">&para;</a></h2>
+<p>The MSTG Summit Preview is an experimental proof-of-concept book created on the OWASP Summit 2017 in London. The goal was to improve the authoring process and book deployment pipeline, as well as to demonstrate the viability of the project. Note that the content is not final and will likely change significantly in subsequent releases.</p>
+<h2 id="mobile-security-testing-workshop-on-the-owasp-summit-2017">Mobile Security Testing Workshop on the OWASP Summit 2017<a class="headerlink" href="#mobile-security-testing-workshop-on-the-owasp-summit-2017" title="Permanent link">&para;</a></h2>
+<p>The OWASP MSTG team is organizing a 5-days mobile security track on the OWASP Summit 2017. The track consists of a series of book sprints, each of which focuses on producing content for a specific section in the OWASP MSTG, as well as proof-reading and editing the existing content. The goal is to make as much progress on the guide as is humanly possible. Depending on the number of participants, we’ll split into sub-groups to work on different subsections or topic areas.</p>
+<h3 id="how-to-join">How to Join<a class="headerlink" href="#how-to-join" title="Permanent link">&para;</a></h3>
+<p>Join up for the working session(s) you like by following the link(s) on the <a href="http://owaspsummit.org/Working-Sessions/Mobile-Security/">mobile security track page</a>, then hitting the "Edit this page here" link at the bottom, and adding yourself to the "participants" field. Signing up is not mandatory, but helps us to better organize the sessions. Don’t worry though if your session of choice happens on the "wrong" day - you can always simply stop by and we’ll brief you on your topic of choice. After all, this is the Woodstock of appsec!</p>
+<p>Mobile security track main page:</p>
+<p><a href="http://owaspsummit.org/Working-Sessions/Mobile-Security/">http://owaspsummit.org/Working-Sessions/Mobile-Security/</a></p>
+<p>Mobile security track schedule:</p>
+<p><a href="http://owaspsummit.org/Working-Sessions/Mobile-Security/">http://owaspsummit.org/schedule/tracks/Mobile-Security.html/</a></p>
+<h2 id="april-5th-2017-mobile-app-security-verification-standard-update">April 5th, 2017: Mobile App Security Verification Standard Update<a class="headerlink" href="#april-5th-2017-mobile-app-security-verification-standard-update" title="Permanent link">&para;</a></h2>
+<p>Version 0.9.3 of the MASVS is now <a href="https://github.com/OWASP/owasp-masvs/releases/tag/0.9.3">available for download</a>. This release contains several bug fixes and modifications to security requirements:</p>
+<div class="highlight"><pre><span></span><code><span class="k">*</span><span class="w"> </span>Merged requirements 7.8 and 7.9 into for simplification
+<span class="k">*</span><span class="w"> </span>Removed Anti-RE controls 8.1 and 8.2
+<span class="k">*</span><span class="w"> </span>Updated MSTG links to current master
+<span class="k">*</span><span class="w"> </span>Section &quot;Environmental Interaction&quot; renamed to &quot;Platform Interaction&quot;
+<span class="k">*</span><span class="w"> </span>Removed To-dos
+<span class="k">*</span><span class="w"> </span>Fixed some wording &amp; spelling issues
+</code></pre></div>
+<h2 id="january-31st-2017-mobile-app-security-verification-standard-v092-available-for-download">January 31st, 2017: Mobile App Security Verification Standard v0.9.2 Available For Download<a class="headerlink" href="#january-31st-2017-mobile-app-security-verification-standard-v092-available-for-download" title="Permanent link">&para;</a></h2>
+<p>The Mobile App Security Verification Standard (MASVS) has undergone a major revision, including a re-design of the security model and verification levels. We also revised many security requirements to address the multitude of <a href="https://github.com/OWASP/owasp-masvs/issues?q=is%3Aissue%20">issues raised on GitHub</a>. The result is MASVS v0.9.2, which is now <a href="https://github.com/OWASP/owasp-masvs/releases/tag/0.9.2">available for download</a> in PDF format.</p>
+<p>As the MASVS is nearing maturity, we have decided to freeze the requirements until the Mobile Testing Guide and checklists "catch up" (due to the one-to-one mapping between requirements in the MASVS and MSTG, changes to the requirements make it necessary to update the other documents as well, causing repeated effort). Unless major issues pop up, the current list will therefore remain in place until MASVS/MSTG v1.0, and further changes will be reserved for v1.1 or later releases.</p>
+<p>The MASVS is a community effort to establish security requirements for designing, developing and testing secure mobile apps on iOS and Android. Join the <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/">OWASP Mobile Security Project Slack Channel</a> to meet the project members! You can sign up for an account <a href="https://join.slack.com/t/owasp/shared_invite/enQtNjExMTc3MTg0MzU4LTViMDg1MmJiMzMwZGUxZjgxZWQ1MTE0NTBlOTBhNjhhZDIzZTZiNmEwOTJlYjdkMzAxMGVhNDkwNDNiNjZiOWQ">here</a>.</p>
+<h2 id="january-28th-2017-mobile-crackmes-and-reversing-tutorials">January 28th, 2017: Mobile Crackmes and Reversing Tutorials<a class="headerlink" href="#january-28th-2017-mobile-crackmes-and-reversing-tutorials" title="Permanent link">&para;</a></h2>
+<p>A key goal of the OWASP Mobile Testing Project is to build the ultimate learning resource and reference guide for mobile app reversers. As hands-on hacking is by far the best way to learn, we'd like to link most of the content to practical examples.</p>
+<p>Starting now, we'll be adding <a href="https://github.com/OWASP/owasp-mastg/tree/master/Crackmes">crackmes for Android and iOS</a> to the <a href="https://github.com/OWASP/owasp-mastg">GitHub repo</a> that will then be used as examples throughout the guide. The goal is to collect enough resources for demonstrating the most important tools and techniques in our guide, plus additional crackmes for practicing. For starters there are three challenges:</p>
+<ul>
+<li><a href="https://github.com/OWASP/owasp-mastg/tree/master/Crackmes/Android/License_01">Android License Validator</a></li>
+<li><a href="https://github.com/OWASP/owasp-mastg/tree/master/Crackmes/iOS/Level_01/">Uncrackable App for iOS Level 1</a></li>
+<li><a href="https://github.com/OWASP/owasp-mastg/tree/master/Crackmes/iOS/Level_02/">Uncrackable App for iOS Level 2</a></li>
+</ul>
+<p>One of these three already has a <a href="https://github.com/OWASP/owasp-mastg/blob/master/Document/0x05c-Reverse-Engineering-and-Tampering.md#symbolic-execution">documented solution</a> in the guide. Tutorials for solving the other two <a href="https://github.com/OWASP/owasp-mastg/blob/master/Crackmes/README.md">still need to be added</a>.</p>
+<h3 id="we-need-more-authors-and-contributors">We Need More Authors and Contributors!<a class="headerlink" href="#we-need-more-authors-and-contributors" title="Permanent link">&para;</a></h3>
+<p>Maybe you have noticed that the reverse engineering sections in the Mobile Testing Guide are incomplete. The reason: We're still in the starting stages and don't have a lot of authors and contributors (in fact, 99% of the reversing content was produced by one guy). We'd love to welcome <em>you</em> as a contributor of crackmes, tutorials, writeups, or simply new ideas for this project.</p>
+<h4 id="what-you-can-do">What You Can Do<a class="headerlink" href="#what-you-can-do" title="Permanent link">&para;</a></h4>
+<p>The OWASP MSTG is an open project and there's a lot of flexibility - it mostly depends on your skill set and willingness to commit your time. That said, the some areas that need help are:</p>
+<ul>
+<li>Solving crackmes and contributing a tutorial to the guide (preferable a technique that's not already documented).</li>
+<li>Writing and adding new crackmes along with solutions (should also describe something not already in the guide. Cracking white-boxes, dynamic analysis using an emulator / introspection, etc. etc.).</li>
+<li>General reversing write-ups to describe specific processes and techniques</li>
+<li>
+<p>Help us figure out resiliency testing processes and <a href="https://github.com/muellerberndt/obfuscation-metrics">obfuscation metrics</a>
+The reversing part of the guide consists of the following chapters:</p>
+</li>
+<li>
+<p>Tampering and Reverse Engineering - General Overview</p>
+</li>
+<li>Tampering and Reverse Engineering on Android</li>
+<li>Tampering and Reverse Engineering on iOS</li>
+</ul>
+<h4 id="how-to-join_1">How To Join<a class="headerlink" href="#how-to-join_1" title="Permanent link">&para;</a></h4>
+<p>Read the <a href="https://github.com/OWASP/owasp-mastg/blob/master/CONTRIBUTING.md">Contribution Guide</a> first, and join the <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/">OWASP Mobile Security Project Slack Channel</a>, where you'll find all the other project members.</p>
+<h2 id="january-22nd-2017-mobile-testing-guide-toc-available">January 22nd, 2017: Mobile Testing Guide TOC Available<a class="headerlink" href="#january-22nd-2017-mobile-testing-guide-toc-available" title="Permanent link">&para;</a></h2>
+<p>As of now, we'll be auto-generating a table of contents out of the current MSTG master branch. This reflects the current state of the guide, and should make it easier to coordinate work between authors. A short-term goal is to finalize the structure of the guide so we get a clearer picture of what will be included in the final document. Lead authors are encouraged to complete the outline of their respective chapters.</p>
+<p><strong>On another note, we still need additional authors to help with all sections of the guide, including mobile operating system overviews, testing processes and techniques, and reverse engineering.</strong> Especially iOS authors are in short supply! As usual, ping us on the Slack Channel if you want to contribute.</p>
+<h2 id="december-4th-2016-call-for-authors-the-ultimate-open-source-mobile-app-reverse-engineering-guide">December 4th, 2016: Call For Authors: The Ultimate Open-Source Mobile App Reverse Engineering Guide<a class="headerlink" href="#december-4th-2016-call-for-authors-the-ultimate-open-source-mobile-app-reverse-engineering-guide" title="Permanent link">&para;</a></h2>
+<p>Reverse engineering is an art, and describing every available facet of it would fill a whole library. The sheer range techniques and possible specializations is mind-blowing: One can spend years working on a very specific, isolated sub-problem, such as automating malware analysis or developing novel de-obfuscation methods. For mobile app security testers, it can be challenging to filter through the vast amount of information and build a working methodology. Things become even more problematic when one is tasked to assess apps that are heavily obfuscated and have anti-tampering measures built in.</p>
+<p>One of the main goals in the MSTG is to build the ultimate resource for mobile reverse engineers. This includes not only basic static and dynamic analysis, but also advanced de-obfuscation, scripting and automation. Obviously, writing all this content is a lot of work, both in terms of general content and OS-specific how-tos. We're therefore looking for talented authors that want to join the project early on. Topics include the following:</p>
+<ul>
+<li>Basic Hybrid Static/Dynamic Analysis</li>
+<li>Code Injection and Dynamic Instrumentation (Substrate, FRIDA)</li>
+<li>Dynamic Binary Instrumentation (Valgrind, PIE)</li>
+<li>Analysis Frameworks (Metasm / Miasm)</li>
+<li>Symbolic Execution</li>
+<li>DCA and DPA attacks on white-box crypto</li>
+<li>Dynamic analysis frameworks (PANDA / DroidScope,...)</li>
+<li>Anything else we might have missed</li>
+</ul>
+<h3 id="what-is-in-for-me">What is in for me?<a class="headerlink" href="#what-is-in-for-me" title="Permanent link">&para;</a></h3>
+<p>All of this is unpaid, volunteer work. However, depending on your contribution, you will be named in the "lead authors" or "contributors" list, and you'll be able to point to the fact that you co-authored the guide. You'll also be contributing to the field, helping others who are just starting out, and in turn becoming a happier person yourself (reaping the full benefits of your altruism).</p>
+<h3 id="where-do-i-sign-up">Where do I sign up?<a class="headerlink" href="#where-do-i-sign-up" title="Permanent link">&para;</a></h3>
+<p>First of all, have a look at the existing RE chapters outline. You'll probably immediately have ideas on how you can contribute. If that's the case, read the <a href="https://github.com/OWASP/owasp-mastg/blob/master/CONTRIBUTING.md">Contribution Guide</a> first.</p>
+<p>Then contact <a href="https://github.com/muellerberndt">Bernhard Mueller</a> - ideally directly on the OWASP Mobile Security Project Slack Channel, where you'll find all the other project members. You can sign up for an account here.</p>
+<p><br></p>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>

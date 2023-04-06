@@ -1,0 +1,3592 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+      
+        <link rel="prev" href="../0x06c-Reverse-Engineering-and-Tampering/">
+      
+      
+        <link rel="next" href="../0x06e-Testing-Cryptography/">
+      
+      <link rel="icon" href="../../../assets/logo_circle.png">
+      <meta name="generator" content="mkdocs-1.4.2, mkdocs-material-9.1.5">
+    
+    
+      
+        <title>iOS Data Storage - OWASP Mobile Application Security</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.7a7fce14.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.a0c5b2b5.min.css">
+      
+      
+
+    
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+  
+
+
+  
+  
+
+
+  <script id="__analytics">function __md_analytics(){function n(){dataLayer.push(arguments)}window.dataLayer=window.dataLayer||[],n("js",new Date),n("config","G-KWZRJV0S4P"),document.addEventListener("DOMContentLoaded",function(){document.forms.search&&document.forms.search.query.addEventListener("blur",function(){this.value&&n("event","search",{search_term:this.value})}),document$.subscribe(function(){var a=document.forms.feedback;if(void 0!==a)for(var e of a.querySelectorAll("[type=submit]"))e.addEventListener("click",function(e){e.preventDefault();var t=document.location.pathname,e=this.getAttribute("data-md-value");n("event","feedback",{page:t,data:e}),a.firstElementChild.disabled=!0;e=a.querySelector(".md-feedback__note [data-md-value='"+e+"']");e&&(e.hidden=!1)}),a.hidden=!1}),location$.subscribe(function(e){n("config","G-KWZRJV0S4P",{page_path:e.pathname})})});var e=document.createElement("script");e.async=!0,e.src="https://www.googletagmanager.com/gtag/js?id=G-KWZRJV0S4P",document.getElementById("__analytics").insertAdjacentElement("afterEnd",e)}</script>
+
+  
+    <script>"undefined"!=typeof __md_analytics&&__md_analytics()</script>
+  
+
+    
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent="">
+  
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&"object"==typeof palette.color)for(var key of Object.keys(palette.color))document.body.setAttribute("data-md-color-"+key,palette.color[key])</script>
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ios-data-storage" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-header__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3V6m0 5h18v2H3v-2m0 5h18v2H3v-2Z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            OWASP Mobile Application Security
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              iOS Data Storage
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      <form class="md-header__option" data-md-component="palette">
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_1">
+          
+            <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_2" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3 3.19.09m3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95 2.06.05m-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31Z"/></svg>
+            </label>
+          
+        
+          
+          <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="" data-md-color-accent=""  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_2">
+          
+            <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_1" hidden>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5c-.84 0-1.65.15-2.39.42L12 2M3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29L3.34 7m.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14L3.36 17M20.65 7l-1.77 3.79a7.023 7.023 0 0 0-2.38-4.15l4.15.36m-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29L20.64 17M12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44L12 22Z"/></svg>
+            </label>
+          
+        
+      </form>
+    
+    
+    
+      <label class="md-header__button md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+      </label>
+      <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.516 6.516 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5Z"/></svg>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7 0-.24-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91 1.61 0 2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08Z"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41Z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../.." class="md-tabs__link">
+      Home
+    </a>
+  </li>
+
+      
+        
+  
+  
+    
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../" class="md-tabs__link md-tabs__link--active">
+        MASTG
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../MASVS/" class="md-tabs__link">
+        MASVS
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../MAS_checklist/" class="md-tabs__link">
+      MAS Checklist
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../crackmes/" class="md-tabs__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../news/" class="md-tabs__link">
+      &#128478; News
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../talks/" class="md-tabs__link">
+      &#127897; Talks
+    </a>
+  </li>
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../contributing/" class="md-tabs__link">
+        &#11088; Contribute
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../donate/" class="md-tabs__link">
+        &#128153; Donate
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+
+
+  <li class="md-tabs__item">
+    <a href="../../../contact/" class="md-tabs__link">
+      &#128172; Connect with Us
+    </a>
+  </li>
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+  
+
+
+  
+
+<nav class="md-nav md-nav--primary md-nav--lifted md-nav--integrated" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="OWASP Mobile Application Security" class="md-nav__button md-logo" aria-label="OWASP Mobile Application Security" data-md-component="logo">
+      
+  <img src="../../../assets/logo_circle.png" alt="logo">
+
+    </a>
+    OWASP Mobile Application Security
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/OWASP/owasp-mastg" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+  </div>
+  <div class="md-source__repository">
+    OWASP/owasp-mastg
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        Home
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          MASTG
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2">
+          <span class="md-nav__icon md-icon"></span>
+          MASTG
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../" class="md-nav__link">
+        OWASP MASTG
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02a-Frontispiece/" class="md-nav__link">
+        Frontispiece
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02b-MASVS-MASTG-Adoption/" class="md-nav__link">
+        OWASP MASVS and MASTG Adoption
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x02c-Acknowledgements/" class="md-nav__link">
+        Acknowledgments
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Intro/0x03-Overview/" class="md-nav__link">
+        Introduction to the OWASP Mobile Application Security Project
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_3" id="__nav_2_3_label" tabindex="0">
+          General Guide
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_3">
+          <span class="md-nav__icon md-icon"></span>
+          General Guide
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04a-Mobile-App-Taxonomy/" class="md-nav__link">
+        Mobile Application Taxonomy
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04b-Mobile-App-Security-Testing/" class="md-nav__link">
+        Mobile Application Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04c-Tampering-and-Reverse-Engineering/" class="md-nav__link">
+        Mobile App Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04e-Testing-Authentication-and-Session-Management/" class="md-nav__link">
+        Mobile App Authentication Architectures
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04f-Testing-Network-Communication/" class="md-nav__link">
+        Mobile App Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04g-Testing-Cryptography/" class="md-nav__link">
+        Mobile App Cryptography
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04h-Testing-Code-Quality/" class="md-nav__link">
+        Mobile App Code Quality
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../General/0x04i-Testing-User-Privacy-Protection/" class="md-nav__link">
+        Mobile App User Privacy Protection
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_4" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_4" id="__nav_2_4_label" tabindex="0">
+          Android
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_4_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_4">
+          <span class="md-nav__icon md-icon"></span>
+          Android
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05a-Platform-Overview/" class="md-nav__link">
+        Android Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05b-Basic-Security_Testing/" class="md-nav__link">
+        Android Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        Android Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05d-Testing-Data-Storage/" class="md-nav__link">
+        Android Data Storage
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05e-Testing-Cryptography/" class="md-nav__link">
+        Android Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05f-Testing-Local-Authentication/" class="md-nav__link">
+        Android Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05g-Testing-Network-Communication/" class="md-nav__link">
+        Android Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05h-Testing-Platform-Interaction/" class="md-nav__link">
+        Android Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        Android Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Android/0x05j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        Android Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_5" checked>
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_5" id="__nav_2_5_label" tabindex="0">
+          iOS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_5_label" aria-expanded="true">
+        <label class="md-nav__title" for="__nav_2_5">
+          <span class="md-nav__icon md-icon"></span>
+          iOS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06a-Platform-Overview/" class="md-nav__link">
+        iOS Platform Overview
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06b-Basic-Security-Testing/" class="md-nav__link">
+        iOS Basic Security Testing
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06c-Reverse-Engineering-and-Tampering/" class="md-nav__link">
+        iOS Tampering and Reverse Engineering
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+    
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          iOS Data Storage
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        iOS Data Storage
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    Overview
+  </a>
+  
+    <nav class="md-nav" aria-label="Overview">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nsdata-and-nsmutabledata" class="md-nav__link">
+    NSData and NSMutableData
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nsuserdefaults" class="md-nav__link">
+    NSUserDefaults
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#databases" class="md-nav__link">
+    Databases
+  </a>
+  
+    <nav class="md-nav" aria-label="Databases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#coredata" class="md-nav__link">
+    CoreData
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sqlite-databases" class="md-nav__link">
+    SQLite Databases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#firebase-real-time-databases" class="md-nav__link">
+    Firebase Real-time Databases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#realm-databases" class="md-nav__link">
+    Realm Databases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#couchbase-lite-databases" class="md-nav__link">
+    Couchbase Lite Databases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#yapdatabase" class="md-nav__link">
+    YapDatabase
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#user-interface" class="md-nav__link">
+    User Interface
+  </a>
+  
+    <nav class="md-nav" aria-label="User Interface">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ui-components" class="md-nav__link">
+    UI Components
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#screenshots" class="md-nav__link">
+    Screenshots
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#keyboard-cache" class="md-nav__link">
+    Keyboard Cache
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#internal-storage" class="md-nav__link">
+    Internal Storage
+  </a>
+  
+    <nav class="md-nav" aria-label="Internal Storage">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#data-protection-api" class="md-nav__link">
+    Data Protection API
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#external-storage" class="md-nav__link">
+    External Storage
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-keychain" class="md-nav__link">
+    The Keychain
+  </a>
+  
+    <nav class="md-nav" aria-label="The Keychain">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keychain-data-persistence" class="md-nav__link">
+    Keychain Data Persistence
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#logs" class="md-nav__link">
+    Logs
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backups" class="md-nav__link">
+    Backups
+  </a>
+  
+    <nav class="md-nav" aria-label="Backups">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#how-the-keychain-is-backed-up" class="md-nav__link">
+    How the Keychain Is Backed Up
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#process-memory" class="md-nav__link">
+    Process Memory
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ipc" class="md-nav__link">
+    IPC
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-local-data-storage-mstg-storage-1-and-mstg-storage-2" class="md-nav__link">
+    Testing Local Data Storage (MSTG-STORAGE-1 and MSTG-STORAGE-2)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Local Data Storage (MSTG-STORAGE-1 and MSTG-STORAGE-2)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#keychain" class="md-nav__link">
+    Keychain
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#filesystem" class="md-nav__link">
+    Filesystem
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis-with-xcode-and-ios-simulator" class="md-nav__link">
+    Dynamic Analysis with Xcode and iOS simulator
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis-with-objection" class="md-nav__link">
+    Dynamic Analysis with Objection
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Analysis with Objection">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#reading-the-keychain" class="md-nav__link">
+    Reading the Keychain
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching-for-binary-cookies" class="md-nav__link">
+    Searching for Binary Cookies
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching-for-property-list-files" class="md-nav__link">
+    Searching for Property List Files
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching-for-sqlite-databases" class="md-nav__link">
+    Searching for SQLite Databases
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#searching-for-cache-databases" class="md-nav__link">
+    Searching for Cache Databases
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-logs-for-sensitive-data-mstg-storage-3" class="md-nav__link">
+    Checking Logs for Sensitive Data (MSTG-STORAGE-3)
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking Logs for Sensitive Data (MSTG-STORAGE-3)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_1" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_1" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#determining-whether-sensitive-data-is-shared-with-third-parties-mstg-storage-4" class="md-nav__link">
+    Determining Whether Sensitive Data Is Shared with Third Parties (MSTG-STORAGE-4)
+  </a>
+  
+    <nav class="md-nav" aria-label="Determining Whether Sensitive Data Is Shared with Third Parties (MSTG-STORAGE-4)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#overview_1" class="md-nav__link">
+    Overview
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_2" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_2" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#finding-sensitive-data-in-the-keyboard-cache-mstg-storage-5" class="md-nav__link">
+    Finding Sensitive Data in the Keyboard Cache (MSTG-STORAGE-5)
+  </a>
+  
+    <nav class="md-nav" aria-label="Finding Sensitive Data in the Keyboard Cache (MSTG-STORAGE-5)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_3" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_3" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#determining-whether-sensitive-data-is-exposed-via-ipc-mechanisms-mstg-storage-6" class="md-nav__link">
+    Determining Whether Sensitive Data Is Exposed via IPC Mechanisms (MSTG-STORAGE-6)
+  </a>
+  
+    <nav class="md-nav" aria-label="Determining Whether Sensitive Data Is Exposed via IPC Mechanisms (MSTG-STORAGE-6)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_4" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Static Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#xpc-services" class="md-nav__link">
+    XPC Services
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mach-ports" class="md-nav__link">
+    Mach Ports
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nsfilecoordinator" class="md-nav__link">
+    NSFileCoordinator
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_4" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#checking-for-sensitive-data-disclosed-through-the-user-interface-mstg-storage-7" class="md-nav__link">
+    Checking for Sensitive Data Disclosed Through the User Interface (MSTG-STORAGE-7)
+  </a>
+  
+    <nav class="md-nav" aria-label="Checking for Sensitive Data Disclosed Through the User Interface (MSTG-STORAGE-7)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_5" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_5" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-backups-for-sensitive-data-mstg-storage-8" class="md-nav__link">
+    Testing Backups for Sensitive Data (MSTG-STORAGE-8)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Backups for Sensitive Data (MSTG-STORAGE-8)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_6" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_6" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#proof-of-concept-removing-ui-lock-with-tampered-backup" class="md-nav__link">
+    Proof of Concept: Removing UI Lock with Tampered Backup
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-auto-generated-screenshots-for-sensitive-information-mstg-storage-9" class="md-nav__link">
+    Testing Auto-Generated Screenshots for Sensitive Information (MSTG-STORAGE-9)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Auto-Generated Screenshots for Sensitive Information (MSTG-STORAGE-9)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_7" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_7" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#testing-memory-for-sensitive-data-mstg-storage-10" class="md-nav__link">
+    Testing Memory for Sensitive Data (MSTG-STORAGE-10)
+  </a>
+  
+    <nav class="md-nav" aria-label="Testing Memory for Sensitive Data (MSTG-STORAGE-10)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#static-analysis_8" class="md-nav__link">
+    Static Analysis
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dynamic-analysis_8" class="md-nav__link">
+    Dynamic Analysis
+  </a>
+  
+    <nav class="md-nav" aria-label="Dynamic Analysis">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#retrieving-and-analyzing-a-memory-dump" class="md-nav__link">
+    Retrieving and Analyzing a Memory Dump
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#runtime-memory-analysis" class="md-nav__link">
+    Runtime Memory Analysis
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#references" class="md-nav__link">
+    References
+  </a>
+  
+    <nav class="md-nav" aria-label="References">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#owasp-masvs" class="md-nav__link">
+    OWASP MASVS
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06e-Testing-Cryptography/" class="md-nav__link">
+        iOS Cryptographic APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06f-Testing-Local-Authentication/" class="md-nav__link">
+        iOS Local Authentication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06g-Testing-Network-Communication/" class="md-nav__link">
+        iOS Network Communication
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06h-Testing-Platform-Interaction/" class="md-nav__link">
+        iOS Platform APIs
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06i-Testing-Code-Quality-and-Build-Settings/" class="md-nav__link">
+        iOS Code Quality and Build Settings
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../0x06j-Testing-Resiliency-Against-Reverse-Engineering/" class="md-nav__link">
+        iOS Anti-Reversing Defenses
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_6" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_6" id="__nav_2_6_label" tabindex="0">
+          Tools
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_6_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_6">
+          <span class="md-nav__icon md-icon"></span>
+          Tools
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08a-Testing-Tools/" class="md-nav__link">
+        Testing Tools
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../Tools/0x08b-Reference-Apps/" class="md-nav__link">
+        Reference applications
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_7" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_2_7" id="__nav_2_7_label" tabindex="0">
+          References
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_7_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_2_7">
+          <span class="md-nav__icon md-icon"></span>
+          References
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../References/0x09-Suggested-Reading/" class="md-nav__link">
+        Suggested Reading
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          MASVS
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3">
+          <span class="md-nav__icon md-icon"></span>
+          MASVS
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/" class="md-nav__link">
+        OWASP MASVS
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_2" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_2" id="__nav_3_2_label" tabindex="0">
+          Intro
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_2_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_2">
+          <span class="md-nav__icon md-icon"></span>
+          Intro
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/01-Foreword/" class="md-nav__link">
+        Foreword
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/02-Frontispiece/" class="md-nav__link">
+        About the Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/03-Using_the_MASVS/" class="md-nav__link">
+        The Mobile Application Security Verification Standard
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Intro/04-Assessment_and_Certification/" class="md-nav__link">
+        Assessment and Certification
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/05-MASVS-STORAGE/" class="md-nav__link">
+        MASVS-STORAGE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/06-MASVS-CRYPTO/" class="md-nav__link">
+        MASVS-CRYPTO
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/07-MASVS-AUTH/" class="md-nav__link">
+        MASVS-AUTH
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/08-MASVS-NETWORK/" class="md-nav__link">
+        MASVS-NETWORK
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/09-MASVS-PLATFORM/" class="md-nav__link">
+        MASVS-PLATFORM
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/10-MASVS-CODE/" class="md-nav__link">
+        MASVS-CODE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/11-MASVS-RESILIENCE/" class="md-nav__link">
+        MASVS-RESILIENCE
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3_10" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_3_10" id="__nav_3_10_label" tabindex="0">
+          Controls
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_3_10_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_3_10">
+          <span class="md-nav__icon md-icon"></span>
+          Controls
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-1/" class="md-nav__link">
+        MASVS-AUTH-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-2/" class="md-nav__link">
+        MASVS-AUTH-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-AUTH-3/" class="md-nav__link">
+        MASVS-AUTH-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-1/" class="md-nav__link">
+        MASVS-CODE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-2/" class="md-nav__link">
+        MASVS-CODE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-3/" class="md-nav__link">
+        MASVS-CODE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CODE-4/" class="md-nav__link">
+        MASVS-CODE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-1/" class="md-nav__link">
+        MASVS-CRYPTO-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-CRYPTO-2/" class="md-nav__link">
+        MASVS-CRYPTO-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-1/" class="md-nav__link">
+        MASVS-NETWORK-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-NETWORK-2/" class="md-nav__link">
+        MASVS-NETWORK-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-1/" class="md-nav__link">
+        MASVS-PLATFORM-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-2/" class="md-nav__link">
+        MASVS-PLATFORM-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-PLATFORM-3/" class="md-nav__link">
+        MASVS-PLATFORM-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-1/" class="md-nav__link">
+        MASVS-RESILIENCE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-2/" class="md-nav__link">
+        MASVS-RESILIENCE-2
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-3/" class="md-nav__link">
+        MASVS-RESILIENCE-3
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-RESILIENCE-4/" class="md-nav__link">
+        MASVS-RESILIENCE-4
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-1/" class="md-nav__link">
+        MASVS-STORAGE-1
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MASVS/Controls/MASVS-STORAGE-2/" class="md-nav__link">
+        MASVS-STORAGE-2
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../MAS_checklist/" class="md-nav__link">
+        MAS Checklist
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          MAS Crackmes
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_5">
+          <span class="md-nav__icon md-icon"></span>
+          MAS Crackmes
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/" class="md-nav__link">
+        MAS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/Android/" class="md-nav__link">
+        Android Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../crackmes/iOS/" class="md-nav__link">
+        iOS Crackmes
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../news/" class="md-nav__link">
+        &#128478; News
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../talks/" class="md-nav__link">
+        &#127897; Talks
+      </a>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          &#11088; Contribute
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_8">
+          <span class="md-nav__icon md-icon"></span>
+          &#11088; Contribute
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/" class="md-nav__link">
+        Contributing to the MAS Project
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/1_How_Can_You_Contribute/" class="md-nav__link">
+        How Can You Contribute?
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/2_Getting_Started/" class="md-nav__link">
+        Getting Started
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/3_PRs_and_Reviews/" class="md-nav__link">
+        Pull Requests & Reviews
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/4_Add_new_Language/" class="md-nav__link">
+        Add a New Language
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/5_Style_Guide/" class="md-nav__link">
+        Style Guide
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contributing/6_Add_a_Crackme/" class="md-nav__link">
+        Add a Crackme
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+      
+      
+      
+      <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+      
+        <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          &#128153; Donate
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <label class="md-nav__title" for="__nav_9">
+          <span class="md-nav__icon md-icon"></span>
+          &#128153; Donate
+        </label>
+        <ul class="md-nav__list" data-md-scrollfix>
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/" class="md-nav__link">
+        Donations
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/packages/" class="md-nav__link">
+        Donation Packages
+      </a>
+    </li>
+  
+
+            
+          
+            
+              
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../donate/steps/" class="md-nav__link">
+        Steps
+      </a>
+    </li>
+  
+
+            
+          
+        </ul>
+      </nav>
+    </li>
+  
+
+    
+      
+      
+      
+
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../contact/" class="md-nav__link">
+        &#128172; Connect with Us
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+<h1 id="ios-data-storage">iOS Data Storage<a class="headerlink" href="#ios-data-storage" title="Permanent link">&para;</a></h1>
+<p>The protection of sensitive data, such as authentication tokens and private information, is key for mobile security. In this chapter, you'll learn about the iOS APIs for local data storage, and best practices for using them.</p>
+<p>As little sensitive data as possible should be saved in permanent local storage. However, in most practical scenarios, at least some user data must be stored. Fortunately, iOS offers secure storage APIs, which allow developers to use the cryptographic hardware available on every iOS device. If these APIs are used correctly, sensitive data and files can be secured via hardware-backed 256-bit AES encryption.</p>
+<h2 id="overview">Overview<a class="headerlink" href="#overview" title="Permanent link">&para;</a></h2>
+<h3 id="nsdata-and-nsmutabledata">NSData and NSMutableData<a class="headerlink" href="#nsdata-and-nsmutabledata" title="Permanent link">&para;</a></h3>
+<p><code>NSData</code> (static data objects) and <code>NSMutableData</code> (dynamic data objects) are typically used for data storage, but they are also useful for distributed objects applications, in which data contained in data objects can be copied or moved between applications. The following are methods used to write <code>NSData</code> objects:</p>
+<ul>
+<li><code>NSDataWritingWithoutOverwriting</code></li>
+<li><code>NSDataWritingFileProtectionNone</code></li>
+<li><code>NSDataWritingFileProtectionComplete</code></li>
+<li><code>NSDataWritingFileProtectionCompleteUnlessOpen</code></li>
+<li><code>NSDataWritingFileProtectionCompleteUntilFirstUserAuthentication</code></li>
+<li><code>writeToFile</code>: stores data as part of the <code>NSData</code> class</li>
+<li><code>NSSearchPathForDirectoriesInDomains, NSTemporaryDirectory</code>: used to manage file paths</li>
+<li><code>NSFileManager</code>: lets you examine and change the contents of the file system. You can use <code>createFileAtPath</code> to create a file and write to it.</li>
+</ul>
+<p>The following example shows how to create a <code>complete</code> encrypted file using the <code>FileManager</code> class. You can find more information in the Apple Developer Documentation <a href="https://developer.apple.com/documentation/uikit/protecting_the_user_s_privacy/encrypting_your_app_s_files" title="Encrypting Your App's Files">"Encrypting Your App's Files"</a></p>
+<p>Swift:</p>
+<div class="highlight"><pre><span></span><code><span class="n">FileManager</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">createFile</span><span class="p">(</span>
+    <span class="n">atPath</span><span class="p">:</span> <span class="n">filePath</span><span class="p">,</span>
+    <span class="n">contents</span><span class="p">:</span> <span class="s">&quot;secret text&quot;</span><span class="p">.</span><span class="n">data</span><span class="p">(</span><span class="n">using</span><span class="p">:</span> <span class="p">.</span><span class="n">utf8</span><span class="p">),</span>
+    <span class="n">attributes</span><span class="p">:</span> <span class="p">[</span><span class="n">FileAttributeKey</span><span class="p">.</span><span class="n">protectionKey</span><span class="p">:</span> <span class="n">FileProtectionType</span><span class="p">.</span><span class="n">complete</span><span class="p">]</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Objective-C:</p>
+<div class="highlight"><pre><span></span><code><span class="p">[[</span><span class="bp">NSFileManager</span><span class="w"> </span><span class="n">defaultManager</span><span class="p">]</span><span class="w"> </span><span class="n">createFileAtPath</span><span class="o">:</span><span class="p">[</span><span class="nb">self</span><span class="w"> </span><span class="n">filePath</span><span class="p">]</span>
+<span class="w">  </span><span class="nl">contents</span><span class="p">:[</span><span class="s">@&quot;secret text&quot;</span><span class="w"> </span><span class="n">dataUsingEncoding</span><span class="o">:</span><span class="n">NSUTF8StringEncoding</span><span class="p">]</span>
+<span class="w">  </span><span class="nl">attributes</span><span class="p">:[</span><span class="bp">NSDictionary</span><span class="w"> </span><span class="n">dictionaryWithObject</span><span class="o">:</span><span class="n">NSFileProtectionComplete</span>
+<span class="w">  </span><span class="nl">forKey</span><span class="p">:</span><span class="n">NSFileProtectionKey</span><span class="p">]];</span>
+</code></pre></div>
+<h3 id="nsuserdefaults">NSUserDefaults<a class="headerlink" href="#nsuserdefaults" title="Permanent link">&para;</a></h3>
+<p>The <a href="https://developer.apple.com/documentation/foundation/nsuserdefaults" title="NSUserDefaults Class"><code>NSUserDefaults</code></a> class provides a programmatic interface for interacting with the default system. The default system allows an application to customize its behavior according to user preferences. Data saved by <code>NSUserDefaults</code> can be viewed in the application bundle. This class stores data in a plist file, but it's meant to be used with small amounts of data.</p>
+<h3 id="databases">Databases<a class="headerlink" href="#databases" title="Permanent link">&para;</a></h3>
+<h4 id="coredata">CoreData<a class="headerlink" href="#coredata" title="Permanent link">&para;</a></h4>
+<p><a href="https://developer.apple.com/library/content/documentation/Cocoa/Conceptual/CoreData/nsfetchedresultscontroller.html#//apple_ref/doc/uid/TP40001075-CH8-SW1" title="Core Data iOS"><code>Core Data</code></a> is a framework for managing the model layer of objects in your application. It provides general and automated solutions to common tasks associated with object life cycles and object graph management, including persistence. <a href="https://cocoacasts.com/what-is-the-difference-between-core-data-and-sqlite/" title="What Is the Difference Between Core Data and SQLite">Core Data can use SQLite as its persistent store</a>, but the framework itself is not a database.</p>
+<p>CoreData does not encrypt it's data by default. As part of a research project (iMAS) from the MITRE Corporation, that was focused on open source iOS security controls, an additional encryption layer can be added to CoreData. See the <a href="https://github.com/project-imas/encrypted-core-data" title="Encrypted Core Data SQLite Store">GitHub Repo</a> for more details.</p>
+<h4 id="sqlite-databases">SQLite Databases<a class="headerlink" href="#sqlite-databases" title="Permanent link">&para;</a></h4>
+<p>The SQLite 3 library must be added to an app if the app is to use SQLite. This library is a C++ wrapper that provides an API for the SQLite commands.</p>
+<h4 id="firebase-real-time-databases">Firebase Real-time Databases<a class="headerlink" href="#firebase-real-time-databases" title="Permanent link">&para;</a></h4>
+<p>Firebase is a development platform with more than 15 products, and one of them is Firebase Real-time Database. It can be leveraged by application developers to store and sync data with a NoSQL cloud-hosted database. The data is stored as JSON and is synchronized in real-time to every connected client and also remains available even when the application goes offline.</p>
+<p>A misconfigured Firebase instance can be identified by making the following network call:</p>
+<p><code>https://\&lt;firebaseProjectName\&gt;.firebaseio.com/.json</code></p>
+<p>The <em>firebaseProjectName</em> can be retrieved from the property list(.plist) file. For example, <code>PROJECT_ID</code> key stores the corresponding Firebase project name in <em>GoogleService-Info.plist</em> file.</p>
+<p>Alternatively, the analysts can use <a href="https://github.com/shivsahni/FireBaseScanner" title="Firebase Scanner">Firebase Scanner</a>, a python script that automates the task above as shown below:</p>
+<div class="highlight"><pre><span></span><code>python<span class="w"> </span>FirebaseScanner.py<span class="w"> </span>-f<span class="w"> </span>&lt;commaSeparatedFirebaseProjectNames&gt;
+</code></pre></div>
+<h4 id="realm-databases">Realm Databases<a class="headerlink" href="#realm-databases" title="Permanent link">&para;</a></h4>
+<p><a href="https://realm.io/docs/objc/latest/" title="Realm Objective-C">Realm Objective-C</a> and <a href="https://realm.io/docs/swift/latest/" title="Realm Swift">Realm Swift</a> aren't supplied by Apple, but they are still worth noting. They store everything unencrypted, unless the configuration has encryption enabled.</p>
+<p>The following example demonstrates how to use encryption with a Realm database:</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// Open the encrypted Realm file where getKey() is a method to obtain a key from the Keychain or a server</span>
+<span class="kd">let</span> <span class="nv">config</span> <span class="p">=</span> <span class="n">Realm</span><span class="p">.</span><span class="n">Configuration</span><span class="p">(</span><span class="n">encryptionKey</span><span class="p">:</span> <span class="n">getKey</span><span class="p">())</span>
+<span class="k">do</span> <span class="p">{</span>
+  <span class="kd">let</span> <span class="nv">realm</span> <span class="p">=</span> <span class="k">try</span> <span class="n">Realm</span><span class="p">(</span><span class="n">configuration</span><span class="p">:</span> <span class="n">config</span><span class="p">)</span>
+  <span class="c1">// Use the Realm as normal</span>
+<span class="p">}</span> <span class="k">catch</span> <span class="kd">let</span> <span class="nv">error</span> <span class="k">as</span> <span class="bp">NSError</span> <span class="p">{</span>
+  <span class="c1">// If the encryption key is wrong, `error` will say that it&#39;s an invalid database</span>
+  <span class="bp">fatalError</span><span class="p">(</span><span class="s">&quot;Error opening realm: </span><span class="si">\(</span><span class="n">error</span><span class="si">)</span><span class="s">&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="couchbase-lite-databases">Couchbase Lite Databases<a class="headerlink" href="#couchbase-lite-databases" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/couchbase/couchbase-lite-ios" title="Couchbase Lite">Couchbase Lite</a> is a lightweight, embedded, document-oriented (NoSQL) database engine that can be synced. It compiles natively for iOS and macOS.</p>
+<h4 id="yapdatabase">YapDatabase<a class="headerlink" href="#yapdatabase" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/yapstudios/YapDatabase" title="YapDatabase">YapDatabase</a> is a key/value store built on top of SQLite.</p>
+<h3 id="user-interface">User Interface<a class="headerlink" href="#user-interface" title="Permanent link">&para;</a></h3>
+<h4 id="ui-components">UI Components<a class="headerlink" href="#ui-components" title="Permanent link">&para;</a></h4>
+<p>Entering sensitive information when, for example, registering an account or making payments, is an essential part of using many apps. This data may be financial information such as credit card data or user account passwords. The data may be exposed if the app doesn't properly mask it while it is being typed.</p>
+<p>In order to prevent disclosure and mitigate risks such as <a href="https://en.wikipedia.org/wiki/Shoulder_surfing_%28computer_security%29">shoulder surfing</a> you should verify that no sensitive data is exposed via the user interface unless explicitly required (e.g. a password being entered). For the data required to be present it should be properly masked, typically by showing asterisks or dots instead of clear text.</p>
+<p>Carefully review all UI components that either show such information or take it as input. Search for any traces of sensitive information and evaluate if it should be masked or completely removed.</p>
+<h4 id="screenshots">Screenshots<a class="headerlink" href="#screenshots" title="Permanent link">&para;</a></h4>
+<p>Manufacturers want to provide device users with an aesthetically pleasing effect when an application is started or exited, so they introduced the concept of saving a screenshot when the application goes into the background. This feature can pose a security risk because screenshots (which may display sensitive information such as an email or corporate documents) are written to local storage, where they can be recovered by a rogue application with a sandbox bypass exploit or someone who steals the device.</p>
+<h4 id="keyboard-cache">Keyboard Cache<a class="headerlink" href="#keyboard-cache" title="Permanent link">&para;</a></h4>
+<p>Several options for simplifying keyboard input are available to users. These options include autocorrection and spell checking. Most keyboard input is cached by default, in <code>/private/var/mobile/Library/Keyboard/dynamic-text.dat</code>.</p>
+<p>The <a href="https://developer.apple.com/reference/uikit/uitextinputtraits" title="UITextInputTraits protocol">UITextInputTraits protocol</a> is used for keyboard caching. The <code>UITextField</code>, <code>UITextView</code>, and <code>UISearchBar</code> classes automatically support this protocol and it offers the following properties:</p>
+<ul>
+<li><code>var autocorrectionType: UITextAutocorrectionType</code> determines whether autocorrection is enabled during typing. When autocorrection is enabled, the text object tracks unknown words and suggests suitable replacements, replacing the typed text automatically unless the user overrides the replacement. The default value of this property is <code>UITextAutocorrectionTypeDefault</code>, which for most input methods enables autocorrection.</li>
+<li><code>var secureTextEntry: BOOL</code> determines whether text copying and text caching are disabled and hides the text being entered for <code>UITextField</code>. The default value of this property is <code>NO</code>.</li>
+</ul>
+<h3 id="internal-storage">Internal Storage<a class="headerlink" href="#internal-storage" title="Permanent link">&para;</a></h3>
+<h4 id="data-protection-api">Data Protection API<a class="headerlink" href="#data-protection-api" title="Permanent link">&para;</a></h4>
+<p>App developers can leverage the iOS <em>Data Protection</em> APIs to implement fine-grained access control for user data stored in flash memory. The APIs are built on top of the Secure Enclave Processor (SEP), which was introduced with the iPhone 5S. The SEP is a coprocessor that provides cryptographic operations for data protection and key management. A device-specific hardware key-the device UID (Unique ID)-is embedded in the secure enclave, ensuring the integrity of data protection even when the operating system kernel is compromised.</p>
+<p>The data protection architecture is based on a hierarchy of keys. The UID and the user passcode key (which is derived from the user's passphrase via the PBKDF2 algorithm) sit at the top of this hierarchy. Together, they can be used to "unlock" so-called class keys, which are associated with different device states (e.g., device locked/unlocked).</p>
+<p>Every file stored on the iOS file system is encrypted with its own per-file key, which is contained in the file metadata. The metadata is encrypted with the file system key and wrapped with the class key corresponding to the protection class the app selected when creating the file.</p>
+<p>The following illustration shows the <a href="https://www.apple.com/business/docs/iOS_Security_Guide.pdf" title="iOS Security Guide">iOS Data Protection Key Hierarchy</a>.</p>
+<p><img src="../../../assets/Images/Chapters/0x06d/key_hierarchy_apple.jpg" width="100%" /></p>
+<p>Files can be assigned to one of four different protection classes, which are explained in more detail in the <a href="https://www.apple.com/business/docs/iOS_Security_Guide.pdf" title="iOS Security Guide">iOS Security Guide</a>:</p>
+<ul>
+<li>
+<p><strong>Complete Protection (NSFileProtectionComplete)</strong>: A key derived from the user passcode and the device UID protects this class key. The derived key is wiped from memory shortly after the device is locked, making the data inaccessible until the user unlocks the device.</p>
+</li>
+<li>
+<p><strong>Protected Unless Open (NSFileProtectionCompleteUnlessOpen)</strong>: This protection class is similar to Complete Protection, but, if the file is opened when unlocked, the app can continue to access the file even if the user locks the device. This protection class is used when, for example, a mail attachment is downloading in the background.</p>
+</li>
+<li>
+<p><strong>Protected Until First User Authentication (NSFileProtectionCompleteUntilFirstUserAuthentication)</strong>: The file can be accessed as soon as the user unlocks the device for the first time after booting. It can be accessed even if the user subsequently locks the device and the class key is not removed from memory.</p>
+</li>
+<li>
+<p><strong>No Protection (NSFileProtectionNone)</strong>: The key for this protection class is protected with the UID only. The class key is stored in "Effaceable Storage", which is a region of flash memory on the iOS device that allows the storage of small amounts of data. This protection class exists for fast remote wiping (immediate deletion of the class key, which makes the data inaccessible).</p>
+</li>
+</ul>
+<p>All class keys except <code>NSFileProtectionNone</code> are encrypted with a key derived from the device UID and the user's passcode. As a result, decryption can happen only on the device itself and requires the correct passcode.</p>
+<p>Since iOS 7, the default data protection class is "Protected Until First User Authentication".</p>
+<h3 id="external-storage">External Storage<a class="headerlink" href="#external-storage" title="Permanent link">&para;</a></h3>
+<h3 id="the-keychain">The Keychain<a class="headerlink" href="#the-keychain" title="Permanent link">&para;</a></h3>
+<p>The iOS Keychain can be used to securely store short, sensitive bits of data, such as encryption keys and session tokens. It is implemented as an SQLite database that can be accessed through the Keychain APIs only.</p>
+<p>On macOS, every user application can create as many Keychains as desired, and every login account has its own Keychain. The <a href="https://developer.apple.com/library/content/documentation/Security/Conceptual/keychainServConcepts/02concepts/concepts.html" title="https://developer.apple.com/library/content/documentation/Security/Conceptual/keychainServConcepts/02concepts/concepts.html">structure of the Keychain on iOS</a> is different: only one Keychain is available to all apps. Access to the items can be shared between apps signed by the same developer via the <a href="https://developer.apple.com/library/content/documentation/IDEs/Conceptual/AppDistributionGuide/AddingCapabilities/AddingCapabilities.html" title="Adding capabilities">access groups feature</a> of the attribute <a href="https://developer.apple.com/documentation/security/ksecattraccessgroup" title="Attribute kSecAttrAccessGroup"><code>kSecAttrAccessGroup</code></a>. Access to the Keychain is managed by the <code>securityd</code> daemon, which grants access according to the app's <code>Keychain-access-groups</code>, <code>application-identifier</code>, and <code>application-group</code> entitlements.</p>
+<p>The <a href="https://developer.apple.com/library/content/documentation/Security/Conceptual/keychainServConcepts/02concepts/concepts.html" title="Keychain concepts">Keychain API</a> includes the following main operations:</p>
+<ul>
+<li><code>SecItemAdd</code></li>
+<li><code>SecItemUpdate</code></li>
+<li><code>SecItemCopyMatching</code></li>
+<li><code>SecItemDelete</code></li>
+</ul>
+<p>Data stored in the Keychain is protected via a class structure that is similar to the class structure used for file encryption. Items added to the Keychain are encoded as a binary plist and encrypted with a 128-bit AES per-item key in Galois/Counter Mode (GCM). Note that larger blobs of data aren't meant to be saved directly in the Keychain-that's what the Data Protection API is for. You can configure data protection for Keychain items by setting the <code>kSecAttrAccessible</code> key in the call to <code>SecItemAdd</code> or <code>SecItemUpdate</code>. The following configurable <a href="https://developer.apple.com/documentation/security/keychain_services/keychain_items/item_attribute_keys_and_values#1679100" title="Accessibility Values for kSecAttrAccessible">accessibility values for kSecAttrAccessible</a> are the Keychain Data Protection classes:</p>
+<ul>
+<li><code>kSecAttrAccessibleAlways</code>: The data in the Keychain item can always be accessed, regardless of whether the device is locked.</li>
+<li><code>kSecAttrAccessibleAlwaysThisDeviceOnly</code>: The data in the Keychain item can always be accessed, regardless of whether the device is locked. The data won't be included in an iCloud or local backup.</li>
+<li><code>kSecAttrAccessibleAfterFirstUnlock</code>: The data in the Keychain item can't be accessed after a restart until the device has been unlocked once by the user.</li>
+<li><code>kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly</code>: The data in the Keychain item can't be accessed after a restart until the device has been unlocked once by the user. Items with this attribute do not migrate to a new device. Thus, after restoring from a backup of a different device, these items will not be present.</li>
+<li><code>kSecAttrAccessibleWhenUnlocked</code>: The data in the Keychain item can be accessed only while the device is unlocked by the user.</li>
+<li><code>kSecAttrAccessibleWhenUnlockedThisDeviceOnly</code>: The data in the Keychain item can be accessed only while the device is unlocked by the user. The data won't be included in an iCloud or local backup.</li>
+<li><code>kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly</code>: The data in the Keychain can be accessed only when the device is unlocked. This protection class is only available if a passcode is set on the device. The data won't be included in an iCloud or local backup.</li>
+</ul>
+<p><code>AccessControlFlags</code> define the mechanisms with which users can authenticate the key (<code>SecAccessControlCreateFlags</code>):</p>
+<ul>
+<li><code>kSecAccessControlDevicePasscode</code>: Access the item via a passcode.</li>
+<li><code>kSecAccessControlBiometryAny</code>: Access the item via one of the fingerprints registered to Touch ID. Adding or removing a fingerprint won't invalidate the item.</li>
+<li><code>kSecAccessControlBiometryCurrentSet</code>: Access the item via one of the fingerprints registered to Touch ID. Adding or removing a fingerprint <em>will</em> invalidate the item.</li>
+<li><code>kSecAccessControlUserPresence</code>: Access the item via either one of the registered fingerprints (using Touch ID) or default to the passcode.</li>
+</ul>
+<p>Please note that keys secured by Touch ID (via <code>kSecAccessControlBiometryAny</code> or <code>kSecAccessControlBiometryCurrentSet</code>) are protected by the Secure Enclave: The Keychain holds a token only, not the actual key. The key resides in the Secure Enclave.</p>
+<p>Starting with iOS 9, you can do ECC-based signing operations in the Secure Enclave. In that scenario, the private key and the cryptographic operations reside within the Secure Enclave. See the static analysis section for more info on creating the ECC keys.
+iOS 9 supports only 256-bit ECC. Furthermore, you need to store the public key in the Keychain because it can't be stored in the Secure Enclave. After the key is created, you can use the <code>kSecAttrKeyType</code> to indicate the type of algorithm you want to use the key with.</p>
+<p>In case you want to use these mechanisms, it is recommended to test whether the passcode has been set. In iOS 8, you will need to check whether you can read/write from an item in the Keychain protected by the <code>kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly</code> attribute. From iOS 9 onward you can check whether a lock screen is set, using <code>LAContext</code>:</p>
+<p>Swift:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">devicePasscodeEnabled</span><span class="p">()</span> <span class="p">-&gt;</span> <span class="nb">Bool</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="bp">LAContext</span><span class="p">().</span><span class="n">canEvaluatePolicy</span><span class="p">(.</span><span class="n">deviceOwnerAuthentication</span><span class="p">,</span> <span class="n">error</span><span class="p">:</span> <span class="kc">nil</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Objective-C:</p>
+<div class="highlight"><pre><span></span><code><span class="p">-(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">devicePasscodeEnabled:</span><span class="p">(</span><span class="bp">LAContext</span><span class="p">)</span><span class="nv">context</span><span class="p">{</span>
+<span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="p">([</span><span class="n">context</span><span class="w"> </span><span class="n">canEvaluatePolicy</span><span class="o">:</span><span class="n">LAPolicyDeviceOwnerAuthentication</span><span class="w"> </span><span class="n">error</span><span class="o">:</span><span class="nb">nil</span><span class="p">])</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">true</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
+<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="nb">false</span><span class="p">;</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Here is sample Swift code you can use to create keys (Notice the <code>kSecAttrTokenID as String: kSecAttrTokenIDSecureEnclave</code>: this indicates that we want to use the Secure Enclave directly.):</p>
+<div class="highlight"><pre><span></span><code><span class="c1">// private key parameters</span>
+<span class="kd">let</span> <span class="nv">privateKeyParams</span> <span class="p">=</span> <span class="p">[</span>
+    <span class="n">kSecAttrLabel</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="s">&quot;privateLabel&quot;</span><span class="p">,</span>
+    <span class="n">kSecAttrIsPermanent</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="kc">true</span><span class="p">,</span>
+    <span class="n">kSecAttrApplicationTag</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="s">&quot;applicationTag&quot;</span><span class="p">,</span>
+<span class="p">]</span> <span class="k">as</span> <span class="n">CFDictionary</span>
+
+<span class="c1">// public key parameters</span>
+<span class="kd">let</span> <span class="nv">publicKeyParams</span> <span class="p">=</span> <span class="p">[</span>
+    <span class="n">kSecAttrLabel</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="s">&quot;publicLabel&quot;</span><span class="p">,</span>
+    <span class="n">kSecAttrIsPermanent</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="kc">false</span><span class="p">,</span>
+    <span class="n">kSecAttrApplicationTag</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="s">&quot;applicationTag&quot;</span><span class="p">,</span>
+<span class="p">]</span> <span class="k">as</span> <span class="n">CFDictionary</span>
+
+<span class="c1">// global parameters</span>
+<span class="kd">let</span> <span class="nv">parameters</span> <span class="p">=</span> <span class="p">[</span>
+    <span class="n">kSecAttrKeyType</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="n">kSecAttrKeyTypeEC</span><span class="p">,</span>
+    <span class="n">kSecAttrKeySizeInBits</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+    <span class="n">kSecAttrTokenID</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="n">kSecAttrTokenIDSecureEnclave</span><span class="p">,</span>
+    <span class="n">kSecPublicKeyAttrs</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="n">publicKeyParams</span><span class="p">,</span>
+    <span class="n">kSecPrivateKeyAttrs</span> <span class="k">as</span> <span class="nb">String</span><span class="p">:</span> <span class="n">privateKeyParams</span><span class="p">,</span>
+<span class="p">]</span> <span class="k">as</span> <span class="n">CFDictionary</span>
+
+<span class="kd">var</span> <span class="nv">pubKey</span><span class="p">,</span> <span class="n">privKey</span><span class="p">:</span> <span class="n">SecKey</span><span class="p">?</span>
+<span class="kd">let</span> <span class="nv">status</span> <span class="p">=</span> <span class="n">SecKeyGeneratePair</span><span class="p">(</span><span class="n">parameters</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">pubKey</span><span class="p">,</span> <span class="p">&amp;</span><span class="n">privKey</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">status</span> <span class="o">!=</span> <span class="n">errSecSuccess</span> <span class="p">{</span>
+    <span class="c1">// Keys created successfully</span>
+<span class="p">}</span>
+</code></pre></div>
+<h4 id="keychain-data-persistence">Keychain Data Persistence<a class="headerlink" href="#keychain-data-persistence" title="Permanent link">&para;</a></h4>
+<p>On iOS, when an application is uninstalled, the Keychain data used by the application is retained by the device, unlike the data stored by the application sandbox which is wiped. In the event that a user sells their device without performing a factory reset, the buyer of the device may be able to gain access to the previous user's application accounts and data by reinstalling the same applications used by the previous user. This would require no technical ability to perform.</p>
+<p>When assessing an iOS application, you should look for Keychain data persistence. This is normally done by using the application to generate sample data that may be stored in the Keychain, uninstalling the application, then reinstalling the application to see whether the data was retained between application installations. Use objection runtime mobile exploration toolkit to dump the keychain data. The following <code>objection</code> command demonstrates this procedure:</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios keychain dump</span>
+Note:<span class="w"> </span>You<span class="w"> </span>may<span class="w"> </span>be<span class="w"> </span>asked<span class="w"> </span>to<span class="w"> </span>authenticate<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>devices<span class="w"> </span>passcode<span class="w"> </span>or<span class="w"> </span>TouchID
+Save<span class="w"> </span>the<span class="w"> </span>output<span class="w"> </span>by<span class="w"> </span>adding<span class="w"> </span><span class="sb">`</span>--json<span class="w"> </span>keychain.json<span class="sb">`</span><span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span><span class="nb">command</span>
+Dumping<span class="w"> </span>the<span class="w"> </span>iOS<span class="w"> </span>keychain...
+Created<span class="w">                    </span>Accessible<span class="w">                      </span>ACL<span class="w">    </span>Type<span class="w">      </span>Account<span class="w">                    </span>Service<span class="w">                                                        </span>Data
+-------------------------<span class="w">  </span>------------------------------<span class="w">  </span>-----<span class="w">  </span>--------<span class="w">  </span>-------------------------<span class="w">  </span>-------------------------------------------------------------<span class="w">  </span>------------------------------------
+<span class="m">2020</span>-02-11<span class="w"> </span><span class="m">13</span>:26:52<span class="w"> </span>+0000<span class="w">  </span>WhenUnlocked<span class="w">                    </span>None<span class="w">   </span>Password<span class="w">  </span>keychainValue<span class="w">              </span>com.highaltitudehacks.DVIAswiftv2.develop<span class="w">                      </span>mysecretpass123
+</code></pre></div>
+<p>There's no iOS API that developers can use to force wipe data when an application is uninstalled. Instead, developers should take the following steps to prevent Keychain data from persisting between application installations:</p>
+<ul>
+<li>When an application is first launched after installation, wipe all Keychain data associated with the application. This will prevent a device's second user from accidentally gaining access to the previous user's accounts. The following Swift example is a basic demonstration of this wiping procedure:</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="kd">let</span> <span class="nv">userDefaults</span> <span class="p">=</span> <span class="n">UserDefaults</span><span class="p">.</span><span class="n">standard</span>
+
+<span class="k">if</span> <span class="n">userDefaults</span><span class="p">.</span><span class="n">bool</span><span class="p">(</span><span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;hasRunBefore&quot;</span><span class="p">)</span> <span class="p">==</span> <span class="kc">false</span> <span class="p">{</span>
+    <span class="c1">// Remove Keychain items here</span>
+
+    <span class="c1">// Update the flag indicator</span>
+    <span class="n">userDefaults</span><span class="p">.</span><span class="kr">set</span><span class="p">(</span><span class="kc">true</span><span class="p">,</span> <span class="n">forKey</span><span class="p">:</span> <span class="s">&quot;hasRunBefore&quot;</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre></div>
+<ul>
+<li>When developing logout functionality for an iOS application, make sure that the Keychain data is wiped as part of account logout. This will allow users to clear their accounts before uninstalling an application.</li>
+</ul>
+<h3 id="logs">Logs<a class="headerlink" href="#logs" title="Permanent link">&para;</a></h3>
+<p>There are many legitimate reasons for creating log files on a mobile device, including keeping track of crashes or errors that are stored locally while the device is offline (so that they can be sent to the app's developer once online), and storing usage statistics. However, logging sensitive data, such as credit card numbers and session information, may expose the data to attackers or malicious applications.
+Log files can be created in several ways. The following list shows the methods available on iOS:</p>
+<ul>
+<li>NSLog Method</li>
+<li>printf-like function</li>
+<li>NSAssert-like function</li>
+<li>Macro</li>
+</ul>
+<h3 id="backups">Backups<a class="headerlink" href="#backups" title="Permanent link">&para;</a></h3>
+<p>iOS includes auto-backup features that create copies of the data stored on the device. You can make iOS backups from your host computer by using iTunes (till macOS Catalina) or Finder (from macOS Catalina onwards), or via the iCloud backup feature. In both cases, the backup includes nearly all data stored on the iOS device except highly sensitive data such as Apple Pay information and Touch ID settings.</p>
+<p>Since iOS backs up installed apps and their data, an obvious concern is whether sensitive user data stored by the app might unintentionally leak through the backup. Another concern, though less obvious, is whether sensitive configuration settings used to protect data or restrict app functionality could be tampered to change app behavior after restoring a modified backup. Both concerns are valid and these vulnerabilities have proven to exist in a vast number of apps today.</p>
+<h4 id="how-the-keychain-is-backed-up">How the Keychain Is Backed Up<a class="headerlink" href="#how-the-keychain-is-backed-up" title="Permanent link">&para;</a></h4>
+<p>When users back up their iOS device, the Keychain data is backed up as well, but the secrets in the Keychain remain encrypted. The class keys necessary to decrypt the Keychain data aren't included in the backup. Restoring the Keychain data requires restoring the backup to a device and unlocking the device with the users passcode.</p>
+<p>Keychain items for which the <code>kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly</code> attribute is set can be decrypted only if the backup is restored to the backed up device. Someone trying to extract this Keychain data from the backup couldn't decrypt it without access to the crypto hardware inside the originating device.</p>
+<p>One caveat to using the Keychain, however, is that it was only designed to store small bits of user data or short notes (according to Apple's documentation on <a href="https://developer.apple.com/documentation/security/keychain_services" title="Keychain Services">Keychain Services</a>). This means that apps with larger local secure storage needs (e.g., messaging apps, etc.) should encrypt the data within the app container, but use the Keychain to store key material. In cases where sensitive configuration settings (e.g., data loss prevention policies, password policies, compliance policies, etc) must remain unencrypted within the app container, you can consider storing a hash of the policies in the keychain for integrity checking. Without an integrity check, these settings could be modified within a backup and then restored back to the device to modify app behavior (e.g., change configured remote endpoints) or security settings (e.g., jailbreak detection, certificate pinning, maximum UI login attempts, etc.).</p>
+<p>The takeaway: If sensitive data is handled as recommended earlier in this chapter (e.g., stored in the Keychain, with Keychain backed integrity checks, or encrypted with a key that's locked inside the Keychain), backups shouldn't be security issue.</p>
+<h3 id="process-memory">Process Memory<a class="headerlink" href="#process-memory" title="Permanent link">&para;</a></h3>
+<p>Analyzing memory can help developers to identify the root causes of problems such as application crashes. However, it can also be used to access to sensitive data. This section describes how to check process' memory for data disclosure.</p>
+<p>First, identify the sensitive information that's stored in memory. Sensitive assets are very likely to be loaded into memory at some point. The objective is to make sure that this info is exposed as briefly as possible.</p>
+<p>To investigate an application's memory, first create a memory dump. Alternatively, you can analyze the memory in real time with, for example, a debugger. Regardless of the method you use, this is a very error-prone process because dumps provide the data left by executed functions and you might miss executing critical steps. In addition, overlooking data during analysis is quite easy to do unless you know the footprint of the data you're looking for (either its exact value or its format). For example, if the app encrypts according to a randomly generated symmetric key, you're very unlikely to spot the key in memory unless you find its value by other means.</p>
+<hr />
+<p>Before looking into the source code, checking the documentation and identifying application components provide an overview of where data might be exposed. For example, while sensitive data received from a backend exists in the final model object, multiple copies may also exist in the HTTP client or the XML parser. All these copies should be removed from memory as soon as possible.</p>
+<p>Understanding the application's architecture and its interaction with the OS will help you identify sensitive information that doesn't have to be exposed in memory at all. For example, assume your app receives data from one server and transfers it to another without needing any additional processing. That data can be received and handled in encrypted form, which prevents exposure via memory.</p>
+<p>However, if sensitive data <em>does</em> need to be exposed via memory, make sure that your app exposes as few copies of this data as possible for as little time as possible. In other words, you want centralized handling of sensitive data, based on primitive and mutable data structures.</p>
+<p>Such data structures give developers direct access to memory. Make sure that this access is used to overwrite the sensitive data and cryptographic keys with zeroes. <a href="https://developer.apple.com/library/archive/documentation/Security/Conceptual/SecureCodingGuide/SecurityDevelopmentChecklists/SecurityDevelopmentChecklists.html" title="Security Development Checklists">Apple Secure Coding Guide</a> suggests zeroing sensitive data after usage, but provides no recommended ways of doing this.</p>
+<p>Examples of preferable data types include <code>char []</code> and <code>int []</code>, but not <code>NSString</code> or <code>String</code>. Whenever you try to modify an immutable object, such as a <code>String</code>, you actually create a copy and change the copy. Consider using <code>NSMutableData</code> for storing secrets on Swift/Objective-C and use <a href="https://developer.apple.com/documentation/foundation/nsmutabledata/1415526-resetbytes" title="NSMutableData resetBytes(in:) API reference"><code>resetBytes(in:)</code> method</a> for zeroing. Also, see <a href="https://github.com/veorq/cryptocoding#clean-memory-of-secret-data/" title="The Cryptocoding Guidelines by @veorq: Clean memory of secret data">Clean memory of secret data</a> for reference.</p>
+<p>Avoid Swift data types other than collections regardless of whether they are considered mutable. Many Swift data types hold their data by value, not by reference. Although this allows modification of the memory allocated to simple types like <code>char</code> and <code>int</code>, handling a complex type such as <code>String</code> by value involves a hidden layer of objects, structures, or primitive arrays whose memory can't be directly accessed or modified. Certain types of usage may seem to create a mutable data object (and even be documented as doing so), but they actually create a mutable identifier (variable) instead of an immutable identifier (constant). For example, many think that the following results in a mutable <code>String</code> in Swift, but this is actually an example of a variable whose complex value can be changed (replaced, not modified in place):</p>
+<div class="highlight"><pre><span></span><code><span class="kd">var</span> <span class="nv">str1</span> <span class="p">=</span> <span class="s">&quot;Goodbye&quot;</span>              <span class="c1">// &quot;Goodbye&quot;, base address:            0x0001039e8dd0</span>
+<span class="n">str1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot; &quot;</span><span class="p">)</span>                 <span class="c1">// &quot;Goodbye &quot;, base address:            0x608000064ae0</span>
+<span class="n">str1</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">&quot;cruel world!&quot;</span><span class="p">)</span>      <span class="c1">// &quot;Goodbye cruel world&quot;, base address: 0x6080000338a0</span>
+<span class="n">str1</span><span class="p">.</span><span class="bp">removeAll</span><span class="p">()</span>                 <span class="c1">// &quot;&quot;, base address                    0x00010bd66180</span>
+</code></pre></div>
+<p>Notice that the base address of the underlying value changes with each string operation. Here is the problem: To securely erase the sensitive information from memory, we don't want to simply change the value of the variable; we want to change the actual content of the memory allocated for the current value. Swift doesn't offer such a function.</p>
+<p>Swift collections (<code>Array</code>, <code>Set</code>, and <code>Dictionary</code>), on the other hand, may be acceptable if they collect primitive data types such as <code>char</code> or <code>int</code> and are defined as mutable (i.e., as variables instead of constants), in which case they are more or less equivalent to a primitive array (such as <code>char []</code>). These collections provide memory management, which can result in unidentified copies of the sensitive data in memory if the collection needs to copy the underlying buffer to a different location to extend it.</p>
+<p>Using mutable Objective-C data types, such as <code>NSMutableString</code>, may also be acceptable, but these types have the same memory issue as Swift collections. Pay attention when using Objective-C collections; they hold data by reference, and only Objective-C data types are allowed. Therefore, we are looking, not for a mutable collection, but for a collection that references mutable objects.</p>
+<p>As we've seen so far, using Swift or Objective-C data types requires a deep understanding of the language implementation. Furthermore, there has been some core re-factoring in between major Swift versions, resulting in many data types' behavior being incompatible with that of other types. To avoid these issues, we recommend using primitive data types whenever data needs to be securely erased from memory.</p>
+<p>Unfortunately, few libraries and frameworks are designed to allow sensitive data to be overwritten. Not even Apple considers this issue in the official iOS SDK API. For example, most of the APIs for data transformation (passers, serializes, etc.) operate on non-primitive data types. Similarly, regardless of whether you flag some <code>UITextField</code> as <em>Secure Text Entry</em> or not, it always returns data in the form of a <code>String</code> or <code>NSString</code>.</p>
+<h3 id="ipc">IPC<a class="headerlink" href="#ipc" title="Permanent link">&para;</a></h3>
+<p><a href="https://nshipster.com/inter-process-communication/" title="IPC on iOS">Inter Process Communication (IPC)</a> allows processes to send each other messages and data. For processes that need to communicate with each other, there are different ways to implement IPC on iOS:</p>
+<ul>
+<li><strong><a href="https://developer.apple.com/library/content/documentation/MacOSX/Conceptual/BPSystemStartup/Chapters/CreatingXPCServices.html" title="XPC Services">XPC Services</a></strong>: XPC is a structured, asynchronous library that provides basic interprocess communication. It is managed by <code>launchd</code>. It is the most secure and flexible implementation of IPC on iOS and should be the preferred method. It runs in the most restricted environment possible: sandboxed with no root privilege escalation and minimal file system access and network access. Two different APIs are used with XPC Services:</li>
+<li>NSXPCConnection API</li>
+<li>XPC Services API</li>
+<li><strong><a href="https://developer.apple.com/documentation/foundation/nsmachport" title="NSMachPort">Mach Ports</a></strong>: All IPC communication ultimately relies on the Mach Kernel API. Mach Ports allow local communication (intra-device communication) only. They can be implemented either natively or via Core Foundation (CFMachPort) and Foundation (NSMachPort) wrappers.</li>
+<li><strong>NSFileCoordinator</strong>: The class <code>NSFileCoordinator</code> can be used to manage and send data to and from apps via files that are available on the local file system to various processes. <a href="https://www.atomicbird.com/blog/sharing-with-app-extensions" title="NSFileCoordinator">NSFileCoordinator</a> methods run synchronously, so your code will be blocked until they stop executing. That's convenient because you don't have to wait for an asynchronous block callback, but it also means that the methods block the running thread.</li>
+</ul>
+<h2 id="testing-local-data-storage-mstg-storage-1-and-mstg-storage-2">Testing Local Data Storage (MSTG-STORAGE-1 and MSTG-STORAGE-2)<a class="headerlink" href="#testing-local-data-storage-mstg-storage-1-and-mstg-storage-2" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis">Static Analysis<a class="headerlink" href="#static-analysis" title="Permanent link">&para;</a></h3>
+<p>When you have access to the source code of an iOS app, identify sensitive data that's saved and processed throughout the app. This includes passwords, secret keys, and personally identifiable information (PII), but it may as well include other data identified as sensitive by industry regulations, laws, and company policies. Look for this data being saved via any of the local storage APIs listed below.</p>
+<p>Make sure that sensitive data is never stored without appropriate protection. For example, authentication tokens should not be saved in <code>NSUserDefaults</code> without additional encryption. Also avoid storing encryption keys in <code>.plist</code> files, hardcoded as strings in code, or generated using a predictable obfuscation function or key derivation function based on stable attributes.</p>
+<p>Sensitive data should be stored by using the Keychain API (that stores them inside the Secure Enclave), or stored encrypted using envelope encryption. Envelope encryption, or key wrapping, is a cryptographic construct that uses symmetric encryption to encapsulate key material. Data encryption keys (DEK) can be encrypted with key encryption keys (KEK) which must be securely stored in the Keychain. Encrypted DEK can be stored in <code>NSUserDefaults</code> or written in files. When required, application reads KEK, then decrypts DEK. Refer to <a href="https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html#encrypting-stored-keys" title="OWASP Cryptographic Storage Cheat Sheet: Encrypting Stored Keys">OWASP Cryptographic Storage Cheat Sheet</a> to learn more about encrypting cryptographic keys.</p>
+<h4 id="keychain">Keychain<a class="headerlink" href="#keychain" title="Permanent link">&para;</a></h4>
+<p>The encryption must be implemented so that the secret key is stored in the Keychain with secure settings, ideally <code>kSecAttrAccessibleWhenPasscodeSetThisDeviceOnly</code>. This ensures the usage of hardware-backed storage mechanisms. Make sure that the <code>AccessControlFlags</code> are set according to the security policy of the keys in the KeyChain.</p>
+<p><a href="https://developer.apple.com/library/content/samplecode/GenericKeychain/Introduction/Intro.html#//apple_ref/doc/uid/DTS40007797-Intro-DontLinkElementID_2" title="GenericKeyChain">Generic examples of using the KeyChain</a> to store, update, and delete data can be found in the official Apple documentation. The official Apple documentation also includes an example of using <a href="https://developer.apple.com/documentation/localauthentication/accessing_keychain_items_with_face_id_or_touch_id" title="Accessing Keychain Items with Face ID or Touch ID">Touch ID and passcode protected keys</a>.</p>
+<h4 id="filesystem">Filesystem<a class="headerlink" href="#filesystem" title="Permanent link">&para;</a></h4>
+<p>Using the source code, examine the different APIs used to store data locally. Make sure that any data is properly encrypted based on its sensitivity.</p>
+<h3 id="dynamic-analysis">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis" title="Permanent link">&para;</a></h3>
+<p>One way to determine whether sensitive information (like credentials and keys) is stored insecurely without leveraging native iOS functions is to analyze the app's data directory. Triggering all app functionality before the data is analyzed is important because the app may store sensitive data only after specific functionality has been triggered. You can then perform static analysis for the data dump according to generic keywords and app-specific data.</p>
+<p>The following steps can be used to determine how the application stores data locally on a jailbroken iOS device:</p>
+<ol>
+<li>Trigger the functionality that stores potentially sensitive data.</li>
+<li>Connect to the iOS device and navigate to its Bundle directory (this applies to iOS versions 8.0 and above): <code>/var/mobile/Containers/Data/Application/$APP_ID/</code></li>
+<li>Execute grep with the data that you've stored, for example: <code>grep -iRn "USERID"</code>.</li>
+<li>If the sensitive data is stored in plaintext, the app fails this test.</li>
+</ol>
+<p>You can analyze the app's data directory on a non-jailbroken iOS device by using third-party applications, such as <a href="https://imazing.com" title="iMazing">iMazing</a>.</p>
+<ol>
+<li>Trigger the functionality that stores potentially sensitive data.</li>
+<li>Connect the iOS device to your host computer and launch iMazing.</li>
+<li>Select "Apps", right-click the desired iOS application, and select "Extract App".</li>
+<li>Navigate to the output directory and locate <code>$APP_NAME.imazing</code>. Rename it to <code>$APP_NAME.zip</code>.</li>
+<li>Unpack the ZIP file. You can then analyze the application data.</li>
+</ol>
+<blockquote>
+<p>Note that tools like iMazing don't copy data directly from the device. They try to extract data from the backups they create. Therefore, getting all the app data that's stored on the iOS device is impossible: not all folders are included in backups. Use a jailbroken device or repackage the app with Frida and use a tool like objection to access all the data and files.</p>
+</blockquote>
+<p>If you added the Frida library to the app and repackaged it as described in "Dynamic Analysis on Non-Jailbroken Devices" (from the "Tampering and Reverse Engineering on iOS" chapter), you can use <a href="https://github.com/sensepost/objection" title="objection">objection</a> to transfer files directly from the app's data directory or <a href="https://github.com/sensepost/objection/wiki/Using-objection#getting-started-ios-edition" title="Getting started iOS edition">read files in objection</a> as explained in the chapter "Basic Security Testing on iOS", section "<a href="../0x06b-Basic-Security-Testing/#host-device-data-transfer" title="Host-Device Data Transfer">Host-Device Data Transfer</a>".</p>
+<p>The Keychain contents can be dumped during dynamic analysis. On a jailbroken device, you can use <a href="https://github.com/ptoomey3/Keychain-Dumper/" title="Keychain Dumper">Keychain dumper</a> as described in the chapter "Basic Security Testing on iOS".</p>
+<p>The path to the Keychain file is</p>
+<div class="highlight"><pre><span></span><code>/private/var/Keychains/keychain-2.db
+</code></pre></div>
+<p>On a non-jailbroken device, you can use objection to <a href="https://github.com/sensepost/objection/wiki/Notes-About-The-Keychain-Dumper" title="Notes About The Keychain Dumper">dump the Keychain items</a> created and stored by the app.</p>
+<h4 id="dynamic-analysis-with-xcode-and-ios-simulator">Dynamic Analysis with Xcode and iOS simulator<a class="headerlink" href="#dynamic-analysis-with-xcode-and-ios-simulator" title="Permanent link">&para;</a></h4>
+<blockquote>
+<p>This test is only available on macOS, as Xcode and the iOS simulator is needed.</p>
+</blockquote>
+<p>For testing the local storage and verifying what data is stored within it, it's not mandatory to have an iOS device. With access to the source code and Xcode the app can be build and deployed in the iOS simulator. The file system of the current device of the iOS simulator is available in <code>~/Library/Developer/CoreSimulator/Devices</code>.</p>
+<p>Once the app is running in the iOS simulator, you can navigate to the directory of the latest simulator started with the following command:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>~/Library/Developer/CoreSimulator/Devices/<span class="k">$(</span>
+ls<span class="w"> </span>-alht<span class="w"> </span>~/Library/Developer/CoreSimulator/Devices<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="p">|</span>
+awk<span class="w"> </span><span class="s1">&#39;{print $9}&#39;</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span>-n<span class="w"> </span><span class="s1">&#39;1!p&#39;</span><span class="k">)</span>/data/Containers/Data/Application
+</code></pre></div>
+<p>The command above will automatically find the UUID of the latest simulator started. Now you still need to grep for your app name or a keyword in your app. This will show you the UUID of the app.</p>
+<div class="highlight"><pre><span></span><code>grep<span class="w"> </span>-iRn<span class="w"> </span>keyword<span class="w"> </span>.
+</code></pre></div>
+<p>Then you can monitor and verify the changes in the filesystem of the app and investigate if any sensitive information is stored within the files while using the app.</p>
+<h4 id="dynamic-analysis-with-objection">Dynamic Analysis with Objection<a class="headerlink" href="#dynamic-analysis-with-objection" title="Permanent link">&para;</a></h4>
+<p>You can use the <a href="https://github.com/sensepost/objection" title="objection">objection</a> runtime mobile exploration toolkit to find vulnerabilities caused by the application's data storage mechanism. Objection can be used without a Jailbroken device, but it will require <a href="https://github.com/sensepost/objection/wiki/Patching-iOS-Applications" title="Objection">patching the iOS Application</a>.</p>
+<h5 id="reading-the-keychain">Reading the Keychain<a class="headerlink" href="#reading-the-keychain" title="Permanent link">&para;</a></h5>
+<p>To use Objection to read the Keychain, execute the following command:</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios keychain dump</span>
+Note:<span class="w"> </span>You<span class="w"> </span>may<span class="w"> </span>be<span class="w"> </span>asked<span class="w"> </span>to<span class="w"> </span>authenticate<span class="w"> </span>using<span class="w"> </span>the<span class="w"> </span>devices<span class="w"> </span>passcode<span class="w"> </span>or<span class="w"> </span>TouchID
+Save<span class="w"> </span>the<span class="w"> </span>output<span class="w"> </span>by<span class="w"> </span>adding<span class="w"> </span><span class="sb">`</span>--json<span class="w"> </span>keychain.json<span class="sb">`</span><span class="w"> </span>to<span class="w"> </span>this<span class="w"> </span><span class="nb">command</span>
+Dumping<span class="w"> </span>the<span class="w"> </span>iOS<span class="w"> </span>keychain...
+Created<span class="w">                    </span>Accessible<span class="w">                      </span>ACL<span class="w">    </span>Type<span class="w">      </span>Account<span class="w">                    </span>Service<span class="w">                                                        </span>Data
+-------------------------<span class="w">  </span>------------------------------<span class="w">  </span>-----<span class="w">  </span>--------<span class="w">  </span>-------------------------<span class="w">  </span>-------------------------------------------------------------<span class="w">  </span>------------------------------------
+<span class="m">2020</span>-02-11<span class="w"> </span><span class="m">13</span>:26:52<span class="w"> </span>+0000<span class="w">  </span>WhenUnlocked<span class="w">                    </span>None<span class="w">   </span>Password<span class="w">  </span>keychainValue<span class="w">              </span>com.highaltitudehacks.DVIAswiftv2.develop<span class="w">                      </span>mysecretpass123
+</code></pre></div>
+<h5 id="searching-for-binary-cookies">Searching for Binary Cookies<a class="headerlink" href="#searching-for-binary-cookies" title="Permanent link">&para;</a></h5>
+<p>iOS applications often store binary cookie files in the application sandbox. Cookies are binary files containing cookie data for application WebViews. You can use objection to convert these files to a JSON format and inspect the data.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios cookies get --json</span>
+<span class="o">[</span>
+<span class="w">    </span><span class="o">{</span>
+<span class="w">        </span><span class="s2">&quot;domain&quot;</span>:<span class="w"> </span><span class="s2">&quot;highaltitudehacks.com&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;expiresDate&quot;</span>:<span class="w"> </span><span class="s2">&quot;2051-09-15 07:46:43 +0000&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;isHTTPOnly&quot;</span>:<span class="w"> </span><span class="s2">&quot;false&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;isSecure&quot;</span>:<span class="w"> </span><span class="s2">&quot;false&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;name&quot;</span>:<span class="w"> </span><span class="s2">&quot;username&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;path&quot;</span>:<span class="w"> </span><span class="s2">&quot;/&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;value&quot;</span>:<span class="w"> </span><span class="s2">&quot;admin123&quot;</span>,
+<span class="w">        </span><span class="s2">&quot;version&quot;</span>:<span class="w"> </span><span class="s2">&quot;0&quot;</span>
+<span class="w">    </span><span class="o">}</span>
+<span class="o">]</span>
+</code></pre></div>
+<h5 id="searching-for-property-list-files">Searching for Property List Files<a class="headerlink" href="#searching-for-property-list-files" title="Permanent link">&para;</a></h5>
+<p>iOS applications often store data in property list (plist) files that are stored in both the application sandbox and the IPA package. Sometimes these files contain sensitive information, such as usernames and passwords; therefore, the contents of these files should be inspected during iOS assessments. Use the <code>ios plist cat plistFileName.plist</code> command to inspect the plist file.</p>
+<p>To find the file userInfo.plist, use the <code>env</code> command. It will print out the locations of the applications Library, Caches and Documents directories:</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># env</span>
+Name<span class="w">               </span>Path
+-----------------<span class="w">  </span>-------------------------------------------------------------------------------------------
+BundlePath<span class="w">         </span>/private/var/containers/Bundle/Application/B2C8E457-1F0C-4DB1-8C39-04ACBFFEE7C8/DVIA-v2.app
+CachesDirectory<span class="w">    </span>/var/mobile/Containers/Data/Application/264C23B8-07B5-4B5D-8701-C020C301C151/Library/Caches
+DocumentDirectory<span class="w">  </span>/var/mobile/Containers/Data/Application/264C23B8-07B5-4B5D-8701-C020C301C151/Documents
+LibraryDirectory<span class="w">   </span>/var/mobile/Containers/Data/Application/264C23B8-07B5-4B5D-8701-C020C301C151/Library
+</code></pre></div>
+<p>Go to the Documents directory and list all files using <code>ls</code>.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ls</span>
+NSFileType<span class="w">      </span>Perms<span class="w">  </span>NSFileProtection<span class="w">                      </span>Read<span class="w">    </span>Write<span class="w">    </span>Owner<span class="w">         </span>Group<span class="w">         </span>Size<span class="w">      </span>Creation<span class="w">                   </span>Name
+------------<span class="w">  </span>-------<span class="w">  </span>------------------------------------<span class="w">  </span>------<span class="w">  </span>-------<span class="w">  </span>------------<span class="w">  </span>------------<span class="w">  </span>--------<span class="w">  </span>-------------------------<span class="w">  </span>------------------------
+Directory<span class="w">         </span><span class="m">493</span><span class="w">  </span>n/a<span class="w">                                   </span>True<span class="w">    </span>True<span class="w">     </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span><span class="m">192</span>.0<span class="w"> </span>B<span class="w">   </span><span class="m">2020</span>-02-12<span class="w"> </span><span class="m">07</span>:03:51<span class="w"> </span>+0000<span class="w">  </span>default.realm.management
+Regular<span class="w">           </span><span class="m">420</span><span class="w">  </span>CompleteUntilFirstUserAuthentication<span class="w">  </span>True<span class="w">    </span>True<span class="w">     </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span><span class="m">16</span>.0<span class="w"> </span>KiB<span class="w">  </span><span class="m">2020</span>-02-12<span class="w"> </span><span class="m">07</span>:03:51<span class="w"> </span>+0000<span class="w">  </span>default.realm
+Regular<span class="w">           </span><span class="m">420</span><span class="w">  </span>CompleteUntilFirstUserAuthentication<span class="w">  </span>True<span class="w">    </span>True<span class="w">     </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span><span class="m">1</span>.2<span class="w"> </span>KiB<span class="w">   </span><span class="m">2020</span>-02-12<span class="w"> </span><span class="m">07</span>:03:51<span class="w"> </span>+0000<span class="w">  </span>default.realm.lock
+Regular<span class="w">           </span><span class="m">420</span><span class="w">  </span>CompleteUntilFirstUserAuthentication<span class="w">  </span>True<span class="w">    </span>True<span class="w">     </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span><span class="m">284</span>.0<span class="w"> </span>B<span class="w">   </span><span class="m">2020</span>-05-29<span class="w"> </span><span class="m">18</span>:15:23<span class="w"> </span>+0000<span class="w">  </span>userInfo.plist
+Unknown<span class="w">           </span><span class="m">384</span><span class="w">  </span>n/a<span class="w">                                   </span>True<span class="w">    </span>True<span class="w">     </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span>mobile<span class="w"> </span><span class="o">(</span><span class="m">501</span><span class="o">)</span><span class="w">  </span><span class="m">0</span>.0<span class="w"> </span>B<span class="w">     </span><span class="m">2020</span>-02-12<span class="w"> </span><span class="m">07</span>:03:51<span class="w"> </span>+0000<span class="w">  </span>default.realm.note
+
+Readable:<span class="w"> </span>True<span class="w">  </span>Writable:<span class="w"> </span>True
+</code></pre></div>
+<p>Execute the <code>ios plist cat</code> command to inspect the content of userInfo.plist file.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># ios plist cat userInfo.plist</span>
+<span class="o">{</span>
+<span class="w">        </span><span class="nv">password</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>password123<span class="p">;</span>
+<span class="w">        </span><span class="nv">username</span><span class="w"> </span><span class="o">=</span><span class="w"> </span>userName<span class="p">;</span>
+<span class="o">}</span>
+</code></pre></div>
+<h5 id="searching-for-sqlite-databases">Searching for SQLite Databases<a class="headerlink" href="#searching-for-sqlite-databases" title="Permanent link">&para;</a></h5>
+<p>iOS applications typically use SQLite databases to store data required by the application. Testers should check the data protection values of these files and their contents for sensitive data. Objection contains a module to interact with SQLite databases. It allows to dump the schema, their tables and query the records.</p>
+<div class="highlight"><pre><span></span><code>...itudehacks.DVIAswiftv2.develop<span class="w"> </span>on<span class="w"> </span><span class="o">(</span>iPhone:<span class="w"> </span><span class="m">13</span>.2.3<span class="o">)</span><span class="w"> </span><span class="o">[</span>usb<span class="o">]</span><span class="w"> </span><span class="c1"># sqlite connect Model.sqlite</span>
+Caching<span class="w"> </span><span class="nb">local</span><span class="w"> </span>copy<span class="w"> </span>of<span class="w"> </span>database<span class="w"> </span>file...
+Downloading<span class="w"> </span>/var/mobile/Containers/Data/Application/264C23B8-07B5-4B5D-8701-C020C301C151/Library/Application<span class="w"> </span>Support/Model.sqlite<span class="w"> </span>to<span class="w"> </span>/var/folders/4m/dsg0mq_17g39g473z0996r7m0000gq/T/tmpdr_7rvxi.sqlite
+Streaming<span class="w"> </span>file<span class="w"> </span>from<span class="w"> </span>device...
+Writing<span class="w"> </span>bytes<span class="w"> </span>to<span class="w"> </span>destination...
+Successfully<span class="w"> </span>downloaded<span class="w"> </span>/var/mobile/Containers/Data/Application/264C23B8-07B5-4B5D-8701-C020C301C151/Library/Application<span class="w"> </span>Support/Model.sqlite<span class="w"> </span>to<span class="w"> </span>/var/folders/4m/dsg0mq_17g39g473z0996r7m0000gq/T/tmpdr_7rvxi.sqlite
+Validating<span class="w"> </span>SQLite<span class="w"> </span>database<span class="w"> </span>format
+Connected<span class="w"> </span>to<span class="w"> </span>SQLite<span class="w"> </span>database<span class="w"> </span>at:<span class="w"> </span>Model.sqlite
+
+SQLite<span class="w"> </span>@<span class="w"> </span>Model.sqlite<span class="w"> </span>&gt;<span class="w"> </span>.tables
++--------------+
+<span class="p">|</span><span class="w"> </span>name<span class="w">         </span><span class="p">|</span>
++--------------+
+<span class="p">|</span><span class="w"> </span>ZUSER<span class="w">        </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Z_METADATA<span class="w">   </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Z_MODELCACHE<span class="w"> </span><span class="p">|</span>
+<span class="p">|</span><span class="w"> </span>Z_PRIMARYKEY<span class="w"> </span><span class="p">|</span>
++--------------+
+Time:<span class="w"> </span><span class="m">0</span>.013s
+
+SQLite<span class="w"> </span>@<span class="w"> </span>Model.sqlite<span class="w"> </span>&gt;<span class="w"> </span><span class="k">select</span><span class="w"> </span>*<span class="w"> </span>from<span class="w"> </span>Z_PRIMARYKEY
++-------+--------+---------+-------+
+<span class="p">|</span><span class="w"> </span>Z_ENT<span class="w"> </span><span class="p">|</span><span class="w"> </span>Z_NAME<span class="w"> </span><span class="p">|</span><span class="w"> </span>Z_SUPER<span class="w"> </span><span class="p">|</span><span class="w"> </span>Z_MAX<span class="w"> </span><span class="p">|</span>
++-------+--------+---------+-------+
+<span class="p">|</span><span class="w"> </span><span class="m">1</span><span class="w">     </span><span class="p">|</span><span class="w"> </span>User<span class="w">   </span><span class="p">|</span><span class="w"> </span><span class="m">0</span><span class="w">       </span><span class="p">|</span><span class="w"> </span><span class="m">0</span><span class="w">     </span><span class="p">|</span>
++-------+--------+---------+-------+
+<span class="m">1</span><span class="w"> </span>row<span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="nb">set</span>
+Time:<span class="w"> </span><span class="m">0</span>.013s
+</code></pre></div>
+<h5 id="searching-for-cache-databases">Searching for Cache Databases<a class="headerlink" href="#searching-for-cache-databases" title="Permanent link">&para;</a></h5>
+<p>By default <code>NSURLSession</code> stores data, such as HTTP requests and responses in the Cache.db database. This database can contain sensitive data, if tokens, usernames or any other sensitive information has been cached. To find the cached information open the data directory of the app (<code>/var/mobile/Containers/Data/Application/&lt;UUID&gt;</code>) and go to  <code>/Library/Caches/&lt;Bundle Identifier&gt;</code>. The WebKit cache is also being stored in the Cache.db file. Objection can open and interact with the database with the command <code>sqlite connect Cache.db</code>, as it is a normal SQLite database.</p>
+<p>It is recommended to disable Caching this data, as it may contain sensitive information in the request or response. The following list below shows different ways of achieving this:</p>
+<ol>
+<li>It is recommended to remove Cached responses after logout. This can be done with the provided method by Apple called <a href="https://developer.apple.com/documentation/foundation/urlcache/1417802-removeallcachedresponses" title="URLCache removeAllCachedResponses"><code>removeAllCachedResponses</code></a>
+   You can call this method as follows:</li>
+</ol>
+<p><code>URLCache.shared.removeAllCachedResponses()</code></p>
+<p>This method will remove all cached requests and responses from Cache.db file.</p>
+<ol>
+<li>If you don't need to use the advantage of cookies it would be recommended to just use the <a href="https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1410529-ephemeral" title="urlsessionconfiguration ephemeral">.ephemeral</a> configuration property of URLSession, which will disable saving cookies and Caches.</li>
+</ol>
+<p><a href="https://developer.apple.com/documentation/foundation/urlsessionconfiguration/1410529-ephemeral" title="urlsessionconfiguration ephemeral">Apple documentation</a>:</p>
+<p><code>An ephemeral session configuration object is similar to a default session configuration (see default), except that the corresponding session object doesn’t store caches, credential stores, or any session-related data to disk. Instead, session-related data is stored in RAM. The only time an ephemeral session writes data to disk is when you tell it to write the contents of a URL to a file.</code></p>
+<ol>
+<li>Cache can be also disabled by setting the Cache Policy to <a href="https://developer.apple.com/documentation/foundation/urlcache/storagepolicy/notallowed" title="URLCachePolicy notAllowed">.notAllowed</a>. It will disable storing Cache in any fashion, either in memory or on disk.</li>
+</ol>
+<h2 id="checking-logs-for-sensitive-data-mstg-storage-3">Checking Logs for Sensitive Data (MSTG-STORAGE-3)<a class="headerlink" href="#checking-logs-for-sensitive-data-mstg-storage-3" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_1">Static Analysis<a class="headerlink" href="#static-analysis_1" title="Permanent link">&para;</a></h3>
+<p>Use the following keywords to check the app's source code for predefined and custom logging statements:</p>
+<ul>
+<li>For predefined and built-in functions:</li>
+<li>NSLog</li>
+<li>NSAssert</li>
+<li>NSCAssert</li>
+<li>fprintf</li>
+<li>For custom functions:</li>
+<li>Logging</li>
+<li>Logfile</li>
+</ul>
+<p>A generalized approach to this issue is to use a define to enable <code>NSLog</code> statements for development and debugging, then disable them before shipping the software. You can do this by adding the following code to the appropriate PREFIX_HEADER (*.pch) file:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">#ifdef DEBUG</span>
+<span class="cp">#   define NSLog (...) NSLog(__VA_ARGS__)</span>
+<span class="cp">#else</span>
+<span class="cp">#   define NSLog (...)</span>
+<span class="cp">#endif</span>
+</code></pre></div>
+<h3 id="dynamic-analysis_1">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_1" title="Permanent link">&para;</a></h3>
+<p>In the section "Monitoring System Logs" of the chapter "iOS Basic Security Testing" various methods for checking the device logs are explained. Navigate to a screen that displays input fields that take sensitive user information.</p>
+<p>After starting one of the methods, fill in the input fields. If sensitive data is displayed in the output, the app fails this test.</p>
+<h2 id="determining-whether-sensitive-data-is-shared-with-third-parties-mstg-storage-4">Determining Whether Sensitive Data Is Shared with Third Parties (MSTG-STORAGE-4)<a class="headerlink" href="#determining-whether-sensitive-data-is-shared-with-third-parties-mstg-storage-4" title="Permanent link">&para;</a></h2>
+<h3 id="overview_1">Overview<a class="headerlink" href="#overview_1" title="Permanent link">&para;</a></h3>
+<p>Sensitive information might be leaked to third parties by several means. On iOS typically via third-party services embedded in the app.</p>
+<p>The features these services provide can involve tracking services to monitor the user's behavior while using the app, selling banner advertisements, or improving the user experience.</p>
+<p>The downside is that developers don't usually know the details of the code executed via third-party libraries. Consequently, no more information than is necessary should be sent to a service, and no sensitive information should be disclosed.</p>
+<p>Most third-party services are implemented in two ways:</p>
+<ul>
+<li>with a standalone library</li>
+<li>with a full SDK</li>
+</ul>
+<h3 id="static-analysis_2">Static Analysis<a class="headerlink" href="#static-analysis_2" title="Permanent link">&para;</a></h3>
+<p>To determine whether API calls and functions provided by the third-party library are used according to best practices, review their source code, requested permissions and check for any known vulnerabilities (see <a href="../0x06i-Testing-Code-Quality-and-Build-Settings/#checking-for-weaknesses-in-third-party-libraries-mstg-code-5">"Checking for Weaknesses in Third Party Libraries (MSTG-CODE-5)"</a>).</p>
+<p>All data that's sent to third-party services should be anonymized to prevent exposure of PII (Personal Identifiable Information) that would allow the third party to identify the user account. No other data (such as IDs that can be mapped to a user account or session) should be sent to a third party.</p>
+<h3 id="dynamic-analysis_2">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_2" title="Permanent link">&para;</a></h3>
+<p>Check all requests to external services for embedded sensitive information.
+To intercept traffic between the client and server, you can perform dynamic analysis by launching a man-in-the-middle (MITM) attack with <a href="../../Tools/0x08a-Testing-Tools/#burp-suite">Burp Suite</a> Professional or <a href="../../Tools/0x08a-Testing-Tools/#owasp-zap">OWASP ZAP</a>. Once you route the traffic through the interception proxy, you can try to sniff the traffic that passes between the app and server. All app requests that aren't sent directly to the server on which the main function is hosted should be checked for sensitive information, such as PII in a tracker or ad service.</p>
+<h2 id="finding-sensitive-data-in-the-keyboard-cache-mstg-storage-5">Finding Sensitive Data in the Keyboard Cache (MSTG-STORAGE-5)<a class="headerlink" href="#finding-sensitive-data-in-the-keyboard-cache-mstg-storage-5" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_3">Static Analysis<a class="headerlink" href="#static-analysis_3" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Search through the source code for similar implementations, such as</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="w">  </span><span class="n">textObject</span><span class="p">.</span><span class="n">autocorrectionType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UITextAutocorrectionTypeNo</span><span class="p">;</span>
+<span class="w">  </span><span class="n">textObject</span><span class="p">.</span><span class="n">secureTextEntry</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">YES</span><span class="p">;</span>
+</code></pre></div>
+<ul>
+<li>Open xib and storyboard files in the <code>Interface Builder</code> of Xcode and verify the states of <code>Secure Text Entry</code> and <code>Correction</code> in the <code>Attributes Inspector</code> for the appropriate object.</li>
+</ul>
+<p>The application must prevent the caching of sensitive information entered into text fields. You can prevent caching by disabling it programmatically, using the <code>textObject.autocorrectionType = UITextAutocorrectionTypeNo</code> directive in the desired UITextFields, UITextViews, and UISearchBars. For data that should be masked, such as PINs and passwords, set <code>textObject.secureTextEntry</code> to <code>YES</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="bp">UITextField</span><span class="w"> </span><span class="o">*</span><span class="n">textField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="bp">UITextField</span><span class="w"> </span><span class="n">alloc</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="n">initWithFrame</span><span class="o">:</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="p">];</span>
+<span class="n">textField</span><span class="p">.</span><span class="n">autocorrectionType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UITextAutocorrectionTypeNo</span><span class="p">;</span>
+</code></pre></div>
+<h3 id="dynamic-analysis_3">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_3" title="Permanent link">&para;</a></h3>
+<p>If a jailbroken iPhone is available, execute the following steps:</p>
+<ol>
+<li>Reset your iOS device keyboard cache by navigating to <code>Settings &gt; General &gt; Reset &gt; Reset Keyboard Dictionary</code>.</li>
+<li>Use the application and identify the functionalities that allow users to enter sensitive data.</li>
+<li>Dump the keyboard cache file <code>dynamic-text.dat</code> into the following directory (which might be different for iOS versions before 8.0):
+<code>/private/var/mobile/Library/Keyboard/</code></li>
+<li>Look for sensitive data, such as username, passwords, email addresses, and credit card numbers. If the sensitive data can be obtained via the keyboard cache file, the app fails this test.</li>
+</ol>
+<div class="highlight"><pre><span></span><code><span class="bp">UITextField</span><span class="w"> </span><span class="o">*</span><span class="n">textField</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="bp">UITextField</span><span class="w"> </span><span class="n">alloc</span><span class="w"> </span><span class="p">]</span><span class="w"> </span><span class="n">initWithFrame</span><span class="o">:</span><span class="w"> </span><span class="n">frame</span><span class="w"> </span><span class="p">];</span>
+<span class="n">textField</span><span class="p">.</span><span class="n">autocorrectionType</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">UITextAutocorrectionTypeNo</span><span class="p">;</span>
+</code></pre></div>
+<p>If you must use a non-jailbroken iPhone:</p>
+<ol>
+<li>Reset the keyboard cache.</li>
+<li>Key in all sensitive data.</li>
+<li>Use the app again and determine whether autocorrect suggests previously entered sensitive information.</li>
+</ol>
+<h2 id="determining-whether-sensitive-data-is-exposed-via-ipc-mechanisms-mstg-storage-6">Determining Whether Sensitive Data Is Exposed via IPC Mechanisms (MSTG-STORAGE-6)<a class="headerlink" href="#determining-whether-sensitive-data-is-exposed-via-ipc-mechanisms-mstg-storage-6" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_4">Static Analysis<a class="headerlink" href="#static-analysis_4" title="Permanent link">&para;</a></h3>
+<p>The following section summarizes keywords that you should look for to identify IPC implementations within iOS source code.</p>
+<h4 id="xpc-services">XPC Services<a class="headerlink" href="#xpc-services" title="Permanent link">&para;</a></h4>
+<p>Several classes may be used to implement the NSXPCConnection API:</p>
+<ul>
+<li>NSXPCConnection</li>
+<li>NSXPCInterface</li>
+<li>NSXPCListener</li>
+<li>NSXPCListenerEndpoint</li>
+</ul>
+<p>You can set <a href="https://www.objc.io/issues/14-mac/xpc/#security-attributes-of-the-connection" title="Security Attributes of NSXPCConnection">security attributes</a> for the connection. The attributes should be verified.</p>
+<p>Check for the following two files in the Xcode project for the XPC Services API (which is C-based):</p>
+<ul>
+<li><a href="https://developer.apple.com/documentation/xpc/xpc_services_xpc.h" title="xpc.h"><code>xpc.h</code></a></li>
+<li><code>connection.h</code></li>
+</ul>
+<h4 id="mach-ports">Mach Ports<a class="headerlink" href="#mach-ports" title="Permanent link">&para;</a></h4>
+<p>Keywords to look for in low-level implementations:</p>
+<ul>
+<li>mach_port_t</li>
+<li>mach_msg_*</li>
+</ul>
+<p>Keywords to look for in high-level implementations (Core Foundation and Foundation wrappers):</p>
+<ul>
+<li>CFMachPort</li>
+<li>CFMessagePort</li>
+<li>NSMachPort</li>
+<li>NSMessagePort</li>
+</ul>
+<h4 id="nsfilecoordinator">NSFileCoordinator<a class="headerlink" href="#nsfilecoordinator" title="Permanent link">&para;</a></h4>
+<p>Keywords to look for:</p>
+<ul>
+<li>NSFileCoordinator</li>
+</ul>
+<h3 id="dynamic-analysis_4">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_4" title="Permanent link">&para;</a></h3>
+<p>Verify IPC mechanisms with static analysis of the iOS source code. No iOS tool is currently available to verify IPC usage.</p>
+<h2 id="checking-for-sensitive-data-disclosed-through-the-user-interface-mstg-storage-7">Checking for Sensitive Data Disclosed Through the User Interface (MSTG-STORAGE-7)<a class="headerlink" href="#checking-for-sensitive-data-disclosed-through-the-user-interface-mstg-storage-7" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_5">Static Analysis<a class="headerlink" href="#static-analysis_5" title="Permanent link">&para;</a></h3>
+<p>A text field that masks its input can be configured in two ways:</p>
+<p><strong>Storyboard</strong>
+In the iOS project's storyboard, navigate to the configuration options for the text field that takes sensitive data. Make sure that the option "Secure Text Entry" is selected. If this option is activated, dots are shown in the text field in place of the text input.</p>
+<p><strong>Source Code</strong>
+If the text field is defined in the source code, make sure that the option <a href="https://developer.apple.com/documentation/uikit/uitextinputtraits/1624427-issecuretextentry" title="isSecureTextEntry in Text Field"><code>isSecureTextEntry</code></a> is set to "true". This option obscures the text input by showing dots.</p>
+<div class="highlight"><pre><span></span><code><span class="n">sensitiveTextField</span><span class="p">.</span><span class="n">isSecureTextEntry</span> <span class="p">=</span> <span class="kc">true</span>
+</code></pre></div>
+<h3 id="dynamic-analysis_5">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_5" title="Permanent link">&para;</a></h3>
+<p>To determine whether the application leaks any sensitive information to the user interface, run the application and identify components that either show such information or take it as input.</p>
+<p>If the information is masked by, for example, asterisks or dots, the app isn't leaking data to the user interface.</p>
+<h2 id="testing-backups-for-sensitive-data-mstg-storage-8">Testing Backups for Sensitive Data (MSTG-STORAGE-8)<a class="headerlink" href="#testing-backups-for-sensitive-data-mstg-storage-8" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_6">Static Analysis<a class="headerlink" href="#static-analysis_6" title="Permanent link">&para;</a></h3>
+<p>A backup of a device on which a mobile application has been installed will include all subdirectories (except for <code>Library/Caches/</code>) and files in the <a href="https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html#//apple_ref/doc/uid/TP40010672-CH2-SW12" title="Directories of an iOS App">app's private directory</a>.</p>
+<p>Therefore, avoid storing sensitive data in plaintext within any of the files or folders that are in the app's private directory or subdirectories.</p>
+<p>Although all the files in <code>Documents/</code> and <code>Library/Application Support/</code> are always backed up by default, you can <a href="https://developer.apple.com/library/content/documentation/FileManagement/Conceptual/FileSystemProgrammingGuide/FileSystemOverview/FileSystemOverview.html#//apple_ref/doc/uid/TP40010672-CH2-SW28" title="Where You Should Put Your App\'s Files">exclude files from the backup</a> by calling <code>NSURL setResourceValue:forKey:error:</code> with the <code>NSURLIsExcludedFromBackupKey</code> key.</p>
+<p>You can use the <a href="https://developer.apple.com/reference/foundation/nsurl#//apple_ref/c/data/NSURLIsExcludedFromBackupKey" title="NSURLIsExcludedFromBackupKey">NSURLIsExcludedFromBackupKey</a> and <a href="https://developer.apple.com/reference/corefoundation/cfurl-rd7#//apple_ref/c/data/kCFURLIsExcludedFromBackupKey" title="kCFURLIsExcludedFromBackupKey">CFURLIsExcludedFromBackupKey</a> file system properties to exclude files and directories from backups. An app that needs to exclude many files can do so by creating its own subdirectory and marking that directory excluded. Apps should create their own directories for exclusion instead of excluding system-defined directories.</p>
+<p>Both file system properties are preferable to the deprecated approach of directly setting an extended attribute. All apps running on iOS version 5.1 and later should use these properties to exclude data from backups.</p>
+<p>The following is <a href="https://developer.apple.com/library/content/qa/qa1719/index.html" title="How do I prevent files from being backed up to iCloud and iTunes?">sample Objective-C code for excluding a file from a backup</a> on iOS 5.1 and later:</p>
+<div class="highlight"><pre><span></span><code><span class="p">-</span> <span class="p">(</span><span class="kt">BOOL</span><span class="p">)</span><span class="nf">addSkipBackupAttributeToItemAtPath:</span><span class="p">(</span><span class="bp">NSString</span><span class="w"> </span><span class="o">*</span><span class="p">)</span> <span class="nv">filePathString</span>
+<span class="p">{</span>
+<span class="w">    </span><span class="bp">NSURL</span><span class="o">*</span><span class="w"> </span><span class="n">URL</span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="bp">NSURL</span><span class="w"> </span><span class="n">fileURLWithPath</span><span class="o">:</span><span class="w"> </span><span class="n">filePathString</span><span class="p">];</span>
+<span class="w">    </span><span class="n">assert</span><span class="p">([[</span><span class="bp">NSFileManager</span><span class="w"> </span><span class="n">defaultManager</span><span class="p">]</span><span class="w"> </span><span class="n">fileExistsAtPath</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="n">URL</span><span class="w"> </span><span class="n">path</span><span class="p">]]);</span>
+
+<span class="w">    </span><span class="bp">NSError</span><span class="w"> </span><span class="o">*</span><span class="n">error</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">nil</span><span class="p">;</span>
+<span class="w">    </span><span class="kt">BOOL</span><span class="w"> </span><span class="n">success</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">URL</span><span class="w"> </span><span class="n">setResourceValue</span><span class="o">:</span><span class="w"> </span><span class="p">[</span><span class="bp">NSNumber</span><span class="w"> </span><span class="n">numberWithBool</span><span class="o">:</span><span class="w"> </span><span class="nb">YES</span><span class="p">]</span>
+<span class="w">                                  </span><span class="nl">forKey</span><span class="p">:</span><span class="w"> </span><span class="n">NSURLIsExcludedFromBackupKey</span><span class="w"> </span><span class="n">error</span><span class="o">:</span><span class="w"> </span><span class="o">&amp;</span><span class="n">error</span><span class="p">];</span>
+<span class="w">    </span><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">success</span><span class="p">){</span>
+<span class="w">        </span><span class="n">NSLog</span><span class="p">(</span><span class="s">@&quot;Error excluding %@ from backup %@&quot;</span><span class="p">,</span><span class="w"> </span><span class="p">[</span><span class="n">URL</span><span class="w"> </span><span class="n">lastPathComponent</span><span class="p">],</span><span class="w"> </span><span class="n">error</span><span class="p">);</span>
+<span class="w">    </span><span class="p">}</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">success</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>The following is sample Swift code for excluding a file from a backup on iOS 5.1 and later, see <a href="https://bencoding.com/2017/02/20/swift-excluding-files-from-icloud-backup/">Swift excluding files from iCloud backup</a> for more information:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">enum</span> <span class="nc">ExcludeFileError</span><span class="p">:</span> <span class="n">Error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="n">fileDoesNotExist</span>
+    <span class="k">case</span> <span class="n">error</span><span class="p">(</span><span class="nb">String</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">excludeFileFromBackup</span><span class="p">(</span><span class="n">filePath</span><span class="p">:</span> <span class="n">URL</span><span class="p">)</span> <span class="p">-&gt;</span> <span class="n">Result</span><span class="p">&lt;</span><span class="nb">Bool</span><span class="p">,</span> <span class="n">ExcludeFileError</span><span class="p">&gt;</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nv">file</span> <span class="p">=</span> <span class="n">filePath</span>
+
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="n">FileManager</span><span class="p">.</span><span class="k">default</span><span class="p">.</span><span class="n">fileExists</span><span class="p">(</span><span class="n">atPath</span><span class="p">:</span> <span class="n">file</span><span class="p">.</span><span class="n">path</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nv">res</span> <span class="p">=</span> <span class="n">URLResourceValues</span><span class="p">()</span>
+            <span class="n">res</span><span class="p">.</span><span class="n">isExcludedFromBackup</span> <span class="p">=</span> <span class="kc">true</span>
+            <span class="k">try</span> <span class="n">file</span><span class="p">.</span><span class="n">setResourceValues</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <span class="k">return</span> <span class="p">.</span><span class="n">success</span><span class="p">(</span><span class="kc">true</span><span class="p">)</span>
+
+        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="p">.</span><span class="n">failure</span><span class="p">(.</span><span class="n">fileDoesNotExist</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">catch</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="p">.</span><span class="n">failure</span><span class="p">(.</span><span class="n">error</span><span class="p">(</span><span class="s">&quot;Error excluding </span><span class="si">\(</span><span class="n">file</span><span class="p">.</span><span class="n">lastPathComponent</span><span class="si">)</span><span class="s"> from backup </span><span class="si">\(</span><span class="n">error</span><span class="si">)</span><span class="s">&quot;</span><span class="p">))</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></div>
+<h3 id="dynamic-analysis_6">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_6" title="Permanent link">&para;</a></h3>
+<p>In order to test the backup, you obviously need to create one first. The most common way to create a backup of an iOS device is by using iTunes, which is available for Windows, Linux and of course macOS (till macOS Mojave). When creating a backup via iTunes you can always only backup the whole device and not select just a single app. Make sure that the option "Encrypt local backup" in iTunes is not set, so that the backup is stored in cleartext on your hard drive.</p>
+<blockquote>
+<p>iTunes is not available anymore from macOS Catalina onwards. Managing of an iOS device, including updates, backup and restore has been moved to the Finder app. The approach remains the same, as described above.</p>
+</blockquote>
+<p>After the iOS device has been backed up, you need to retrieve the file path of the backup, which are different locations on each OS. The official Apple documentation will help you to <a href="https://support.apple.com/en-us/HT204215" title="Locate backups of your iPhone, iPad, and iPod touch">locate backups of your iPhone, iPad, and iPod touch</a>.</p>
+<p>When you want to navigate to the backup folder up to High Sierra you can easily do so. Starting with macOS Mojave you will get the following error (even as root):</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">pwd</span>
+/Users/foo/Library/Application<span class="w"> </span>Support
+$<span class="w"> </span>ls<span class="w"> </span>-alh<span class="w"> </span>MobileSync
+ls:<span class="w"> </span>MobileSync:<span class="w"> </span>Operation<span class="w"> </span>not<span class="w"> </span>permitted
+</code></pre></div>
+<p>This is not a permission issue of the backup folder, but a new feature in macOS Mojave. You can solve this problem by granting full disk access to your terminal application by following the explanation on <a href="http://osxdaily.com/2018/10/09/fix-operation-not-permitted-terminal-error-macos/" title="Fix Terminal -Operation not permitted- Error in MacOS Mojave">OSXDaily</a>.</p>
+<p>Before you can access the directory you need to select the folder with the UDID of your device. Check the section "Getting the UDID of an iOS device" in the "iOS Basic Security Testing" chapter on how to retrieve the UDID.</p>
+<p>Once you know the UDID you can navigate into this directory and you will find the full backup of the whole device, which does include pictures, app data and whatever might have been stored on the device.</p>
+<p>Review the data that's in the backed up files and folders. The structure of the directories and file names is obfuscated and will look like this:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span><span class="nb">pwd</span>
+/Users/foo/Library/Application<span class="w"> </span>Support/MobileSync/Backup/416f01bd160932d2bf2f95f1f142bc29b1c62dcb/00
+$<span class="w"> </span>ls<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-n<span class="w"> </span><span class="m">3</span>
+000127b08898088a8a169b4f63b363a3adcf389b
+0001fe89d0d03708d414b36bc6f706f567b08d66
+000200a644d7d2c56eec5b89c1921dacbec83c3e
+</code></pre></div>
+<p>Therefore, it's not straightforward to navigate through it and you will not find any hints of the app you want to analyze in the directory or file name. You can consider using the <a href="https://imazing.com" title="iMazing">iMazing</a> shareware utility to assist here. Perform a device backup with iMazing and use its built-in backup explorer to easily analyze app container contents including original paths and file names.</p>
+<p>Without iMazing or similar software you may need to resort to using grep to identify sensitive data. This is not the most thorough approach but you can try searching for sensitive data that you have keyed in while using the app before you made the backup. For example: the username, password, credit card data, PII or any data that is considered sensitive in the context of the app.</p>
+<div class="highlight"><pre><span></span><code>~/Library/Application<span class="w"> </span>Support/MobileSync/Backup/&lt;UDID&gt;
+grep<span class="w"> </span>-iRn<span class="w"> </span><span class="s2">&quot;password&quot;</span><span class="w"> </span>.
+</code></pre></div>
+<p>As described in the Static Analysis section, any sensitive data that you're able to find should be excluded from the backup, encrypted properly by using the Keychain or not stored on the device in the first place.</p>
+<p>To identify if a backup is encrypted, you can check the key named "IsEncrypted" from the file "Manifest.plist", located at the root of the backup directory. The following example shows a configuration indicating that the backup is encrypted:</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="cp">&lt;!DOCTYPE plist PUBLIC &quot;-//Apple//DTD PLIST 1.0//EN&quot; &quot;http://www.apple.com/DTDs/PropertyList-1.0.dtd&quot;&gt;</span>
+<span class="nt">&lt;plist</span><span class="w"> </span><span class="na">version=</span><span class="s">&quot;1.0&quot;</span><span class="nt">&gt;</span>
+...
+<span class="w"> </span><span class="nt">&lt;key&gt;</span>Date<span class="nt">&lt;/key&gt;</span>
+<span class="w"> </span><span class="nt">&lt;date&gt;</span>2021-03-12T17:43:33Z<span class="nt">&lt;/date&gt;</span>
+<span class="w"> </span><span class="nt">&lt;key&gt;</span>IsEncrypted<span class="nt">&lt;/key&gt;</span>
+<span class="w"> </span><span class="nt">&lt;true/&gt;</span>
+...
+<span class="nt">&lt;/plist&gt;</span>
+</code></pre></div>
+<p>In case you need to work with an encrypted backup, there are some Python scripts in <a href="https://github.com/dinosec/iphone-dataprotection/tree/master/python_scripts" title="iphone-dataprotection">DinoSec's GitHub repo</a>, such as backup_tool.py and backup_passwd.py, that will serve as a good starting point. However, note that they might not work with the latest iTunes/Finder versions and might need to be tweaked.</p>
+<p>You can also use the tool <a href="../../Tools/0x08a-Testing-Tools/#iosbackup">iOSbackup</a> to easily read and extract files from a password-encrypted iOS backup.</p>
+<h4 id="proof-of-concept-removing-ui-lock-with-tampered-backup">Proof of Concept: Removing UI Lock with Tampered Backup<a class="headerlink" href="#proof-of-concept-removing-ui-lock-with-tampered-backup" title="Permanent link">&para;</a></h4>
+<p>As discussed earlier, sensitive data is not limited to just user data and PII. It can also be configuration or settings files that affect app behavior, restrict functionality, or enable security controls. If you take a look at the open source bitcoin wallet app, <a href="https://github.com/bither/bither-ios" title="Bither for iOS">Bither</a>, you'll see that it's possible to configure a PIN to lock the UI. And after a few easy steps, you will see how to bypass this UI lock with a modified backup on a non-jailbroken device.</p>
+<p><img src="../../../assets/Images/Chapters/0x06d/bither_demo_enable_pin.png" width="300px" />
+<img src="../../../assets/Images/Chapters/0x06d/bither_demo_pin_screen.png" width="300px" /></p>
+<p>After you enable the pin, use iMazing to perform a device backup:</p>
+<ol>
+<li>Select your device from the list under the <strong>AVAILABLE</strong> menu.</li>
+<li>Click the top menu option <strong>Back Up</strong>.</li>
+<li>Follow prompts to complete the backup using defaults.</li>
+</ol>
+<p>Next you can open the backup to view app container files within your target app:</p>
+<ol>
+<li>Select your device and click <strong>Backups</strong> on the top right menu.</li>
+<li>Click the backup you created and select <strong>View</strong>.</li>
+<li>Navigate to the Bither app from the <strong>Apps</strong> directory.</li>
+</ol>
+<p>At this point you can view all the backed up content for Bither.</p>
+<p><img src="../../../assets/Images/Chapters/0x06d/bither_demo_imazing_1.png" width="100%" /></p>
+<p>This is where you can begin parsing through the files looking for sensitive data. In the screenshot you'll see the <code>net.bither.plist</code> file which contains the <code>pin_code</code> attribute. To remove the UI lock restriction, simply delete the <code>pin_code</code> attribute and save the changes.</p>
+<p>From there it's possible to easily restore the modified version of <code>net.bither.plist</code> back onto the device using the licensed version of iMazing.</p>
+<p>The free workaround, however, is to find the plist file in the obfuscated backup generated by iTunes/Finder. So create your backup of the device with Bither's PIN code configured. Then, using the steps described earlier, find the backup directory and grep for "pin_code" as shown below.</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>~/Library/Application<span class="w"> </span>Support/MobileSync/Backup/&lt;UDID&gt;
+$<span class="w"> </span>grep<span class="w"> </span>-iRn<span class="w"> </span><span class="s2">&quot;pin_code&quot;</span><span class="w"> </span>.
+Binary<span class="w"> </span>file<span class="w"> </span>./13/135416dd5f251f9251e0f07206277586b7eac6f6<span class="w"> </span>matches
+</code></pre></div>
+<p>You'll see there was a match on a binary file with an obfuscated name. This is your <code>net.bither.plist</code> file. Go ahead and rename the file giving it a plist extension so Xcode can easily open it up for you.</p>
+<p><img src="../../../assets/Images/Chapters/0x06d/bither_demo_plist.png" width="100%" /></p>
+<p>Again, remove the <code>pin_code</code> attribute from the plist and save your changes. Rename the file back to the original name (i.e., without the plist extension) and perform your backup restore. When the restore is complete you'll see that Bither no longer prompts you for the PIN code when launched.</p>
+<h2 id="testing-auto-generated-screenshots-for-sensitive-information-mstg-storage-9">Testing Auto-Generated Screenshots for Sensitive Information (MSTG-STORAGE-9)<a class="headerlink" href="#testing-auto-generated-screenshots-for-sensitive-information-mstg-storage-9" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_7">Static Analysis<a class="headerlink" href="#static-analysis_7" title="Permanent link">&para;</a></h3>
+<p>If you have the source code, search for the <a href="https://developer.apple.com/documentation/uikit/uiapplicationdelegate/1622997-applicationdidenterbackground"><code>applicationDidEnterBackground</code></a> method to determine whether the application sanitizes the screen before being backgrounded.</p>
+<p>The following is a sample implementation using a default background image (<code>overlayImage.png</code>) whenever the application is backgrounded, overriding the current view:</p>
+<p>Swift:</p>
+<div class="highlight"><pre><span></span><code><span class="kd">private</span> <span class="kd">var</span> <span class="nv">backgroundImage</span><span class="p">:</span> <span class="bp">UIImageView</span><span class="p">?</span>
+
+<span class="kd">func</span> <span class="nf">applicationDidEnterBackground</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">let</span> <span class="nv">myBanner</span> <span class="p">=</span> <span class="bp">UIImageView</span><span class="p">(</span><span class="n">image</span><span class="p">:</span> <span class="p">#</span><span class="n">imageLiteral</span><span class="p">(</span><span class="n">resourceName</span><span class="p">:</span> <span class="s">&quot;overlayImage&quot;</span><span class="p">))</span>
+    <span class="n">myBanner</span><span class="p">.</span><span class="n">frame</span> <span class="p">=</span> <span class="bp">UIScreen</span><span class="p">.</span><span class="n">main</span><span class="p">.</span><span class="n">bounds</span>
+    <span class="n">backgroundImage</span> <span class="p">=</span> <span class="n">myBanner</span>
+    <span class="n">window</span><span class="p">?.</span><span class="n">addSubview</span><span class="p">(</span><span class="n">myBanner</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">applicationWillEnterForeground</span><span class="p">(</span><span class="kc">_</span> <span class="n">application</span><span class="p">:</span> <span class="bp">UIApplication</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">backgroundImage</span><span class="p">?.</span><span class="n">removeFromSuperview</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>Objective-C:</p>
+<div class="highlight"><pre><span></span><code><span class="k">@property</span><span class="w"> </span><span class="p">(</span><span class="bp">UIImageView</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="n">backgroundImage</span><span class="p">;</span>
+
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationDidEnterBackground:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="bp">UIImageView</span><span class="w"> </span><span class="o">*</span><span class="n">myBanner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[[</span><span class="bp">UIImageView</span><span class="w"> </span><span class="n">alloc</span><span class="p">]</span><span class="w"> </span><span class="n">initWithImage</span><span class="o">:</span><span class="s">@&quot;overlayImage.png&quot;</span><span class="p">];</span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImage</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">myBanner</span><span class="p">;</span>
+<span class="w">    </span><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImage</span><span class="p">.</span><span class="n">bounds</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">UIScreen</span><span class="p">.</span><span class="n">mainScreen</span><span class="p">.</span><span class="n">bounds</span><span class="p">;</span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">window</span><span class="w"> </span><span class="n">addSubview</span><span class="o">:</span><span class="n">myBanner</span><span class="p">];</span>
+<span class="p">}</span>
+
+<span class="p">-</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span><span class="nf">applicationWillEnterForeground:</span><span class="p">(</span><span class="bp">UIApplication</span><span class="w"> </span><span class="o">*</span><span class="p">)</span><span class="nv">application</span><span class="w"> </span><span class="p">{</span>
+<span class="w">    </span><span class="p">[</span><span class="nb">self</span><span class="p">.</span><span class="n">backgroundImage</span><span class="w"> </span><span class="n">removeFromSuperview</span><span class="p">];</span>
+<span class="p">}</span>
+</code></pre></div>
+<p>This sets the background image to <code>overlayImage.png</code> whenever the application is backgrounded. It prevents sensitive data leaks because <code>overlayImage.png</code> will always override the current view.</p>
+<h3 id="dynamic-analysis_7">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_7" title="Permanent link">&para;</a></h3>
+<p>You can use a <em>visual approach</em> to quickly validate this test case using any iOS device (jailbroken or not):</p>
+<ol>
+<li>Navigate to an application screen that displays sensitive information, such as a username, an email address, or account details.</li>
+<li>Background the application by hitting the <strong>Home</strong> button on your iOS device.</li>
+<li>Verify that a default image is shown as the top view element instead of the view containing the sensitive information.</li>
+</ol>
+<p>If required, you may also collect evidence by performing steps 1 to 3 on a jailbroken device or a non-jailbroken device after <a href="../0x06c-Reverse-Engineering-and-Tampering/#dynamic-analysis-on-non-jailbroken-devices">repackaging the app with the Frida Gadget</a>. After that, connect to the iOS device <a href="../0x06b-Basic-Security-Testing/#accessing-the-device-shell">per SSH</a> or <a href="../0x06b-Basic-Security-Testing/#host-device-data-transfer">by other means</a> and navigate to the Snapshots directory. The location may differ on each iOS version but it's usually inside the app's Library directory. On iOS 14.5:
+    <code>/var/mobile/Containers/Data/Application/$APP_ID/Library/SplashBoard/Snapshots/sceneID:$APP_NAME-default/</code></p>
+<p>The screenshots inside that folder should not contain any sensitive information.</p>
+<h2 id="testing-memory-for-sensitive-data-mstg-storage-10">Testing Memory for Sensitive Data (MSTG-STORAGE-10)<a class="headerlink" href="#testing-memory-for-sensitive-data-mstg-storage-10" title="Permanent link">&para;</a></h2>
+<h3 id="static-analysis_8">Static Analysis<a class="headerlink" href="#static-analysis_8" title="Permanent link">&para;</a></h3>
+<p>When performing static analysis for sensitive data exposed via memory, you should</p>
+<ul>
+<li>try to identify application components and map where the data is used,</li>
+<li>make sure that sensitive data is handled with as few components as possible,</li>
+<li>make sure that object references are properly removed once the object containing sensitive data is no longer needed,</li>
+<li>make sure that highly sensitive data is overwritten as soon as it is no longer needed,</li>
+<li>not pass such data via immutable data types, such as <code>String</code> and <code>NSString</code>,</li>
+<li>avoid non-primitive data types (because they might leave data behind),</li>
+<li>overwrite the value in memory before removing references,</li>
+<li>pay attention to third-party components (libraries and frameworks). Having a public API that handles data according to the recommendations above is a good indicator that developers considered the issues discussed here.</li>
+</ul>
+<h3 id="dynamic-analysis_8">Dynamic Analysis<a class="headerlink" href="#dynamic-analysis_8" title="Permanent link">&para;</a></h3>
+<p>There are several approaches and tools available for dynamically testing the memory of an iOS app for sensitive data.</p>
+<h4 id="retrieving-and-analyzing-a-memory-dump">Retrieving and Analyzing a Memory Dump<a class="headerlink" href="#retrieving-and-analyzing-a-memory-dump" title="Permanent link">&para;</a></h4>
+<p>Whether you are using a jailbroken or a non-jailbroken device, you can dump the app's process memory with <a href="https://github.com/sensepost/objection" title="Objection">objection</a> and <a href="https://github.com/Nightbringer21/fridump" title="Fridump">Fridump</a>. You can find a detailed explanation of this process in the section "<a href="../0x06c-Reverse-Engineering-and-Tampering/#memory-dump" title="Memory Dump">Memory Dump</a>", in the chapter "Tampering and Reverse Engineering on iOS".</p>
+<p>After the memory has been dumped (e.g. to a file called "memory"), depending on the nature of the data you're looking for, you'll need a set of different tools to process and analyze that memory dump. For instance, if you're focusing on strings, it might be sufficient for you to execute the command <code>strings</code> or <code>rabin2 -zz</code> to extract those strings.</p>
+<div class="highlight"><pre><span></span><code><span class="c1"># using strings</span>
+$<span class="w"> </span>strings<span class="w"> </span>memory<span class="w"> </span>&gt;<span class="w"> </span>strings.txt
+
+<span class="c1"># using rabin2</span>
+$<span class="w"> </span>rabin2<span class="w"> </span>-ZZ<span class="w"> </span>memory<span class="w"> </span>&gt;<span class="w"> </span>strings.txt
+</code></pre></div>
+<p>Open <code>strings.txt</code> in your favorite editor and dig through it to identify sensitive information.</p>
+<p>However if you'd like to inspect other kind of data, you'd rather want to use radare2 and its search capabilities. See radare2's help on the search command (<code>/?</code>) for more information and a list of options. The following shows only a subset of them:</p>
+<div class="highlight"><pre><span></span><code>$<span class="w"> </span>r2<span class="w"> </span>&lt;name_of_your_dump_file&gt;
+
+<span class="o">[</span>0x00000000<span class="o">]</span>&gt;<span class="w"> </span>/?
+Usage:<span class="w"> </span>/<span class="o">[</span>!bf<span class="o">]</span><span class="w"> </span><span class="o">[</span>arg<span class="o">]</span><span class="w">  </span>Search<span class="w"> </span>stuff<span class="w"> </span><span class="o">(</span>see<span class="w"> </span><span class="s1">&#39;e??search&#39;</span><span class="w"> </span><span class="k">for</span><span class="w"> </span>options<span class="o">)</span>
+<span class="p">|</span>Use<span class="w"> </span>io.va<span class="w"> </span><span class="k">for</span><span class="w"> </span>searching<span class="w"> </span><span class="k">in</span><span class="w"> </span>non<span class="w"> </span>virtual<span class="w"> </span>addressing<span class="w"> </span>spaces
+<span class="p">|</span><span class="w"> </span>/<span class="w"> </span>foo<span class="se">\x</span><span class="m">00</span><span class="w">                    </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>string<span class="w"> </span><span class="s1">&#39;foo\0&#39;</span>
+<span class="p">|</span><span class="w"> </span>/c<span class="o">[</span>ar<span class="o">]</span><span class="w">                       </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>crypto<span class="w"> </span>materials
+<span class="p">|</span><span class="w"> </span>/e<span class="w"> </span>/E.F/i<span class="w">                    </span>match<span class="w"> </span>regular<span class="w"> </span>expression
+<span class="p">|</span><span class="w"> </span>/i<span class="w"> </span>foo<span class="w">                       </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>string<span class="w"> </span><span class="s1">&#39;foo&#39;</span><span class="w"> </span>ignoring<span class="w"> </span><span class="k">case</span>
+<span class="p">|</span><span class="w"> </span>/m<span class="o">[</span>?<span class="o">][</span>ebm<span class="o">]</span><span class="w"> </span>magicfile<span class="w">         </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>magic,<span class="w"> </span>filesystems<span class="w"> </span>or<span class="w"> </span>binary<span class="w"> </span>headers
+<span class="p">|</span><span class="w"> </span>/v<span class="o">[</span><span class="m">1248</span><span class="o">]</span><span class="w"> </span>value<span class="w">               </span>look<span class="w"> </span><span class="k">for</span><span class="w"> </span>an<span class="w"> </span><span class="sb">`</span>cfg.bigendian<span class="sb">`</span><span class="w"> </span>32bit<span class="w"> </span>value
+<span class="p">|</span><span class="w"> </span>/w<span class="w"> </span>foo<span class="w">                       </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>wide<span class="w"> </span>string<span class="w"> </span><span class="s1">&#39;f\0o\0o\0&#39;</span>
+<span class="p">|</span><span class="w"> </span>/x<span class="w"> </span>ff0033<span class="w">                    </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>hex<span class="w"> </span>string
+<span class="p">|</span><span class="w"> </span>/z<span class="w"> </span>min<span class="w"> </span>max<span class="w">                   </span>search<span class="w"> </span><span class="k">for</span><span class="w"> </span>strings<span class="w"> </span>of<span class="w"> </span>given<span class="w"> </span>size
+...
+</code></pre></div>
+<h4 id="runtime-memory-analysis">Runtime Memory Analysis<a class="headerlink" href="#runtime-memory-analysis" title="Permanent link">&para;</a></h4>
+<p>By using <a href="../../Tools/0x08a-Testing-Tools/#r2frida">r2frida</a> you can analyze and inspect the app's memory while running and without needing to dump it. For example, you may run the previous search commands from r2frida and search the memory for a string, hexadecimal values, etc. When doing so, remember to prepend the search command (and any other r2frida specific commands) with a backslash <code>\</code> after starting the session with <code>r2 frida://usb//&lt;name_of_your_app&gt;</code>.</p>
+<p>For more information, options and approaches, please refer to section "<a href="../0x06c-Reverse-Engineering-and-Tampering/#in-memory-search" title="In-Memory Search">In-Memory Search</a>" in the chapter "Tampering and Reverse Engineering on iOS".</p>
+<h2 id="references">References<a class="headerlink" href="#references" title="Permanent link">&para;</a></h2>
+<ul>
+<li>[#mandt] Tarjei Mandt, Mathew Solnik  and  David Wang, Demystifying the Secure Enclave Processor - <a href="https://www.blackhat.com/docs/us-16/materials/us-16-Mandt-Demystifying-The-Secure-Enclave-Processor.pdf">https://www.blackhat.com/docs/us-16/materials/us-16-Mandt-Demystifying-The-Secure-Enclave-Processor.pdf</a></li>
+</ul>
+<h3 id="owasp-masvs">OWASP MASVS<a class="headerlink" href="#owasp-masvs" title="Permanent link">&para;</a></h3>
+<ul>
+<li>MSTG-STORAGE-1: "System credential storage facilities need to be used to store sensitive data, such as PII, user credentials or cryptographic keys."</li>
+<li>MSTG-STORAGE-2: "No sensitive data should be stored outside of the app container or system credential storage facilities."</li>
+<li>MSTG-STORAGE-3: "No sensitive data is written to application logs."</li>
+<li>MSTG-STORAGE-4: "No sensitive data is shared with third parties unless it is a necessary part of the architecture."</li>
+<li>MSTG-STORAGE-5: "The keyboard cache is disabled on text inputs that process sensitive data."</li>
+<li>MSTG-STORAGE-6: "No sensitive data is exposed via IPC mechanisms."</li>
+<li>MSTG-STORAGE-7: "No sensitive data, such as passwords or pins, is exposed through the user interface."</li>
+<li>MSTG-STORAGE-8: "No sensitive data is included in backups generated by the mobile operating system."</li>
+<li>MSTG-STORAGE-9: "The app removes sensitive data from views when moved to the background."</li>
+<li>MSTG-STORAGE-10: "The app does not hold sensitive data in memory longer than necessary, and memory is cleared explicitly after use."</li>
+</ul>
+
+
+  
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12Z"/></svg>
+            Back to top
+          </button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      <div style="float: left; padding-right: 1em;">
+  <a href="https://www.owasp.org"><img src="https://github.com/OWASP/owasp-mastg/blob/master/Document/Images/OWASP_logo_white.png?raw=true" width="100px" /></a>
+</div>
+<span>
+  &#169; OWASP Foundation 2023. This work is licensed under 
+  <a href="https://creativecommons.org/licenses/by/4.0">CC-BY-4.0</a>. For any reuse or distribution, you must make clear to others the license terms of this work.
+</span><br><span>OWASP &#174; is a registered trademark of the OWASP Foundation, Inc.</span>
+<div style="color: #6a6868"><span>Made with</span> <a href="https://squidfunk.github.io/mkdocs-material/">Material for MkDocs</a>  | <i>Website designed by Carlos Holguera.</i></div>
+
+    </div>
+  
+  
+</div>
+      
+        <div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://owasp.slack.com/messages/project-mobile_omtg/details/" target="_blank" rel="noopener" title="owasp.slack.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M94.12 315.1c0 25.9-21.16 47.06-47.06 47.06S0 341 0 315.1c0-25.9 21.16-47.06 47.06-47.06h47.06v47.06zm23.72 0c0-25.9 21.16-47.06 47.06-47.06s47.06 21.16 47.06 47.06v117.84c0 25.9-21.16 47.06-47.06 47.06s-47.06-21.16-47.06-47.06V315.1zm47.06-188.98c-25.9 0-47.06-21.16-47.06-47.06S139 32 164.9 32s47.06 21.16 47.06 47.06v47.06H164.9zm0 23.72c25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06H47.06C21.16 243.96 0 222.8 0 196.9s21.16-47.06 47.06-47.06H164.9zm188.98 47.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06s-21.16 47.06-47.06 47.06h-47.06V196.9zm-23.72 0c0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06V79.06c0-25.9 21.16-47.06 47.06-47.06 25.9 0 47.06 21.16 47.06 47.06V196.9zM283.1 385.88c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06-25.9 0-47.06-21.16-47.06-47.06v-47.06h47.06zm0-23.72c-25.9 0-47.06-21.16-47.06-47.06 0-25.9 21.16-47.06 47.06-47.06h117.84c25.9 0 47.06 21.16 47.06 47.06 0 25.9-21.16 47.06-47.06 47.06H283.1z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://twitter.com/OWASP_MAS" target="_blank" rel="noopener" title="twitter.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M459.37 151.716c.325 4.548.325 9.097.325 13.645 0 138.72-105.583 298.558-298.558 298.558-59.452 0-114.68-17.219-161.137-47.106 8.447.974 16.568 1.299 25.34 1.299 49.055 0 94.213-16.568 130.274-44.832-46.132-.975-84.792-31.188-98.112-72.772 6.498.974 12.995 1.624 19.818 1.624 9.421 0 18.843-1.3 27.614-3.573-48.081-9.747-84.143-51.98-84.143-102.985v-1.299c13.969 7.797 30.214 12.67 47.431 13.319-28.264-18.843-46.781-51.005-46.781-87.391 0-19.492 5.197-37.36 14.294-52.954 51.655 63.675 129.3 105.258 216.365 109.807-1.624-7.797-2.599-15.918-2.599-24.04 0-57.828 46.782-104.934 104.934-104.934 30.213 0 57.502 12.67 76.67 33.137 23.715-4.548 46.456-13.32 66.599-25.34-7.798 24.366-24.366 44.833-46.132 57.827 21.117-2.273 41.584-8.122 60.426-16.243-14.292 20.791-32.161 39.308-52.628 54.253z"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/OWASP/owasp-mastg/discussions" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 496 512"><!--! Font Awesome Free 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2023 Fonticons, Inc.--><path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    <script id="__config" type="application/json">{"base": "../../..", "features": ["search.suggest", "search.share", "toc.integrate", "navigation.instant", "navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking"], "search": "../../../assets/javascripts/workers/search.208ed371.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.407015b8.min.js"></script>
+      
+        <script src="https://unpkg.com/tablesort@5.3.0/dist/tablesort.min.js"></script>
+      
+        <script src="../../../javascripts/tablesort.js"></script>
+      
+    
+  </body>
+</html>
